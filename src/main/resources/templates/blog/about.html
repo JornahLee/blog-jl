@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="blog/layout" th:with="title='关于 |',active='about'">
+<header th:replace="blog/layout::headerFragment(${title},${active})"></header>
+<body>
+<div layout:fragment="content">
+    <div class="content-wrap">
+        <div id="content" class="content">
+            <div id="posts" class="posts-expand">
+                <div class="post-block page" style="opacity: 1; display: block;">
+                    <header class="post-header" style="opacity: 1; display: block; transform: translateY(0px);">
+                        <h1 class="post-title" itemprop="name headline">关于博主</h1>
+                    </header>
+                    <div class="post-body" style="opacity: 1; display: block; transform: translateY(0px);">
+                        <h2>介绍</h2>
+                        <blockquote>
+                            <div>
+                                Jornah Lee，博主，技术爱好者，热爱JAVA，励志于成为技术大牛。
+                            </div>
+                        </blockquote>
+                        <h2>技能标签</h2>
+                        <ul>
+                            <li>
+                                <blockquote>
+                                    <div>
+                                        JAVA、JS
+                                        <br>
+                                        Spring、SpringMVC、SpringBoot、SpringCloud、MyBatis
+                                        <br>
+                                        MySQL、Redis、ActiveMQ
+                                        <br>
+                                        Linux、Apache、Nginx
+                                    </div>
+                                </blockquote>
+                            </li>
+                        </ul>
+                        <h2>个人爱好</h2>
+                        <blockquote>
+                            <div>
+                                平时看看技术论坛，捣鼓单片机，喜欢做一些远程开关的小玩意儿，也爱好LOL、动漫。
+                            </div>
+                        </blockquote>
+                        <h2>联系</h2>
+                        <ul>
+                            <li>QQ：614042560</li>
+                            <li>邮箱：614042560@qq.com</li>
+                            <th:block th:each="index : ${commons.social()}">
+                                <th:block th:if="${index.value} != null and ${index.value} != ''">
+                                    <th:block th:switch="${index.key}">
+                                        <th:block th:case="'github'">
+                                            <li>GitHub：<a th:href="@{${index.value}}" target="_blank" th:text="${index.value}"></a></li>
+                                        </th:block>
+                                        <th:block th:case="'jianshu'">
+                                            <li>简书：<a th:href="@{${index.value}}" target="_blank" th:text="${index.value}"></a></li>
+                                        </th:block>
+                                        <th:block th:case="'zhihu'">
+                                            <li>知乎：<a th:href="@{${index.value}}" target="_blank" th:text="${index.value}"></a></li>
+                                        </th:block>
+                                        <th:block th:case="'csdn'">
+                                            <li>CSDN：<a th:href="@{${index.value}}" target="_blank" th:text="${index.value}"></a></li>
+                                        </th:block>
+                                        <th:block th:case="'resume'">
+                                            <li>简历：<a th:href="@{${index.value}}" target="_blank" th:text="${index.value}"></a></li>
+                                        </th:block>
+                                    </th:block>
+                                </th:block>
+                            </th:block>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
