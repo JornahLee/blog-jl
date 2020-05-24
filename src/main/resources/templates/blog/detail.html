@@ -17,21 +17,29 @@
                                     <span class="post-meta-item-icon">
                                     <i class="fa fa-calendar-o"></i>
                                     </span>
-                                    <span class="post-meta-item-text">发表于</span>
-                                    <time th:text="${commons.fmtdate(article.created, 'yyyy-MM-dd')}" title="创建于" datetime="2018-07-07T15:40:56+08:00">
+                                    <time th:text="${commons.fmtdate(article.modified, 'yyyy-MM-dd')}" title="修改于" datetime="2018-07-07T15:40:56+08:00">
                                     </time>
+                                    <span class="post-meta-item-text">修改</span>
                                 </span>
                                 <span class="post-category">
                                     <span class="post-meta-divider">|</span>
                                     <span class="post-meta-item-icon">
                                         <i class="fa fa-folder-o"></i>
                                     </span>
-                                    <span class="post-meta-item-text">分类于</span>
                                     <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
                                         <a th:href="@{'/categories/'} + ${article.categories}" itemprop="url" rel="index">
                                             <span itemprop="name" th:text="${article.categories}"></span>
                                         </a>
                                     </span>
+                                </span>
+                                <span class="post-time">
+                                    <span class="post-meta-divider">|</span>
+                                    <span class="post-meta-item-icon">
+                                    <i class="fa fa-calendar-o"></i>
+                                    </span>
+                                    <time th:text="${commons.fmtdate(article.created, 'yyyy-MM-dd')}" title="发表于" datetime="2018-07-07T15:40:56+08:00">
+                                    </time>
+                                    <span class="post-meta-item-text">创建</span>
                                 </span>
                             </div>
                         </header>

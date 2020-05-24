@@ -36,7 +36,7 @@
         </where>
         ORDER BY
         <if test="weightFlag==true">
-            c.weight DESC ,
+            c.orderWeight DESC ,
         </if>
         c.created DESC
 

@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
+
 <footer id="footer" class="footer" th:fragment="footer(record)">
+    <link rel="stylesheet" href="ban-niang/font-awesome.min.css">
+    <script src="ban-niang/autoload.js"></script>
     <div class="footer-inner">
         <div class="copyright">
             © 2019 - <span>2020</span> <span class="with-love">
@@ -13,7 +16,7 @@
         </div>
 
         <div class="theme-info">
-            源码 - <a class="theme-link" target="_blank" href="https://github.com/caozongpeng/SpringBootBlog"> Jornah Lee's Blog </a>
+            源码 - <a class="theme-link" target="_blank" href="https://github.com/JornahLee/blog-jl"> Jornah Lee's Blog </a>
         </div>
         <div>
             <th:block th:if="${record != null and record != ''}">
