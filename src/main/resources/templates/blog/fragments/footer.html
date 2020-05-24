@@ -1,7 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
+<script>
+    function gxtz(){
+        window.open('javascript:window.name;', '<script>location.replace("http://www.beian.miit.gov.cn/publish/query/indexFirst.action")<\/script>');
+    }
+</script>
 
+<style>
+    .foot_bot{width:1200px;margin:890px auto 0;overflow:hidden;}
+    .foot_bot span{float:left;}
+    .foot_bot span a{margin-right:5px;}
+    .foot_bot span a:hover{background:#fff;filter: alpha(opacity=80); opacity: 0.8;}
+    .foot_bot font{float:right;font-size:14px;color:#4f4f4f;margin-top:8px;}
+    .systemlogo{width:100%; height:71px; margin-top:120px; text-align:center;}
+</style>
 <footer id="footer" class="footer" th:fragment="footer(record)">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
     <script src="ban-niang/autoload.js"></script>
@@ -23,6 +36,10 @@
                 <a th:text="${record}" th:href="@{http://www.miitbeian.gov.cn/}"></a>
             </th:block>
         </div>
+        <div class="foot_bot">
+            <font><a   href="javascript:void(0)" οnclick="gxtz()" style="color:#4f4f4f;">蜀ICP备20012827号-1</a></font>
+        </div>
+
     </div>
 </footer>
 </body>
