@@ -27,3 +27,7 @@ hs_err_pid*
 
 # class
 target
+
+#IDE
+*.iml
+
