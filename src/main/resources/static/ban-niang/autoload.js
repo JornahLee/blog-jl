@@ -25,9 +25,11 @@ function loadExternalResource(url, type) {
 }
 
 // 加载 waifu.css live2d.min.js waifu-tips.js
-if (screen.width >= 768) {
+localpath = window.location.protocol + '//' + window.location.host + '/ban-niang/'
+// if (screen.width >= 768) {
+if (screen.width >= 0) {
 	Promise.all([
-		loadExternalResource("http://localhost/ban-niang/" + "waifu.css", "css"),
+		loadExternalResource(localpath + "waifu.css", "css"),
 		loadExternalResource(live2d_path + "live2d.min.js", "js"),
 		loadExternalResource(live2d_path + "waifu-tips.js", "js")
 	]).then(() => {
