@@ -53,6 +53,7 @@
         <main id="main" class="main">
             <div class="main-inner">
 
+                <div th:replace="blog/fragments/sidebar::sidebar"></div>
                 <!--主体content-->
                 <div layout:fragment="content" id="content"></div>
 
@@ -64,7 +65,9 @@
                         <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
                     </div>
                 </div>
-                <div th:replace="blog/fragments/sidebar::sidebar"></div>
+
+<!--                <div th:replace="blog/fragments/toc::toc"></div>-->
+
 
             </div>
         </main>

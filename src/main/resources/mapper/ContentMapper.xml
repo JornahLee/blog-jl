@@ -82,7 +82,7 @@
             #{commentsNum, jdbcType=INTEGER},
             #{allowComment, jdbcType=INTEGER},
             #{allowPing, jdbcType=INTEGER},
-            #{allowFeed, jdbcType=INTEGER}
+            #{allowFeed, jdbcType=INTEGER},
             #{orderWeight, jdbcType=INTEGER}
         </trim>
     </insert>

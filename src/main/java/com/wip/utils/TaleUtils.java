@@ -3,11 +3,19 @@ package com.wip.utils;
 import com.wip.constant.WebConst;
 import com.wip.controller.admin.AttachController;
 import com.wip.model.UserDomain;
+import com.wip.utils.commonmark.HeadingRenderer;
 import org.apache.commons.lang3.StringUtils;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
+import org.commonmark.ext.heading.anchor.HeadingAnchorExtension;
+import org.commonmark.node.Heading;
+import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.node.Node;
+import org.commonmark.renderer.NodeRenderer;
+import org.commonmark.renderer.html.HtmlNodeRendererContext;
+import org.commonmark.renderer.html.HtmlNodeRendererFactory;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
@@ -22,7 +30,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -205,13 +215,58 @@ public class TaleUtils {
         if (StringUtils.isBlank(markdown)) {
             return "";
         }
-        java.util.List<Extension> extensions = Arrays.asList(TablesExtension.create());
+        java.util.List<Extension> extensions = Arrays.asList(TablesExtension.create(),HeadingAnchorExtension.create());
         org.commonmark.parser.Parser parser = org.commonmark.parser.Parser.builder().extensions(extensions).build();
         Node document = parser.parse(markdown);
         HtmlRenderer renderer = HtmlRenderer.builder().extensions(extensions).build();
         String content = renderer.render(document);
         content = Commons.emoji(content);
         return content;
+    }
+    public static String tocFromMd(String markdown) {
+        if (StringUtils.isBlank(markdown)) {
+            return "";
+        }
+        java.util.List<Extension> extensions = Arrays.asList(HeadingAnchorExtension.create());
+        org.commonmark.parser.Parser parser = org.commonmark.parser.Parser.builder().extensions(extensions).build();
+        Node document = parser.parse(markdown);
+        HtmlRenderer renderer = HtmlRenderer.builder()
+                .nodeRendererFactory(HeadingRenderer::new).extensions(extensions)
+                .build();
+        String content = renderer.render(document);
+        content = Commons.emoji(content);
+        Matcher matcher = Pattern.compile("<(h[12]).+\\1>").matcher(content);
+        StringBuilder res=new StringBuilder();
+        while (matcher.find()){
+            res.append(matcher.group()).append("\n");
+        }
+        return res.toString().replaceAll("<h\\d>|</h\\d>","");
+    }
+
+    @Test
+    public void test(){
+        String res = TaleUtils.tocFromMd("# 1\n" +
+                "\n" +
+                "## 11\n" +
+                "\n" +
+                "### 111\n" +
+                "\n" +
+                "# 2\n" +
+                "\n" +
+                "## 22\n" +
+                "\n" +
+                "# 3\n" +
+                "\n" +
+                "## 33\n" +
+                "\n" +
+                "# 4\n" +
+                "\n" +
+                "## 44\n" +
+                "\n" +
+                "目录\n" +
+                "\n" +
+                "[TOC]");
+        System.out.println(res);
 
     }
 
