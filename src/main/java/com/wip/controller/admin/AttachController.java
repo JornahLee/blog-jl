@@ -75,6 +75,7 @@ public class AttachController extends BaseController {
             @RequestParam(name = "editormd-image-file", required = true)
             MultipartFile file
     ) {
+        this.filesUploadToCloud(request,response,new MultipartFile[]{file});
 
     }
 
