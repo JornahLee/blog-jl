@@ -17,7 +17,8 @@
                             <tr>
                                 <th width="25%">文章标题</th>
                                 <th width="8%">类型</th>
-                                <th width="20%">发布时间</th>
+                                <th width="10%">修改时间</th>
+                                <th width="10%">发布时间</th>
                                 <th>浏览量</th>
                                 <th>所属分类</th>
                                 <th width="8%">发布状态</th>
@@ -38,6 +39,7 @@
                                                 <span class="label label-default">作品</span>
                                             </th:block>
                                         </td>
+                                        <td><th:block th:text="${commons.fmtdate(post.modified, 'yyyy-MM-dd HH:mm:ss')}"/></td>
                                         <td><th:block th:text="${commons.fmtdate(post.created, 'yyyy-MM-dd HH:mm:ss')}"/></td>
                                         <td><th:block th:text="${post.hits}"/></td>
                                         <td><th:block th:text="${post.categories}"/></td>

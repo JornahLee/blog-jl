@@ -38,7 +38,8 @@
         <if test="weightFlag==true">
             c.orderWeight DESC ,
         </if>
-        c.created DESC
+
+        c.modified DESC , created DESC
 
     </select>
     <!--文章表列名-->
@@ -63,7 +64,7 @@
         INSERT INTO
           <include refid="BASE_TABLE"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            title, titlePic, slug, created, content, authorId,
+            title, titlePic, slug, created,modified, content, authorId,
             type, status, tags, categories, hits, commentsNum, allowComment,
             allowPing, allowFeed ,orderWeight
         </trim>
@@ -71,6 +72,7 @@
             #{title, jdbcType=VARCHAR},
             #{titlePic, jdbcType=VARCHAR},
             #{slug, jdbcType=VARCHAR},
+            UNIX_TIMESTAMP(NOW()),
             UNIX_TIMESTAMP(NOW()),
             #{content, jdbcType=LONGVARCHAR},
             #{authorId, jdbcType=INTEGER},
