@@ -28,7 +28,7 @@
 
     </select>
     <!--通过用户ID获取用户信息-->
-    <select id="getUserInfoById" parameterType="com.wip.model.UserDomain">
+    <select id="getUserInfoById" resultType="com.wip.model.UserDomain">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM

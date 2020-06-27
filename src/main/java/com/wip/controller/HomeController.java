@@ -6,9 +6,7 @@ import com.wip.constant.ErrorConstant;
 import com.wip.constant.Types;
 import com.wip.constant.WebConst;
 import com.wip.dto.MetaDto;
-import com.wip.dto.StatisticsDto;
 import com.wip.dto.cond.ContentCond;
-import com.wip.dto.cond.MetaCond;
 import com.wip.exception.BusinessException;
 import com.wip.model.CommentDomain;
 import com.wip.model.ContentDomain;
@@ -16,7 +14,6 @@ import com.wip.model.MetaDomain;
 import com.wip.service.article.ContentService;
 import com.wip.service.comment.CommentService;
 import com.wip.service.meta.MetaService;
-import com.wip.service.site.SiteService;
 import com.wip.utils.APIResponse;
 import com.wip.utils.IPKit;
 import com.wip.utils.TaleUtils;
@@ -31,9 +28,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Api("博客前台页面")
 @Controller
@@ -158,13 +156,26 @@ public class HomeController extends BaseController {
         ContentDomain article = contentService.getArticleById(cid);
         request.setAttribute("article", article);
 
-        // 更新文章的点击量
-        this.updateArticleHits(article.getCid(), article.getHits());
+        if (!isFromSameIp(cid, request)) {
+            // 更新文章的点击量
+            this.updateArticleHits(article.getCid(), article.getHits());
+        }
         // 获取评论
         List<CommentDomain> comments = commentService.getCommentsByCId(cid);
         request.setAttribute("comments", comments);
 
         return "blog/detail";
+    }
+
+    private boolean isFromSameIp(Integer cid, HttpServletRequest request) {
+        String uniqHitKey = String.format("%s::%s", IPKit.getIpAddressByRequest1(request), cid);
+        String uniqHitValue = cache.get(uniqHitKey);
+        if (Objects.nonNull(uniqHitValue)) {
+            return true;
+        } else {
+            cache.set(uniqHitKey,"y", TimeUnit.DAYS.toMillis(1));
+            return false;
+        }
     }
 
     /**
@@ -179,12 +190,12 @@ public class HomeController extends BaseController {
             chits = 0;
         }
         hits = null == hits ? 1 : hits + 1;
-        if (hits >= WebConst.HIT_EXEED) {
+        if (hits >= WebConst.HIT_BUFFER_SIZE) {
             ContentDomain temp = new ContentDomain();
             temp.setCid(cid);
             temp.setHits(chits + hits);
             contentService.updateContentByCid(temp);
-            cache.hset("article", "hits", 1);
+            cache.hset("article", "hits", null);
         } else {
             cache.hset("article", "hits", hits);
         }
