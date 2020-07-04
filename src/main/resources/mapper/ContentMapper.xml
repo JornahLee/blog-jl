@@ -116,7 +116,10 @@
             <if test="content != null">
                 content = #{content, jdbcType=LONGVARCHAR},
             </if>
-            modified = UNIX_TIMESTAMP(NOW()),
+            <if test="modified != null">
+                modified = UNIX_TIMESTAMP(NOW()),
+            </if>
+
             <if test="type != null">
                 type = #{type, jdbcType=VARCHAR},
             </if>

@@ -168,7 +168,7 @@ public class HomeController extends BaseController {
     }
 
     private boolean isFromSameIp(Integer cid, HttpServletRequest request) {
-        String uniqHitKey = String.format("%s::%s", IPKit.getIpAddressByRequest1(request), cid);
+        String uniqHitKey = String.format("%s::%s", IPKit.getIpAddressByRequest(request), cid);
         String uniqHitValue = cache.get(uniqHitKey);
         if (Objects.nonNull(uniqHitValue)) {
             return true;
@@ -244,7 +244,7 @@ public class HomeController extends BaseController {
             return APIResponse.fail("请输入200个字符以内的评价");
         }
 
-        String val = IPKit.getIpAddressByRequest1(request) + ":" + cid;
+        String val = IPKit.getIpAddressByRequest(request) + ":" + cid;
         Integer count = cache.hget(Types.COMMENTS_FREQUENCY.getType(), val);
         if (null != count && count > 0) {
             return APIResponse.fail("您发表的评论太快了，请过会再试");
