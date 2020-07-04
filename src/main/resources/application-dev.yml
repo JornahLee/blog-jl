@@ -12,7 +12,8 @@ spring:
       #基本属性
       url: jdbc:mysql://118.25.187.1:3306/blog_jl?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=true
       username: root
-      password: mimamysql614
+      password: ${MYSQL_PWD}
+#      password: mimamysql614
       #配置初始化大小/最小/最大
       initial-size: 1
       min-idle: 1
