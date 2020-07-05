@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @Api("登录相关接口")
 @Controller
@@ -71,7 +72,7 @@ public class AuthController extends BaseController {
             request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, userInfo);
             // 判断是否勾选记住我
             if (StringUtils.isNotBlank(remember_me)) {
-                TaleUtils.setCookie(response, userInfo.getUid());
+                TaleUtils.setCookie(response, userInfo.getUid(),Long.valueOf(TimeUnit.DAYS.toMillis(15)).intValue());
             }
             // 写入日志
             logService.addLog(LogActions.LOGIN.getAction(), userInfo.getUsername()+"用户", request.getRemoteAddr(), userInfo.getUid());

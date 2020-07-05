@@ -102,13 +102,13 @@ public class TaleUtils {
      * @param response
      * @param uid
      */
-    public static void setCookie(HttpServletResponse response, Integer uid) {
+    public static void setCookie(HttpServletResponse response, Integer uid,int maxAge) {
         try {
             String val= Tools.enAes(uid.toString(), WebConst.AES_SALT);
             boolean isSSL = false;
             Cookie cookie = new Cookie(WebConst.USER_IN_COOKIE, val);
             cookie.setPath("/");
-            cookie.setMaxAge(60 * 30);
+            cookie.setMaxAge(maxAge);
             cookie.setSecure(isSSL);
             response.addCookie(cookie);
         } catch (Exception e) {
