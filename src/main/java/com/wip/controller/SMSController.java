@@ -18,6 +18,7 @@ public class SMSController {
     public static final Map<String, String> verifyCodeCache = new HashMap<>();
 
     @GetMapping("/send/{phoneNumber}")
+    @CrossOrigin
     public APIResponse sendVerifyCode(@PathVariable String phoneNumber) throws TencentCloudSDKException {
         String verifyCode = generateVerifyCode();
         verifyCodeCache.put(phoneNumber, verifyCode);
@@ -31,6 +32,7 @@ public class SMSController {
     }
 
     @GetMapping("/verify/{phoneNumber}/{verifyCode}")
+    @CrossOrigin
     public APIResponse verify(@PathVariable String phoneNumber, @PathVariable String verifyCode) {
         String s = verifyCodeCache.get(phoneNumber);
         verifyCodeCache.remove(phoneNumber);
