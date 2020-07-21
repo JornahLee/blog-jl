@@ -9,7 +9,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wip.constant.ErrorConstant;
 import com.wip.dao.CommentDao;
-import com.wip.dto.cond.CommentCond;
+import com.wip.model.dto.cond.CommentCond;
 import com.wip.exception.BusinessException;
 import com.wip.model.CommentDomain;
 import com.wip.model.ContentDomain;

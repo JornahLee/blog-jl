@@ -3,12 +3,14 @@
  * User: Jornah Lee
  * DateTime: 2018/8/2 9:25
  **/
-package com.wip.dto;
+package com.wip.model.dto;
+
+import java.io.Serializable;
 
 /**
  * 后台统计对象
  */
-public class StatisticsDto {
+public class StatisticsDto implements Serializable {
 
     /**
      * 文章数

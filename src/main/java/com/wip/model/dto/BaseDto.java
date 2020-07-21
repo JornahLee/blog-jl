@@ -3,12 +3,14 @@
  * User: Jornah Lee
  * DateTime: 2018/8/3 16:30
  **/
-package com.wip.dto;
+package com.wip.model.dto;
+
+import java.io.Serializable;
 
 /**
  * 公共属性的类
  */
-public class BaseDto {
+public class BaseDto implements Serializable {
 
     /**
      * 用户名

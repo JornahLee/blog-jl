@@ -5,10 +5,12 @@
  **/
 package com.wip.model;
 
+import java.io.Serializable;
+
 /**
  * 网站图片文件相关表
  */
-public class AttAchDomain {
+public class AttAchDomain implements Serializable {
 
     /**
      * 主键编号

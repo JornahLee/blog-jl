@@ -3,7 +3,7 @@
 <mapper namespace="com.wip.dao.ContentDao">
 
     <!--表名-->
-    <select id="getArticleByCond" resultType="com.wip.model.ContentDomain" parameterType="com.wip.dto.cond.ContentCond">
+    <select id="getArticleByCond" resultType="com.wip.model.ContentDomain" parameterType="com.wip.model.dto.cond.ContentCond">
         SELECT
         <include refid="BASE_COLUMN"/>
         FROM

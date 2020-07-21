@@ -3,7 +3,7 @@
  * User: Jornah Lee
  * DateTime: 2018/7/24 16:59
  **/
-package com.wip.dto;
+package com.wip.model.dto;
 
 import com.wip.model.MetaDomain;
 

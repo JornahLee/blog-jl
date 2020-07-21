@@ -5,10 +5,12 @@
  **/
 package com.wip.model;
 
+import java.io.Serializable;
+
 /**
  * 评论表
  */
-public class CommentDomain {
+public class CommentDomain implements Serializable {
     /**
      * comment表主键
      */

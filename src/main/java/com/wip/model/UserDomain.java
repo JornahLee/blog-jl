@@ -1,9 +1,11 @@
 package com.wip.model;
 
+import java.io.Serializable;
+
 /**
  * 用户表
  */
-public class UserDomain {
+public class UserDomain implements Serializable {
 
     /** 主键编号 */
     private Integer uid;

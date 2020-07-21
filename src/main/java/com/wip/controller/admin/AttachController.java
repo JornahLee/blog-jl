@@ -7,7 +7,7 @@ import com.wip.constant.LogActions;
 import com.wip.constant.Types;
 import com.wip.constant.WebConst;
 import com.wip.controller.BaseController;
-import com.wip.dto.AttAchDto;
+import com.wip.model.dto.AttAchDto;
 import com.wip.exception.BusinessException;
 import com.wip.model.AttAchDomain;
 import com.wip.model.UserDomain;

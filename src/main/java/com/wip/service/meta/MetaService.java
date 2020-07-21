@@ -5,8 +5,8 @@
  **/
 package com.wip.service.meta;
 
-import com.wip.dto.MetaDto;
-import com.wip.dto.cond.MetaCond;
+import com.wip.model.dto.MetaDto;
+import com.wip.model.dto.cond.MetaCond;
 import com.wip.model.MetaDomain;
 
 import java.util.List;

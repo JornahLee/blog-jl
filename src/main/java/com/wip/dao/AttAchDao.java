@@ -5,7 +5,7 @@
  **/
 package com.wip.dao;
 
-import com.wip.dto.AttAchDto;
+import com.wip.model.dto.AttAchDto;
 import com.wip.model.AttAchDomain;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

@@ -5,7 +5,7 @@
  **/
 package com.wip.service.site;
 
-import com.wip.dto.StatisticsDto;
+import com.wip.model.dto.StatisticsDto;
 import com.wip.model.CommentDomain;
 import com.wip.model.ContentDomain;
 

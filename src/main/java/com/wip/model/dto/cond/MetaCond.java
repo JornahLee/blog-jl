@@ -3,7 +3,7 @@
  * User: Jornah Lee
  * DateTime: 2018/7/24 16:59
  **/
-package com.wip.dto.cond;
+package com.wip.model.dto.cond;
 
 /**
  * Meta查询条件

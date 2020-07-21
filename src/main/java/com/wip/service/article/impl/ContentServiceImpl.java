@@ -13,7 +13,7 @@ import com.wip.constant.WebConst;
 import com.wip.dao.CommentDao;
 import com.wip.dao.ContentDao;
 import com.wip.dao.RelationShipDao;
-import com.wip.dto.cond.ContentCond;
+import com.wip.model.dto.cond.ContentCond;
 import com.wip.exception.BusinessException;
 import com.wip.model.CommentDomain;
 import com.wip.model.ContentDomain;

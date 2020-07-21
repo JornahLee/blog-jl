@@ -6,7 +6,7 @@
 package com.wip.service.comment;
 
 import com.github.pagehelper.PageInfo;
-import com.wip.dto.cond.CommentCond;
+import com.wip.model.dto.cond.CommentCond;
 import com.wip.model.CommentDomain;
 
 import java.util.List;

@@ -5,10 +5,12 @@
  **/
 package com.wip.model;
 
+import java.io.Serializable;
+
 /**
  * 文章表
  */
-public class ContentDomain {
+public class ContentDomain implements Serializable {
     /**
      * 文章的主键编号
      */

@@ -3,7 +3,7 @@
  * User: Administrator
  * DateTime: 2018/7/31 22:39
  **/
-package com.wip.dto.cond;
+package com.wip.model.dto.cond;
 
 /**
  * 评论的查找参数

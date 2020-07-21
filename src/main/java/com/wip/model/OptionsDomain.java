@@ -5,10 +5,12 @@
  **/
 package com.wip.model;
 
+import java.io.Serializable;
+
 /**
  * 网站配置项
  */
-public class OptionsDomain {
+public class OptionsDomain implements Serializable {
 
     /**
      * 名称

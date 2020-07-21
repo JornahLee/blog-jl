@@ -9,7 +9,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wip.constant.ErrorConstant;
 import com.wip.dao.AttAchDao;
-import com.wip.dto.AttAchDto;
+import com.wip.model.dto.AttAchDto;
 import com.wip.exception.BusinessException;
 import com.wip.model.AttAchDomain;
 import com.wip.service.attach.AttAchService;

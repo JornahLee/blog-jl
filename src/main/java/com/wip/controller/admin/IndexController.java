@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.wip.constant.LogActions;
 import com.wip.constant.WebConst;
 import com.wip.controller.BaseController;
-import com.wip.dto.StatisticsDto;
+import com.wip.model.dto.StatisticsDto;
 import com.wip.exception.BusinessException;
 import com.wip.model.CommentDomain;
 import com.wip.model.ContentDomain;

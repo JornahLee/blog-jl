@@ -3,7 +3,7 @@ package com.wip.controller.admin;
 import com.wip.constant.ErrorConstant;
 import com.wip.constant.Types;
 import com.wip.controller.BaseController;
-import com.wip.dto.cond.MetaCond;
+import com.wip.model.dto.cond.MetaCond;
 import com.wip.exception.BusinessException;
 import com.wip.model.MetaDomain;
 import com.wip.service.meta.MetaService;

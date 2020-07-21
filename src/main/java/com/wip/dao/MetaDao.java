@@ -5,8 +5,8 @@
  **/
 package com.wip.dao;
 
-import com.wip.dto.MetaDto;
-import com.wip.dto.cond.MetaCond;
+import com.wip.model.dto.MetaDto;
+import com.wip.model.dto.cond.MetaCond;
 import com.wip.model.MetaDomain;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

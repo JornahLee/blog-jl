@@ -6,7 +6,7 @@
 package com.wip.service.article;
 
 import com.github.pagehelper.PageInfo;
-import com.wip.dto.cond.ContentCond;
+import com.wip.model.dto.cond.ContentCond;
 import com.wip.model.ContentDomain;
 import com.wip.model.MetaDomain;
 

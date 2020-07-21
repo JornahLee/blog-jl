@@ -2,8 +2,8 @@ package com.wip.interceptor;
 
 import com.wip.constant.Types;
 import com.wip.constant.WebConst;
-import com.wip.dto.MetaDto;
-import com.wip.dto.StatisticsDto;
+import com.wip.model.dto.MetaDto;
+import com.wip.model.dto.StatisticsDto;
 import com.wip.model.OptionsDomain;
 import com.wip.model.UserDomain;
 import com.wip.service.meta.MetaService;

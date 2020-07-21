@@ -5,7 +5,7 @@
  **/
 package com.wip.dao;
 
-import com.wip.dto.cond.CommentCond;
+import com.wip.model.dto.cond.CommentCond;
 import com.wip.model.CommentDomain;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

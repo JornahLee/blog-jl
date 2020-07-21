@@ -3,7 +3,7 @@
  * User: Jornah Lee
  * DateTime: 2018/8/3 16:31
  **/
-package com.wip.dto;
+package com.wip.model.dto;
 
 public class AttAchDto extends BaseDto {
     /**

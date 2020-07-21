@@ -5,7 +5,7 @@
  **/
 package com.wip.dao;
 
-import com.wip.dto.cond.ContentCond;
+import com.wip.model.dto.cond.ContentCond;
 import com.wip.model.ContentDomain;
 import com.wip.model.RelationShipDomain;
 import org.apache.ibatis.annotations.Mapper;

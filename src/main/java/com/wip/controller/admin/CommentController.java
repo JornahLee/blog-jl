@@ -2,7 +2,7 @@ package com.wip.controller.admin;
 
 import com.github.pagehelper.PageInfo;
 import com.wip.controller.BaseController;
-import com.wip.dto.cond.CommentCond;
+import com.wip.model.dto.cond.CommentCond;
 import com.wip.model.CommentDomain;
 import com.wip.model.UserDomain;
 import com.wip.service.comment.CommentService;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 @Api("评论相关接口")
