@@ -44,17 +44,16 @@ public class ContentCond {
     private Integer endTime;
 
     /**
-     * 是否按权重排序
-     * @return
+     *  排序的SQL语句
      */
-    private Boolean weightFlag;
+    private String howToOrder;
 
-    public Boolean getWeightFlag() {
-        return weightFlag;
+    public String getHowToOrder() {
+        return howToOrder;
     }
 
-    public void setWeightFlag(Boolean weightFlag) {
-        this.weightFlag = weightFlag;
+    public void setHowToOrder(String howToOrder) {
+        this.howToOrder = howToOrder;
     }
 
     public String getTag() {

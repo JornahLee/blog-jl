@@ -29,9 +29,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Api("博客前台页面")
 @Controller
@@ -58,7 +61,7 @@ public class HomeController extends BaseController {
                     int limit
     ) {
         ContentCond cond = new ContentCond();
-        cond.setWeightFlag(true);
+        cond.setHowToOrder("orderWeight DESC, modified DESC");
         cond.setStatus(ContentCond.PUBLISH);
         PageInfo<ContentDomain> articles = contentService.getArticlesByCond(cond, page, limit);
 
@@ -79,6 +82,7 @@ public class HomeController extends BaseController {
     ) {
         ContentCond cond = new ContentCond();
         cond.setStatus(ContentCond.PUBLISH);
+        cond.setHowToOrder("created DESC");
         PageInfo<ContentDomain> articles = contentService.getArticlesByCond(cond, page, limit);
         request.setAttribute("articles", articles);
         return "blog/archives";
@@ -90,7 +94,7 @@ public class HomeController extends BaseController {
         // 获取分类
         List<MetaDto> categories = metaService.getMetaList(Types.CATEGORY.getType(), null, WebConst.MAX_POSTS);
         // 分类总数
-        Long categoryCount = metaService.getMetasCountByType(Types.CATEGORY.getType());
+        int categoryCount = metaService.getMetasCountByType(Types.CATEGORY.getType());
         request.setAttribute("categories", categories);
         request.setAttribute("categoryCount", categoryCount);
         return "blog/category";
@@ -119,7 +123,7 @@ public class HomeController extends BaseController {
         // 获取标签
         List<MetaDto> tags = metaService.getMetaList(Types.TAG.getType(), null, WebConst.MAX_POSTS);
         // 标签总数
-        Long tagCount = metaService.getMetasCountByType(Types.TAG.getType());
+        int tagCount = metaService.getMetasCountByType(Types.TAG.getType());
         request.setAttribute("tags", tags);
         request.setAttribute("tagCount", tagCount);
         return "blog/tags";
@@ -173,7 +177,7 @@ public class HomeController extends BaseController {
         if (Objects.nonNull(uniqHitValue)) {
             return true;
         } else {
-            cache.set(uniqHitKey,"y", TimeUnit.DAYS.toMillis(1));
+            cache.set(uniqHitKey, "y", TimeUnit.DAYS.toMillis(1));
             return false;
         }
     }

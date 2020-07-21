@@ -165,14 +165,14 @@ public class MetaServiceImpl implements MetaService {
 
     @Override
     @Cacheable(value = "metaCaches", key = "'metaCountByType_'+ #p0")
-    public Long getMetasCountByType(String type) {
+    public int getMetasCountByType(String type) {
         if (null == type)
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
-        return metaDao.getMetasCountByType(type);
+        return metaDao.getMetasCountByType(type).intValue();
     }
 
     @Override
-    @Cacheable(value = "metaCaches", key = "'metaByName_' + #p0")
+    @Cacheable(value = "metaCaches", key = "'metaByName_' + #p1")
     public MetaDomain getMetaByName(String type, String name) {
         if (null == name)
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);

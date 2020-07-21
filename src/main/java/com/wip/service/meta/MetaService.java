@@ -79,7 +79,7 @@ public interface MetaService {
      * @param type
      * @return
      */
-    Long getMetasCountByType(String type);
+    int getMetasCountByType(String type);
 
     /**
      * 通过Meta名查找Meta项目

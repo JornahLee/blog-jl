@@ -34,12 +34,12 @@
                 AND c.created &lt;= #{endTime, jdbcType=INTEGER}
             </if>
         </where>
-        ORDER BY
-        <if test="weightFlag==true">
-            c.orderWeight DESC ,
+
+        <if test="howToOrder != null">
+            ORDER BY ${howToOrder}
         </if>
 
-        c.modified DESC , created DESC
+
 
     </select>
     <!--文章表列名-->

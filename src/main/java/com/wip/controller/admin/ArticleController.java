@@ -51,7 +51,10 @@ public class ArticleController extends BaseController {
             @RequestParam(name = "limit", required = false, defaultValue = "15")
             int limit
     ) {
-        PageInfo<ContentDomain> articles = contentService.getArticlesByCond(new ContentCond(), page, limit);
+        ContentCond contentCond = new ContentCond();
+        contentCond.setHowToOrder("modified DESC");
+        // ORDER BY  c.orderWeight DESC ,  c.modified DESC , created DESC
+        PageInfo<ContentDomain> articles = contentService.getArticlesByCond(contentCond, page, limit);
         request.setAttribute("articles",articles);
         return "admin/article_list";
     }
