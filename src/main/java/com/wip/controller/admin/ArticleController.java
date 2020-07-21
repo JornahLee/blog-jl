@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 import java.util.List;
 
 @Api("文章管理")
@@ -138,6 +139,7 @@ public class ArticleController extends BaseController {
         contentDomain.setCategories(categories);
         contentDomain.setAllowComment(allowComment ? 1: 0);
         contentDomain.setOrderWeight(orderWeight);
+        contentDomain.setModified(Instant.now().toEpochMilli());
         LOGGER.debug("param-orderWeight:{}",orderWeight);
         LOGGER.debug("contentDomain-orderWeight:{}",contentDomain.getOrderWeight());
         contentService.updateArticleById(contentDomain);

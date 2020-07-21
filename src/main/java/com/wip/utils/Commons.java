@@ -66,7 +66,7 @@ public class Commons {
      * @param patten
      * @return
      */
-    public static String fmtdate(Integer unixTime, String patten) {
+    public static String fmtdate(Long unixTime, String patten) {
         if (null != unixTime && StringUtils.isNotBlank(patten)) {
             return DateKit.formatDateByUnixTime(unixTime,patten);
         }

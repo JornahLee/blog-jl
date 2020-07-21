@@ -16,7 +16,7 @@ public class DateKit {
 
 
     public static String formatDateByUnixTime(long unixTime, String dateFormat) {
-        return dateFormat(new Date(unixTime * 1000L), dateFormat);
+        return dateFormat(new Date(unixTime), dateFormat);
     }
 
     public static String dateFormat(Date date, String dateFormat) {

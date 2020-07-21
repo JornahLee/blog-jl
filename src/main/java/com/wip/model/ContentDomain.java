@@ -30,11 +30,11 @@ public class ContentDomain implements Serializable {
     /**
      * 内容生成时的GMT unix时间戳
      */
-    private Integer created;
+    private Long created;
     /**
      * 内容更改时的GMT unix时间戳
      */
-    private Integer modified;
+    private Long modified;
     /**
      * 内容文字
      */
@@ -119,19 +119,19 @@ public class ContentDomain implements Serializable {
         this.slug = slug;
     }
 
-    public Integer getCreated() {
+    public Long getCreated() {
         return created;
     }
 
-    public void setCreated(Integer created) {
+    public void setCreated(Long created) {
         this.created = created;
     }
 
-    public Integer getModified() {
+    public Long getModified() {
         return modified;
     }
 
-    public void setModified(Integer modified) {
+    public void setModified(Long modified) {
         this.modified = modified;
     }
 
