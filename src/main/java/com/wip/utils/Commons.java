@@ -6,6 +6,7 @@ import com.wip.constant.WebConst;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -67,6 +68,12 @@ public class Commons {
      * @return
      */
     public static String fmtdate(Long unixTime, String patten) {
+        if (null != unixTime && StringUtils.isNotBlank(patten)) {
+            return DateKit.formatDateByUnixTime(unixTime,patten);
+        }
+        return "";
+    }
+    public static String fmtdate(Instant unixTime, String patten) {
         if (null != unixTime && StringUtils.isNotBlank(patten)) {
             return DateKit.formatDateByUnixTime(unixTime,patten);
         }

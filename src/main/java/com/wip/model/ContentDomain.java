@@ -6,6 +6,7 @@
 package com.wip.model;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 /**
  * 文章表
@@ -30,11 +31,11 @@ public class ContentDomain implements Serializable {
     /**
      * 内容生成时的GMT unix时间戳
      */
-    private Long created;
+    private Instant created;
     /**
      * 内容更改时的GMT unix时间戳
      */
-    private Long modified;
+    private Instant modified;
     /**
      * 内容文字
      */
@@ -75,7 +76,6 @@ public class ContentDomain implements Serializable {
      * 是否允许ping
      */
     private Integer allowPing;
-
 
 
     /**
@@ -119,24 +119,24 @@ public class ContentDomain implements Serializable {
         this.slug = slug;
     }
 
-    public Long getCreated() {
+    public String getContent() {
+        return content;
+    }
+
+    public Instant getCreated() {
         return created;
     }
 
-    public void setCreated(Long created) {
+    public void setCreated(Instant created) {
         this.created = created;
     }
 
-    public Long getModified() {
+    public Instant getModified() {
         return modified;
     }
 
-    public void setModified(Long modified) {
+    public void setModified(Instant modified) {
         this.modified = modified;
-    }
-
-    public String getContent() {
-        return content;
     }
 
     public void setContent(String content) {
@@ -222,6 +222,7 @@ public class ContentDomain implements Serializable {
     public void setAllowFeed(Integer allowFeed) {
         this.allowFeed = allowFeed;
     }
+
     public Integer getOrderWeight() {
         return orderWeight;
     }

@@ -75,22 +75,12 @@
             <version>3.4</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
+<!--        jackson 的jsr310新时间api支持包-->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-joda</artifactId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-parameter-names</artifactId>
-        </dependency>
+<!--        jackson 的jsr310新时间api支持包-->
 
         <!-- 分页插件 -->
         <dependency>

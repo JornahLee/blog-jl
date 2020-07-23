@@ -6,6 +6,7 @@
 package com.wip.utils;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -17,6 +18,9 @@ public class DateKit {
 
     public static String formatDateByUnixTime(long unixTime, String dateFormat) {
         return dateFormat(new Date(unixTime), dateFormat);
+    }
+    public static String formatDateByUnixTime(Instant unixTime, String dateFormat) {
+        return dateFormat(new Date(unixTime.toEpochMilli()), dateFormat);
     }
 
     public static String dateFormat(Date date, String dateFormat) {

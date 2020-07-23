@@ -4,10 +4,10 @@ import com.github.pagehelper.PageInfo;
 import com.wip.constant.LogActions;
 import com.wip.constant.Types;
 import com.wip.controller.BaseController;
-import com.wip.model.dto.cond.ContentCond;
-import com.wip.model.dto.cond.MetaCond;
 import com.wip.model.ContentDomain;
 import com.wip.model.MetaDomain;
+import com.wip.model.dto.cond.ContentCond;
+import com.wip.model.dto.cond.MetaCond;
 import com.wip.service.article.ContentService;
 import com.wip.service.log.LogService;
 import com.wip.service.meta.MetaService;
@@ -22,8 +22,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.Instant;
 import java.util.List;
+
+import static java.time.Instant.now;
 
 @Api("文章管理")
 @Controller
@@ -139,7 +140,8 @@ public class ArticleController extends BaseController {
         contentDomain.setCategories(categories);
         contentDomain.setAllowComment(allowComment ? 1: 0);
         contentDomain.setOrderWeight(orderWeight);
-        contentDomain.setModified(Instant.now().toEpochMilli());
+        contentDomain.setModified(now());
+
         LOGGER.debug("param-orderWeight:{}",orderWeight);
         LOGGER.debug("contentDomain-orderWeight:{}",contentDomain.getOrderWeight());
         contentService.updateArticleById(contentDomain);
