@@ -5,12 +5,12 @@
  **/
 package com.wip.model.dto;
 
-import com.wip.model.MetaDomain;
+import com.wip.model.Meta;
 
 /**
  * 标签、分类列表
  */
-public class MetaDto extends MetaDomain {
+public class MetaDto extends Meta {
 
     private int count;
 

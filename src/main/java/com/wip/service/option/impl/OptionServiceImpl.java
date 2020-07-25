@@ -8,7 +8,7 @@ package com.wip.service.option.impl;
 import com.wip.constant.ErrorConstant;
 import com.wip.dao.OptionDao;
 import com.wip.exception.BusinessException;
-import com.wip.model.OptionsDomain;
+import com.wip.model.Options;
 import com.wip.service.option.OptionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class OptionServiceImpl implements OptionService {
 
     @Override
     @Cacheable(value = "optionsCache", key = "'options_'")
-    public List<OptionsDomain> getOptions() {
+    public List<Options> getOptions() {
         return optionDao.getOptions();
     }
 
@@ -47,7 +47,7 @@ public class OptionServiceImpl implements OptionService {
     public void updateOptionByName(String name, String value) {
         if (StringUtils.isBlank(name))
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
-        OptionsDomain option = new OptionsDomain();
+        Options option = new Options();
         option.setName(name);
         option.setValue(value);
         optionDao.updateOptionByName(option);
@@ -55,7 +55,7 @@ public class OptionServiceImpl implements OptionService {
 
     @Override
     @Cacheable(value = "optionCache", key = "'optionByname+' + #p0")
-    public OptionsDomain getOptionByName(String name) {
+    public Options getOptionByName(String name) {
         if (StringUtils.isBlank(name))
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         return optionDao.getOptionByName(name);

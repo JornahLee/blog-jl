@@ -9,7 +9,7 @@ import com.wip.constant.WebConst;
 import com.wip.controller.BaseController;
 import com.wip.model.dto.AttAchDto;
 import com.wip.exception.BusinessException;
-import com.wip.model.AttAchDomain;
+import com.wip.model.Attach;
 import com.wip.model.UserDomain;
 import com.wip.service.attach.AttAchService;
 import com.wip.service.log.LogService;
@@ -99,14 +99,14 @@ public class AttachController extends BaseController {
                 String fileName = TaleUtils.getFileKey(file.getOriginalFilename().replaceFirst("/", ""));
 
                 QiNiuCloudService.upload(file, fileName);
-                AttAchDomain attAchDomain = new AttAchDomain();
+                Attach attach = new Attach();
                 HttpSession session = request.getSession();
                 UserDomain sessionUser = (UserDomain) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
-                attAchDomain.setAuthorId(sessionUser.getUid());
-                attAchDomain.setFtype(TaleUtils.isImage(file.getInputStream()) ? Types.IMAGE.getType() : Types.FILE.getType());
-                attAchDomain.setFname(fileName);
-                attAchDomain.setFkey(QiNiuCloudService.QINIU_UPLOAD_SITE + fileName);
-                attAchService.addAttAch(attAchDomain);
+                attach.setAuthorId(sessionUser.getUid());
+                attach.setFtype(TaleUtils.isImage(file.getInputStream()) ? Types.IMAGE.getType() : Types.FILE.getType());
+                attach.setFname(fileName);
+                attach.setFkey(QiNiuCloudService.QINIU_UPLOAD_SITE + fileName);
+                attAchService.addAttAch(attach);
             }
             return APIResponse.success();
 

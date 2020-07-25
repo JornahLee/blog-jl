@@ -1,6 +1,6 @@
 package com.wip.dao;
 
-import com.wip.model.UserDomain;
+import com.wip.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,20 +16,20 @@ public interface UserDao {
      * @param password  密码
      * @return
      */
-    UserDomain getUserInfoByCond(@Param("username") String username, @Param("password") String password);
+    User getUserInfoByCond(@Param("username") String username, @Param("password") String password);
 
     /**
      * 通过用户ID获取用户信息
      * @param uid
      * @return
      */
-    UserDomain getUserInfoById(Integer uid);
+    User getUserInfoById(Integer uid);
 
     /**
      * 更改用户信息
      * @param user
      * @return
      */
-    int updateUserInfo(UserDomain user);
+    int updateUserInfo(User user);
 
 }

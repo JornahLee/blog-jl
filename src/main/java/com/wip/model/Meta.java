@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * 项目表
  */
-public class MetaDomain implements Serializable {
+public class Meta implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

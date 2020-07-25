@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * 网站配置项
  */
-public class OptionsDomain implements Serializable {
+public class Options implements Serializable {
 
     /**
      * 名称

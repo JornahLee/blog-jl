@@ -6,11 +6,12 @@
 package com.wip.model;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 /**
  * 网站图片文件相关表
  */
-public class AttAchDomain implements Serializable {
+public class Attach implements Serializable {
 
     /**
      * 主键编号
@@ -40,7 +41,7 @@ public class AttAchDomain implements Serializable {
     /**
      * 创建的时间戳
      */
-    private Integer created;
+    private Instant created;
 
     public Integer getId() {
         return id;
@@ -82,11 +83,11 @@ public class AttAchDomain implements Serializable {
         this.authorId = authorId;
     }
 
-    public Integer getCreated() {
+    public Instant getCreated() {
         return created;
     }
 
-    public void setCreated(Integer created) {
+    public void setCreated(Instant created) {
         this.created = created;
     }
 }

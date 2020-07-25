@@ -4,8 +4,8 @@ import com.wip.constant.Types;
 import com.wip.constant.WebConst;
 import com.wip.model.dto.MetaDto;
 import com.wip.model.dto.StatisticsDto;
-import com.wip.model.OptionsDomain;
-import com.wip.model.UserDomain;
+import com.wip.model.Options;
+import com.wip.model.User;
 import com.wip.service.meta.MetaService;
 import com.wip.service.option.OptionService;
 import com.wip.service.site.SiteService;
@@ -70,7 +70,7 @@ public class BaseInterceptor implements HandlerInterceptor {
         LOGGER.info("用户访问地址：{}，来路地址：{}",uri, IPKit.getIpAddressByRequest(request));
 
         // 请求拦截处理
-        UserDomain user = TaleUtils.getLoginUser(request);
+        User user = TaleUtils.getLoginUser(request);
         if (null == user) {
             Integer uid = TaleUtils.getCookieUid(request);
             if (null != uid) {
@@ -101,7 +101,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView view) throws Exception {
-        OptionsDomain ov = optionService.getOptionByName("site_record");
+        Options ov = optionService.getOptionByName("site_record");
         // 分类总数
         int categoryCount = metaService.getMetasCountByType(Types.CATEGORY.getType());
         // 标签总数
@@ -123,7 +123,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 
     private void initSiteConfig(HttpServletRequest request) {
         if (WebConst.initConfig.isEmpty()) {
-            List<OptionsDomain> options = optionService.getOptions();
+            List<Options> options = optionService.getOptions();
             Map<String, String> querys = new HashMap<>();
             options.forEach(option -> {
                 querys.put(option.getName(),option.getValue());

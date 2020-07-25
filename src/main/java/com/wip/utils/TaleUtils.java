@@ -1,19 +1,14 @@
 package com.wip.utils;
 
 import com.wip.constant.WebConst;
-import com.wip.controller.admin.AttachController;
-import com.wip.model.UserDomain;
+import com.wip.controller.v1.admin.AttachController;
+import com.wip.model.User;
 import com.wip.utils.commonmark.HeadingRenderer;
 import org.apache.commons.lang3.StringUtils;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.ext.heading.anchor.HeadingAnchorExtension;
-import org.commonmark.node.Heading;
-import org.commonmark.node.IndentedCodeBlock;
 import org.commonmark.node.Node;
-import org.commonmark.renderer.NodeRenderer;
-import org.commonmark.renderer.html.HtmlNodeRendererContext;
-import org.commonmark.renderer.html.HtmlNodeRendererFactory;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +17,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.html.parser.Parser;
 import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
@@ -30,9 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,12 +42,12 @@ public class TaleUtils {
      * @param request
      * @return
      */
-    public static UserDomain getLoginUser(HttpServletRequest request) {
+    public static User getLoginUser(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (null == session) {
             return null;
         }
-        return (UserDomain) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+        return (User) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
     }
 
     /**

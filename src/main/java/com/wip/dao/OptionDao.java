@@ -5,7 +5,7 @@
  **/
 package com.wip.dao;
 
-import com.wip.model.OptionsDomain;
+import com.wip.model.Options;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -20,18 +20,18 @@ public interface OptionDao {
      * 获取网站全部信息
      * @return
      */
-    List<OptionsDomain> getOptions();
+    List<Options> getOptions();
 
     /**
      * 更新网站配置
      * @param option
      */
-    void updateOptionByName(OptionsDomain option);
+    void updateOptionByName(Options option);
 
     /**
      * 通过名称网站配置
      * @param name
      * @return
      */
-    OptionsDomain getOptionByName(String name);
+    Options getOptionByName(String name);
 }

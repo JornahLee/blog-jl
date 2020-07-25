@@ -5,7 +5,7 @@
  **/
 package com.wip.service.user;
 
-import com.wip.model.UserDomain;
+import com.wip.model.User;
 
 /**
  * 用户相关Service接口
@@ -18,20 +18,20 @@ public interface UserService {
      * @param password  密码
      * @return
      */
-    UserDomain login(String username, String password);
+    User login(String username, String password);
 
     /**
      * 通过用户ID获取用户信息
      * @param uid   主键
      * @return
      */
-    UserDomain getUserInfoById(Integer uid);
+    User getUserInfoById(Integer uid);
 
     /**
      * 更改用户信息
      * @param user  user对象
      * @return
      */
-    int updateUserInfo(UserDomain user);
+    int updateUserInfo(User user);
 
 }

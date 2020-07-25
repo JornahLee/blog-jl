@@ -17,7 +17,7 @@
 
 
     <!--更新项目-->
-    <update id="updateMeta" parameterType="com.wip.model.MetaDomain">
+    <update id="updateMeta" parameterType="com.wip.model.Meta">
         UPDATE
           <include refid="BASE_TABLE"/>
         <set>
@@ -44,7 +44,7 @@
     </update>
 
     <!--根据主键ID获取项目-->
-    <select id="getMetaById" resultType="com.wip.model.MetaDomain">
+    <select id="getMetaById" resultType="com.wip.model.Meta">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM
@@ -54,7 +54,7 @@
     </select>
 
     <!--添加项目信息-->
-    <insert id="addMeta" parameterType="com.wip.model.MetaDomain" useGeneratedKeys="true" keyProperty="mid">
+    <insert id="addMeta" parameterType="com.wip.model.Meta" useGeneratedKeys="true" keyProperty="mid">
         INSERT INTO
           <include refid="BASE_TABLE"/>
             <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -72,7 +72,7 @@
     </insert>
 
     <!--根据条件获取项目-->
-    <select id="getMetasByCond" resultType="com.wip.model.MetaDomain" parameterType="com.wip.model.dto.cond.MetaCond">
+    <select id="getMetasByCond" resultType="com.wip.model.Meta" parameterType="com.wip.model.dto.cond.MetaCond">
         SELECT
           <include refid="BASE_COLUMN" />
         FROM
@@ -97,7 +97,7 @@
 
     </delete>
 
-    <resultMap id="BaseResultMap" type="com.wip.model.MetaDomain">
+    <resultMap id="BaseResultMap" type="com.wip.model.Meta">
         <id column="mid" jdbcType="INTEGER" property="mid"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="slug" jdbcType="VARCHAR" property="slug"/>
@@ -139,7 +139,7 @@
           m.type = #{type, jdbcType=VARCHAR}
     </select>
     <!--通过Meta名查找Meta项目-->
-    <select id="getMetaByName" resultType="com.wip.model.MetaDomain">
+    <select id="getMetaByName" resultType="com.wip.model.Meta">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM

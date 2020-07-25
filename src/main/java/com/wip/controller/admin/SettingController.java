@@ -3,7 +3,7 @@ package com.wip.controller.admin;
 import com.wip.constant.LogActions;
 import com.wip.constant.WebConst;
 import com.wip.controller.BaseController;
-import com.wip.model.OptionsDomain;
+import com.wip.model.Options;
 import com.wip.service.log.LogService;
 import com.wip.service.option.OptionService;
 import com.wip.utils.APIResponse;
@@ -41,7 +41,7 @@ public class SettingController extends BaseController {
     @ApiOperation("进入设置页")
     @GetMapping(value = "")
     public String index(HttpServletRequest request) {
-        List<OptionsDomain> optionsList = optionService.getOptions();
+        List<Options> optionsList = optionService.getOptions();
         Map<String, String> options = new HashMap<>();
         optionsList.forEach((option) ->{
             options.put(option.getName(),option.getValue());

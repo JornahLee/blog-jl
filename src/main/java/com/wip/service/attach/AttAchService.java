@@ -7,7 +7,7 @@ package com.wip.service.attach;
 
 import com.github.pagehelper.PageInfo;
 import com.wip.model.dto.AttAchDto;
-import com.wip.model.AttAchDomain;
+import com.wip.model.Attach;
 
 /**
  * 文件相关接口
@@ -16,9 +16,9 @@ public interface AttAchService {
 
     /**
      * 添加单个附件信息
-     * @param attAchDomain
+     * @param attach
      */
-    void addAttAch(AttAchDomain attAchDomain);
+    void addAttAch(Attach attach);
 
     /**
      * 获取所有的附件信息

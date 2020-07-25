@@ -5,7 +5,7 @@
  **/
 package com.wip.utils;
 
-import com.wip.model.MetaDomain;
+import com.wip.model.Meta;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ public final class AdminCommons {
      * @param cats
      * @return
      */
-    public static boolean exist_cat(MetaDomain category, String cats) {
+    public static boolean exist_cat(Meta category, String cats) {
         String[] arr = StringUtils.split(cats, ",");
         if (null != arr && arr.length > 0) {
             for (String c : arr) {

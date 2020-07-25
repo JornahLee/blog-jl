@@ -8,7 +8,7 @@ package com.wip.service.log.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wip.dao.LogDao;
-import com.wip.model.LogDomain;
+import com.wip.model.Log;
 import com.wip.service.log.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,19 +28,19 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public void addLog(String action, String data, String ip, Integer authorId) {
-        LogDomain logDomain = new LogDomain();
-        logDomain.setAuthorId(authorId);
-        logDomain.setIp(ip);
-        logDomain.setData(data);
-        logDomain.setAction(action);
-        logDao.addLog(logDomain);
+        Log log = new Log();
+        log.setAuthorId(authorId);
+        log.setIp(ip);
+        log.setData(data);
+        log.setAction(action);
+        logDao.addLog(log);
     }
 
     @Override
-    public PageInfo<LogDomain> getLogs(int pageNum, int pageSize) {
+    public PageInfo<Log> getLogs(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum,pageSize);
-        List<LogDomain> logs = logDao.getLogs();
-        PageInfo<LogDomain> pageInfo = new PageInfo<>(logs);
+        List<Log> logs = logDao.getLogs();
+        PageInfo<Log> pageInfo = new PageInfo<>(logs);
         return pageInfo;
 
     }

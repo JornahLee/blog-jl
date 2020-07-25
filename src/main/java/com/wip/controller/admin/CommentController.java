@@ -3,7 +3,7 @@ package com.wip.controller.admin;
 import com.github.pagehelper.PageInfo;
 import com.wip.controller.BaseController;
 import com.wip.model.dto.cond.CommentCond;
-import com.wip.model.CommentDomain;
+import com.wip.model.Comment;
 import com.wip.model.UserDomain;
 import com.wip.service.comment.CommentService;
 import com.wip.utils.APIResponse;
@@ -41,7 +41,7 @@ public class CommentController extends BaseController {
 
     ) {
         UserDomain user = this.user(request);
-        PageInfo<CommentDomain> comments = commentService.getCommentsByCond(new CommentCond(), page, limit);
+        PageInfo<Comment> comments = commentService.getCommentsByCond(new CommentCond(), page, limit);
         request.setAttribute("comments", comments);
         return "admin/comment_list";
     }
@@ -59,7 +59,7 @@ public class CommentController extends BaseController {
             String status
     ) {
         try {
-            CommentDomain comment = commentService.getCommentById(coid);
+            Comment comment = commentService.getCommentById(coid);
             if (null != comment) {
                 commentService.updateCommentStatus(coid,status);
             } else {
@@ -82,7 +82,7 @@ public class CommentController extends BaseController {
                     Integer coid
     ) {
         try {
-            CommentDomain comment = commentService.getCommentById(coid);
+            Comment comment = commentService.getCommentById(coid);
             if (null != comment) {
                 commentService.deleteComment(coid);
             } else {

@@ -6,8 +6,8 @@
 package com.wip.service.site;
 
 import com.wip.model.dto.StatisticsDto;
-import com.wip.model.CommentDomain;
-import com.wip.model.ContentDomain;
+import com.wip.model.Comment;
+import com.wip.model.Content;
 
 import java.util.List;
 
@@ -21,14 +21,14 @@ public interface SiteService {
      * @param limit
      * @return
      */
-    List<CommentDomain> getComments(int limit);
+    List<Comment> getComments(int limit);
 
     /**
      * 获取文章列表
      * @param limit
      * @return
      */
-    List<ContentDomain> getNewArticles(int limit);
+    List<Content> getNewArticles(int limit);
 
     /**
      * 获取后台统计数

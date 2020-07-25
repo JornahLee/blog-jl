@@ -1,6 +1,6 @@
 package com.wip.controller;
 
-import com.wip.model.UserDomain;
+import com.wip.model.User;
 import com.wip.utils.MapCache;
 import com.wip.utils.TaleUtils;
 
@@ -22,7 +22,7 @@ public abstract class BaseController {
      * @param request
      * @return
      */
-    public UserDomain user(HttpServletRequest request) {
+    public User user(HttpServletRequest request) {
         return TaleUtils.getLoginUser(request);
     }
 

@@ -6,7 +6,7 @@
 package com.wip.dao;
 
 import com.wip.model.dto.AttAchDto;
-import com.wip.model.AttAchDomain;
+import com.wip.model.Attach;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,9 +20,9 @@ public interface AttAchDao {
 
     /**
      * 添加单个附件文件
-     * @param attAchDomain
+     * @param attach
      */
-    void addAttAch(AttAchDomain attAchDomain);
+    void addAttAch(Attach attach);
 
     /**
      * 获取所有的附件信息

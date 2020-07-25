@@ -7,8 +7,8 @@ package com.wip.service.article;
 
 import com.github.pagehelper.PageInfo;
 import com.wip.model.dto.cond.ContentCond;
-import com.wip.model.ContentDomain;
-import com.wip.model.MetaDomain;
+import com.wip.model.Content;
+import com.wip.model.Meta;
 
 import java.util.List;
 
@@ -19,22 +19,22 @@ public interface ContentService {
 
     /***
      * 添加文章
-     * @param contentDomain
+     * @param content
      */
-    void addArticle(ContentDomain contentDomain);
+    void addArticle(Content content);
 
     /**
      * 根据编号获取文章
      * @param cid
      * @return
      */
-    ContentDomain getArticleById(Integer cid);
+    Content getArticleById(Integer cid);
 
     /**
      * 更新文章
-     * @param contentDomain
+     * @param content
      */
-    void updateArticleById(ContentDomain contentDomain);
+    void updateArticleById(Content content);
 
     /**
      * 根据条件获取文章列表
@@ -43,7 +43,7 @@ public interface ContentService {
      * @param limit
      * @return
      */
-    PageInfo<ContentDomain> getArticlesByCond(ContentCond contentCond, int page, int limit);
+    PageInfo<Content> getArticlesByCond(ContentCond contentCond, int page, int limit);
 
     /**
      * 删除文章
@@ -55,19 +55,19 @@ public interface ContentService {
      * 添加文章点击量
      * @param content
      */
-    void updateContentByCid(ContentDomain content);
+    void updateContentByCid(Content content);
 
     /**
      * 通过分类获取文章
      * @param category
      * @return
      */
-    List<ContentDomain> getArticleByCategory(String category);
+    List<Content> getArticleByCategory(String category);
 
     /**
      * 通过标签获取文章
      * @param tags
      * @return
      */
-    List<ContentDomain> getArticleByTags(MetaDomain tags);
+    List<Content> getArticleByTags(Meta tags);
 }

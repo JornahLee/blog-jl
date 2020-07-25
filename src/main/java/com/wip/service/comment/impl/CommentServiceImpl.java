@@ -11,11 +11,10 @@ import com.wip.constant.ErrorConstant;
 import com.wip.dao.CommentDao;
 import com.wip.model.dto.cond.CommentCond;
 import com.wip.exception.BusinessException;
-import com.wip.model.CommentDomain;
-import com.wip.model.ContentDomain;
+import com.wip.model.Comment;
+import com.wip.model.Content;
 import com.wip.service.article.ContentService;
 import com.wip.service.comment.CommentService;
-import com.wip.utils.DateKit;
 import com.wip.utils.TaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     @CacheEvict(value = "commentCache", allEntries = true)
-    public void addComment(CommentDomain comments) {
+    public void addComment(Comment comments) {
         String msg = null;
 
         if (null == comments) {
@@ -82,17 +82,17 @@ public class CommentServiceImpl implements CommentService {
         if (msg != null)
             throw BusinessException.withErrorCode(msg);
 
-        ContentDomain article = contentService.getArticleById(comments.getCid());
+        Content article = contentService.getArticleById(comments.getCid());
         if (null == article) {
             throw BusinessException.withErrorCode("该文章不存在");
         }
 
         comments.setOwnerId(article.getAuthorId());
         comments.setStatus(STATUS_MAP.get(STATUS_BLANK));
-        comments.setCreated(DateKit.getCurrentUnixTime());
+        comments.setCreated(Instant.now());
         commentDao.addComment(comments);
 
-        ContentDomain temp = new ContentDomain();
+        Content temp = new Content();
         temp.setCid(article.getCid());
         Integer count = article.getCommentsNum();
         if (null == count) {
@@ -105,7 +105,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Cacheable(value = "commentCache", key = "'commentsByCId_' + #p0")
-    public List<CommentDomain> getCommentsByCId(Integer cid) {
+    public List<Comment> getCommentsByCId(Integer cid) {
         if (null == cid)
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         return commentDao.getCommentByCId(cid);
@@ -113,18 +113,18 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Cacheable(value = "commentCache", key = "'commentsByCond_'+ #p1")
-    public PageInfo<CommentDomain> getCommentsByCond(CommentCond commentCond, int pageNum, int pageSize) {
+    public PageInfo<Comment> getCommentsByCond(CommentCond commentCond, int pageNum, int pageSize) {
         if (null == commentCond)
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         PageHelper.startPage(pageNum,pageSize);
-        List<CommentDomain> comments = commentDao.getCommentsByCond(commentCond);
-        PageInfo<CommentDomain> pageInfo = new PageInfo<>(comments);
+        List<Comment> comments = commentDao.getCommentsByCond(commentCond);
+        PageInfo<Comment> pageInfo = new PageInfo<>(comments);
         return pageInfo;
     }
 
     @Override
     @Cacheable(value = "commentCache",key = "'commentById_' + #p0")
-    public CommentDomain getCommentById(Integer coid) {
+    public Comment getCommentById(Integer coid) {
         if (null == coid)
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         return commentDao.getCommentById(coid);

@@ -7,7 +7,7 @@ package com.wip.service.meta;
 
 import com.wip.model.dto.MetaDto;
 import com.wip.model.dto.cond.MetaCond;
-import com.wip.model.MetaDomain;
+import com.wip.model.Meta;
 
 import java.util.List;
 
@@ -60,19 +60,19 @@ public interface MetaService {
      * @param metaCond  查询条件
      * @return
      */
-    List<MetaDomain> getMetas(MetaCond metaCond);
+    List<Meta> getMetas(MetaCond metaCond);
 
     /**
      * 添加项目
      * @param meta
      */
-    void addMea(MetaDomain meta);
+    void addMea(Meta meta);
 
     /**
      * 更新项目
      * @param meta
      */
-    void updateMeta(MetaDomain meta);
+    void updateMeta(Meta meta);
 
     /**
      * 通过类型获取项目总数
@@ -87,5 +87,5 @@ public interface MetaService {
      * @param name
      * @return
      */
-    MetaDomain getMetaByName(String type, String name);
+    Meta getMetaByName(String type, String name);
 }

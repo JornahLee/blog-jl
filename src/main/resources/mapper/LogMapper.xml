@@ -12,7 +12,7 @@
     </sql>
 
     <!--添加日志-->
-    <insert id="addLog" parameterType="com.wip.model.LogDomain">
+    <insert id="addLog" parameterType="com.wip.model.Log">
         INSERT INTO
           <include refid="BASE_TABLE"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -23,11 +23,11 @@
             #{data, jdbcType=VARCHAR},
             #{authorId, jdbcType=INTEGER},
             #{ip, jdbcType=VARCHAR},
-            UNIX_TIMESTAMP(NOW())
+            NOW()
         </trim>
     </insert>
 
-    <select id="getLogs" resultType="com.wip.model.LogDomain">
+    <select id="getLogs" resultType="com.wip.model.Log">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM

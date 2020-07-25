@@ -7,9 +7,9 @@ import com.wip.constant.WebConst;
 import com.wip.controller.BaseController;
 import com.wip.model.dto.StatisticsDto;
 import com.wip.exception.BusinessException;
-import com.wip.model.CommentDomain;
-import com.wip.model.ContentDomain;
-import com.wip.model.LogDomain;
+import com.wip.model.Comment;
+import com.wip.model.Content;
+import com.wip.model.Log;
 import com.wip.model.UserDomain;
 import com.wip.service.log.LogService;
 import com.wip.service.site.SiteService;
@@ -53,15 +53,15 @@ public class IndexController extends BaseController {
     public String index(HttpServletRequest request) {
         LOGGER.info("Enter admin index method");
         // 获取5条评论
-        List<CommentDomain> comments = siteService.getComments(5);
+        List<Comment> comments = siteService.getComments(5);
         // 获取5篇文章
-        List<ContentDomain> contents = siteService.getNewArticles(5);
+        List<Content> contents = siteService.getNewArticles(5);
         // 获取后台统计数
         StatisticsDto statistics = siteService.getStatistics();
 
         // 获取5篇日志
-        PageInfo<LogDomain> logs = logService.getLogs(1,5);
-        List<LogDomain> list = logs.getList();
+        PageInfo<Log> logs = logService.getLogs(1,5);
+        List<Log> list = logs.getList();
 
         request.setAttribute("comments",comments);
         request.setAttribute("articles",contents);

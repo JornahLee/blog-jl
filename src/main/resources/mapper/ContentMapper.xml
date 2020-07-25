@@ -3,7 +3,7 @@
 <mapper namespace="com.wip.dao.ContentDao">
 
     <!--表名-->
-    <select id="getArticleByCond" resultType="com.wip.model.ContentDomain" parameterType="com.wip.model.dto.cond.ContentCond">
+    <select id="getArticleByCond" resultType="com.wip.model.Content" parameterType="com.wip.model.dto.cond.ContentCond">
         SELECT
         <include refid="BASE_COLUMN"/>
         FROM
@@ -28,10 +28,10 @@
                 AND c.type = #{type, jdbcType=VARCHAR}
             </if>
             <if test="startTime != null">
-                AND c.created &gt;= #{startTime, jdbcType=INTEGER}
+                AND c.created &gt;= #{startTime, jdbcType=DATETIME}
             </if>
             <if test="endTime != null">
-                AND c.created &lt;= #{endTime, jdbcType=INTEGER}
+                AND c.created &lt;= #{endTime, jdbcType=DATETIME}
             </if>
         </where>
 
@@ -60,7 +60,7 @@
     </sql>
 
     <!--根据文章ID获取文章信息-->
-    <insert id="addArticle" parameterType="com.wip.model.ContentDomain" useGeneratedKeys="true" keyProperty="cid">
+    <insert id="addArticle" parameterType="com.wip.model.Content" useGeneratedKeys="true" keyProperty="cid">
         INSERT INTO
           <include refid="BASE_TABLE"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -90,7 +90,7 @@
     </insert>
 
     <!--根据文章ID更新文章-->
-    <select id="getArticleById" resultType="com.wip.model.ContentDomain">
+    <select id="getArticleById" resultType="com.wip.model.Content">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM
@@ -100,7 +100,7 @@
     </select>
 
     <!--根据条件查询文章-->
-    <update id="updateArticleById" parameterType="com.wip.model.ContentDomain">
+    <update id="updateArticleById" parameterType="com.wip.model.Content">
         UPDATE
           <include refid="BASE_TABLE"/>
         <set>
@@ -171,7 +171,7 @@
           <include refid="BASE_TABLE"/>
     </select>
     <!--通过分类获取文章-->
-    <select id="getArticleByCategory" resultType="com.wip.model.ContentDomain">
+    <select id="getArticleByCategory" resultType="com.wip.model.Content">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM
@@ -181,7 +181,7 @@
     </select>
 
     <!--通过标签获取 文章-->
-    <select id="getArticleByTags" resultType="com.wip.model.ContentDomain">
+    <select id="getArticleByTags" resultType="com.wip.model.Content">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM

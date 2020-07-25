@@ -7,7 +7,7 @@ package com.wip.service.log;
 
 
 import com.github.pagehelper.PageInfo;
-import com.wip.model.LogDomain;
+import com.wip.model.Log;
 
 /**
  * 日志相关Service接口
@@ -29,5 +29,5 @@ public interface LogService {
      * @param pageSize
      * @return
      */
-    PageInfo<LogDomain> getLogs(int pageNum, int pageSize);
+    PageInfo<Log> getLogs(int pageNum, int pageSize);
 }

@@ -1,11 +1,12 @@
 package com.wip.model;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 /**
  * 用户表
  */
-public class UserDomain implements Serializable {
+public class User implements Serializable {
 
     /** 主键编号 */
     private Integer uid;
@@ -20,9 +21,9 @@ public class UserDomain implements Serializable {
     /**  用户显示的名称 */
     private String screenName;
     /** 用户注册时的GMT unix时间戳 */
-    private Integer created;
+    private Instant created;
     /** 最后活动时间 */
-    private Integer activated;
+    private Instant activated;
     /** 上次登录最后活跃时间 */
     private Integer logged;
     /** 用户组 */
@@ -76,19 +77,19 @@ public class UserDomain implements Serializable {
         this.screenName = screenName;
     }
 
-    public Integer getCreated() {
+    public Instant getCreated() {
         return created;
     }
 
-    public void setCreated(Integer created) {
+    public void setCreated(Instant created) {
         this.created = created;
     }
 
-    public Integer getActivated() {
+    public Instant getActivated() {
         return activated;
     }
 
-    public void setActivated(Integer activated) {
+    public void setActivated(Instant activated) {
         this.activated = activated;
     }
 

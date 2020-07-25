@@ -14,8 +14,8 @@ import com.wip.dao.MetaDao;
 import com.wip.model.dto.StatisticsDto;
 import com.wip.model.dto.cond.CommentCond;
 import com.wip.model.dto.cond.ContentCond;
-import com.wip.model.CommentDomain;
-import com.wip.model.ContentDomain;
+import com.wip.model.Comment;
+import com.wip.model.Content;
 import com.wip.service.site.SiteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,26 +46,26 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     @Cacheable(value = "siteCache", key = "'comments_' + #p0")
-    public List<CommentDomain> getComments(int limit) {
+    public List<Comment> getComments(int limit) {
         LOGGER.debug("Enter recentComments method: limit={}", limit);
         if (limit < 0 || limit > 10) {
             limit = 10;
         }
         PageHelper.startPage(1,limit);
-        List<CommentDomain> rs = commentDao.getCommentsByCond(new CommentCond());
+        List<Comment> rs = commentDao.getCommentsByCond(new CommentCond());
         LOGGER.debug("Exit recentComments method");
         return rs;
     }
 
     @Override
     @Cacheable(value = "siteCache", key = "'newArticles_' + #p0")
-    public List<ContentDomain> getNewArticles(int limit) {
+    public List<Content> getNewArticles(int limit) {
         LOGGER.debug("Enter recentArticles method:limit={}",limit);
         if (limit < 0 || limit > 10) {
             limit = 10;
         }
         PageHelper.startPage(1,limit);
-        List<ContentDomain> rs = contentDao.getArticleByCond(new ContentCond());
+        List<Content> rs = contentDao.getArticleByCond(new ContentCond());
         LOGGER.debug("Exit recentArticles method");
         return rs;
     }

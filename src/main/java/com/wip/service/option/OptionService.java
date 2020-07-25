@@ -5,7 +5,7 @@
  **/
 package com.wip.service.option;
 
-import com.wip.model.OptionsDomain;
+import com.wip.model.Options;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +19,7 @@ public interface OptionService {
      * 获取全部网站配置
      * @return
      */
-    List<OptionsDomain> getOptions();
+    List<Options> getOptions();
 
     /**
      * 保存系统设置
@@ -39,5 +39,5 @@ public interface OptionService {
      * @param site_record
      * @return
      */
-    OptionsDomain getOptionByName(String site_record);
+    Options getOptionByName(String site_record);
 }

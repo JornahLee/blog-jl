@@ -4,8 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.wip.constant.LogActions;
 import com.wip.constant.Types;
 import com.wip.controller.BaseController;
-import com.wip.model.ContentDomain;
-import com.wip.model.MetaDomain;
+import com.wip.model.Content;
+import com.wip.model.Meta;
 import com.wip.model.dto.cond.ContentCond;
 import com.wip.model.dto.cond.MetaCond;
 import com.wip.service.article.ContentService;
@@ -56,7 +56,7 @@ public class ArticleController extends BaseController {
         ContentCond contentCond = new ContentCond();
         contentCond.setHowToOrder("modified DESC");
         // ORDER BY  c.orderWeight DESC ,  c.modified DESC , created DESC
-        PageInfo<ContentDomain> articles = contentService.getArticlesByCond(contentCond, page, limit);
+        PageInfo<Content> articles = contentService.getArticlesByCond(contentCond, page, limit);
         request.setAttribute("articles",articles);
         return "admin/article_list";
     }
@@ -66,7 +66,7 @@ public class ArticleController extends BaseController {
     public String newArticle(HttpServletRequest request) {
         MetaCond metaCond = new MetaCond();
         metaCond.setType(Types.CATEGORY.getType());
-        List<MetaDomain> metas = metaService.getMetas(metaCond);
+        List<Meta> metas = metaService.getMetas(metaCond);
         request.setAttribute("categories",metas);
         return "admin/article_edit";
     }
@@ -79,11 +79,11 @@ public class ArticleController extends BaseController {
             Integer cid,
             HttpServletRequest request
     ) {
-        ContentDomain content = contentService.getArticleById(cid);
+        Content content = contentService.getArticleById(cid);
         request.setAttribute("contents", content);
         MetaCond metaCond = new MetaCond();
         metaCond.setType(Types.CATEGORY.getType());
-        List<MetaDomain> categories = metaService.getMetas(metaCond);
+        List<Meta> categories = metaService.getMetas(metaCond);
         request.setAttribute("categories", categories);
         request.setAttribute("active", "article");
         return "admin/article_edit";
@@ -128,7 +128,7 @@ public class ArticleController extends BaseController {
             @RequestParam(name = "orderWeight", required = true)
             Integer orderWeight
     ) {
-        ContentDomain contentDomain = new ContentDomain();
+        Content contentDomain = new Content();
         contentDomain.setTitle(title);
         contentDomain.setCid(cid);
         contentDomain.setTitlePic(titlePic);
@@ -185,7 +185,7 @@ public class ArticleController extends BaseController {
             @RequestParam(name = "orderWeight", required = true)
             Integer orderWeight
     ) {
-        ContentDomain contentDomain = new ContentDomain();
+        Content contentDomain = new Content();
         contentDomain.setTitle(title);
         contentDomain.setTitlePic(titlePic);
         contentDomain.setSlug(slug);

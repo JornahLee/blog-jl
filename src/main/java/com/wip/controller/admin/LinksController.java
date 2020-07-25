@@ -5,7 +5,7 @@ import com.wip.constant.Types;
 import com.wip.controller.BaseController;
 import com.wip.model.dto.cond.MetaCond;
 import com.wip.exception.BusinessException;
-import com.wip.model.MetaDomain;
+import com.wip.model.Meta;
 import com.wip.service.meta.MetaService;
 import com.wip.utils.APIResponse;
 import io.swagger.annotations.Api;
@@ -36,7 +36,7 @@ public class LinksController extends BaseController {
     public String index(HttpServletRequest request) {
         MetaCond metaCond = new MetaCond();
         metaCond.setType(Types.LINK.getType());
-        List<MetaDomain> metas = metaService.getMetas(metaCond);
+        List<Meta> metas = metaService.getMetas(metaCond);
         request.setAttribute("links", metas);
         return "admin/links";
     }
@@ -62,7 +62,7 @@ public class LinksController extends BaseController {
             int sort
     ) {
         try {
-            MetaDomain meta = new MetaDomain();
+            Meta meta = new Meta();
             meta.setName(title);
             meta.setSlug(url);
             meta.setDescription(logo);

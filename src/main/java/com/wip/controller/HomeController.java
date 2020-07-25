@@ -8,9 +8,9 @@ import com.wip.constant.WebConst;
 import com.wip.model.dto.MetaDto;
 import com.wip.model.dto.cond.ContentCond;
 import com.wip.exception.BusinessException;
-import com.wip.model.CommentDomain;
-import com.wip.model.ContentDomain;
-import com.wip.model.MetaDomain;
+import com.wip.model.Comment;
+import com.wip.model.Content;
+import com.wip.model.Meta;
 import com.wip.service.article.ContentService;
 import com.wip.service.comment.CommentService;
 import com.wip.service.meta.MetaService;
@@ -29,12 +29,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Api("博客前台页面")
 @Controller
@@ -63,7 +60,7 @@ public class HomeController extends BaseController {
         ContentCond cond = new ContentCond();
         cond.setHowToOrder("orderWeight DESC, modified DESC");
         cond.setStatus(ContentCond.PUBLISH);
-        PageInfo<ContentDomain> articles = contentService.getArticlesByCond(cond, page, limit);
+        PageInfo<Content> articles = contentService.getArticlesByCond(cond, page, limit);
 
         request.setAttribute("articles", articles);
         return "blog/home";
@@ -83,7 +80,7 @@ public class HomeController extends BaseController {
         ContentCond cond = new ContentCond();
         cond.setStatus(ContentCond.PUBLISH);
         cond.setHowToOrder("created DESC");
-        PageInfo<ContentDomain> articles = contentService.getArticlesByCond(cond, page, limit);
+        PageInfo<Content> articles = contentService.getArticlesByCond(cond, page, limit);
         request.setAttribute("articles", articles);
         return "blog/archives";
     }
@@ -108,10 +105,10 @@ public class HomeController extends BaseController {
             @PathVariable("name")
                     String name
     ) {
-        MetaDomain category = metaService.getMetaByName(Types.CATEGORY.getType(), name);
+        Meta category = metaService.getMetaByName(Types.CATEGORY.getType(), name);
         if (null == category.getName())
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
-        List<ContentDomain> articles = contentService.getArticleByCategory(category.getName());
+        List<Content> articles = contentService.getArticleByCategory(category.getName());
         request.setAttribute("category", category.getName());
         request.setAttribute("articles", articles);
         return "blog/category_detail";
@@ -137,8 +134,8 @@ public class HomeController extends BaseController {
             @PathVariable("name")
                     String name
     ) {
-        MetaDomain tags = metaService.getMetaByName(Types.TAG.getType(), name);
-        List<ContentDomain> articles = contentService.getArticleByTags(tags);
+        Meta tags = metaService.getMetaByName(Types.TAG.getType(), name);
+        List<Content> articles = contentService.getArticleByTags(tags);
         request.setAttribute("articles", articles);
         request.setAttribute("tags", tags.getName());
         return "blog/tags_detail";
@@ -157,7 +154,7 @@ public class HomeController extends BaseController {
                     Integer cid,
             HttpServletRequest request
     ) {
-        ContentDomain article = contentService.getArticleById(cid);
+        Content article = contentService.getArticleById(cid);
         request.setAttribute("article", article);
 
         if (!isFromSameIp(cid, request)) {
@@ -165,7 +162,7 @@ public class HomeController extends BaseController {
             this.updateArticleHits(article.getCid(), article.getHits());
         }
         // 获取评论
-        List<CommentDomain> comments = commentService.getCommentsByCId(cid);
+        List<Comment> comments = commentService.getCommentsByCId(cid);
         request.setAttribute("comments", comments);
 
         return "blog/detail";
@@ -195,7 +192,7 @@ public class HomeController extends BaseController {
         }
         hits = null == hits ? 1 : hits + 1;
         if (hits >= WebConst.HIT_BUFFER_SIZE) {
-            ContentDomain temp = new ContentDomain();
+            Content temp = new Content();
             temp.setCid(cid);
             temp.setHits(chits + hits);
             contentService.updateContentByCid(temp);
@@ -261,7 +258,7 @@ public class HomeController extends BaseController {
         content = EmojiParser.parseToAliases(content);
 
 
-        CommentDomain comments = new CommentDomain();
+        Comment comments = new Comment();
         comments.setAuthor(author);
         comments.setCid(cid);
         comments.setIp(request.getRemoteAddr());

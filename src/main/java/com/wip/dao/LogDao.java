@@ -6,7 +6,7 @@
 package com.wip.dao;
 
 
-import com.wip.model.LogDomain;
+import com.wip.model.Log;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -19,14 +19,14 @@ public interface LogDao {
 
     /**
      * 添加日志
-     * @param logDomain
+     * @param log
      * @return
      */
-    int addLog(LogDomain logDomain);
+    int addLog(Log log);
 
     /**
      * 获取日志
      * @return
      */
-    List<LogDomain> getLogs();
+    List<Log> getLogs();
 }

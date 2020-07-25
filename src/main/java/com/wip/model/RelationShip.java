@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * 文章关联信息表
  */
-public class RelationShipDomain implements Serializable {
+public class RelationShip implements Serializable {
 
     /**
      * 文章主键

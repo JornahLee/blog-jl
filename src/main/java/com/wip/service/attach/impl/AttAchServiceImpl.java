@@ -11,7 +11,7 @@ import com.wip.constant.ErrorConstant;
 import com.wip.dao.AttAchDao;
 import com.wip.model.dto.AttAchDto;
 import com.wip.exception.BusinessException;
-import com.wip.model.AttAchDomain;
+import com.wip.model.Attach;
 import com.wip.service.attach.AttAchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -31,10 +31,10 @@ public class AttAchServiceImpl implements AttAchService {
 
     @Override
     @CacheEvict(value = {"attCaches", "attCache"}, allEntries = true, beforeInvocation = true)
-    public void addAttAch(AttAchDomain attAchDomain) {
-        if (null == attAchDomain)
+    public void addAttAch(Attach attach) {
+        if (null == attach)
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
-        attAchDao.addAttAch(attAchDomain);
+        attAchDao.addAttAch(attach);
     }
 
     @Override

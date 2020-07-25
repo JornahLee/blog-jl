@@ -7,7 +7,7 @@ package com.wip.dao;
 
 import com.wip.model.dto.MetaDto;
 import com.wip.model.dto.cond.MetaCond;
-import com.wip.model.MetaDomain;
+import com.wip.model.Meta;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,28 +25,28 @@ public interface MetaDao {
      * @param meta  项目对象
      * @return
      */
-    int addMeta(MetaDomain meta);
+    int addMeta(Meta meta);
 
     /**
      * 更新项目
      * @param meta  项目对象
      * @return
      */
-    int updateMeta(MetaDomain meta);
+    int updateMeta(Meta meta);
 
     /**
      * 根据条件查询
      * @param metaCond
      * @return
      */
-    List<MetaDomain> getMetasByCond(MetaCond metaCond);
+    List<Meta> getMetasByCond(MetaCond metaCond);
 
     /**
      * 根据ID获取项目
      * @param mid
      * @return
      */
-    MetaDomain getMetaById(@Param("mid") Integer mid);
+    Meta getMetaById(@Param("mid") Integer mid);
 
     /**
      * 根据sql查询
@@ -74,5 +74,5 @@ public interface MetaDao {
      * @param name
      * @return
      */
-    MetaDomain getMetaByName(@Param("type") String type, @Param("name") String name);
+    Meta getMetaByName(@Param("type") String type, @Param("name") String name);
 }

@@ -11,7 +11,7 @@ import java.time.Instant;
 /**
  * 文章表
  */
-public class ContentDomain implements Serializable {
+public class Content implements Serializable {
     /**
      * 文章的主键编号
      */

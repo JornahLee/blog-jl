@@ -13,9 +13,9 @@ import com.wip.dao.RelationShipDao;
 import com.wip.model.dto.MetaDto;
 import com.wip.model.dto.cond.MetaCond;
 import com.wip.exception.BusinessException;
-import com.wip.model.ContentDomain;
-import com.wip.model.MetaDomain;
-import com.wip.model.RelationShipDomain;
+import com.wip.model.Content;
+import com.wip.model.Meta;
+import com.wip.model.RelationShip;
 import com.wip.service.article.ContentService;
 import com.wip.service.meta.MetaService;
 import org.apache.commons.lang3.StringUtils;
@@ -51,14 +51,14 @@ public class MetaServiceImpl implements MetaService {
             metaCond.setName(name);
             metaCond.setType(type);
             // 通过项目名和类型查找有没有存在的
-            List<MetaDomain> metas = metaDao.getMetasByCond(metaCond);
+            List<Meta> metas = metaDao.getMetasByCond(metaCond);
             // 判断是否找到有相同的
             if (null == metas || metas.size() ==0) {
-                MetaDomain metaDomain = new MetaDomain();
+                Meta metaDomain = new Meta();
                 metaDomain.setName(name);
                 // 如果有mid代表需要更新
                 if (null != mid) {
-                    MetaDomain meta = metaDao.getMetaById(mid);
+                    Meta meta = metaDao.getMetaById(mid);
                     if (null != meta)
                         metaDomain.setMid(mid);
                     metaDao.updateMeta(metaDomain);
@@ -116,17 +116,17 @@ public class MetaServiceImpl implements MetaService {
         MetaCond metaCond = new MetaCond();
         metaCond.setName(name);
         metaCond.setType(type);
-        List<MetaDomain> metas = this.getMetas(metaCond);
+        List<Meta> metas = this.getMetas(metaCond);
 
         int mid;
-        MetaDomain metaDomain;
+        Meta metaDomain;
         if (metas.size() == 1) {
-            MetaDomain meta = metas.get(0);
+            Meta meta = metas.get(0);
             mid = meta.getMid();
         } else if (metas.size() > 1) {
             throw BusinessException.withErrorCode(ErrorConstant.Meta.NOT_ONE_RESULT);
         } else {
-            metaDomain = new MetaDomain();
+            metaDomain = new Meta();
             metaDomain.setSlug(name);
             metaDomain.setName(name);
             metaDomain.setType(type);
@@ -136,7 +136,7 @@ public class MetaServiceImpl implements MetaService {
         if (mid != 0) {
             Long count = relationShipDao.getCountById(cid, mid);
             if (count ==0) {
-                RelationShipDomain relationShip = new RelationShipDomain();
+                RelationShip relationShip = new RelationShip();
                 relationShip.setCid(cid);
                 relationShip.setMid(mid);
                 relationShipDao.addRelationShip(relationShip);
@@ -148,7 +148,7 @@ public class MetaServiceImpl implements MetaService {
     @Override
     @Transactional
     @CacheEvict(value = {"metaCaches","metaCache"}, allEntries = true, beforeInvocation = true)
-    public void addMea(MetaDomain meta) {
+    public void addMea(Meta meta) {
         if (null == meta)
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         metaDao.addMeta(meta);
@@ -157,7 +157,7 @@ public class MetaServiceImpl implements MetaService {
     @Override
     @Transactional
     @CacheEvict(value = {"metaCaches", "metaCache"}, allEntries = true, beforeInvocation = true)
-    public void updateMeta(MetaDomain meta) {
+    public void updateMeta(Meta meta) {
         if (null == meta || null == meta.getMid())
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         metaDao.updateMeta(meta);
@@ -173,7 +173,7 @@ public class MetaServiceImpl implements MetaService {
 
     @Override
     @Cacheable(value = "metaCaches", key = "'metaByName_' + #p1")
-    public MetaDomain getMetaByName(String type, String name) {
+    public Meta getMetaByName(String type, String name) {
         if (null == name)
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         return metaDao.getMetaByName(type,name);
@@ -186,22 +186,22 @@ public class MetaServiceImpl implements MetaService {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
 
         // 通过ID找到该项目
-        MetaDomain meta = metaDao.getMetaById(mid);
+        Meta meta = metaDao.getMetaById(mid);
         if (null != meta) {
             String type = meta.getType();
             String name = meta.getName();
             // 删除meta
             metaDao.deleteMetaById(mid);
             // 需要把相关的数据删除
-            List<RelationShipDomain> relationShips = relationShipDao.getRelationShipByMid(mid);
+            List<RelationShip> relationShips = relationShipDao.getRelationShipByMid(mid);
             // 判断是否查找到项目编号
             if (null != relationShips && relationShips.size() > 0) {
-                for (RelationShipDomain relationShip : relationShips) {
+                for (RelationShip relationShip : relationShips) {
                     // 通过关联表的文章ID找到该文章
-                    ContentDomain article = contentService.getArticleById(relationShip.getCid());
+                    Content article = contentService.getArticleById(relationShip.getCid());
                     // 判断是否找到文章
                     if (null != article) {
-                        ContentDomain temp = new ContentDomain();
+                        Content temp = new Content();
                         temp.setCid(relationShip.getCid());
                         if (type.equals(Types.CATEGORY.getType())) {
                             temp.setCategories(reMeta(name,article.getCategories()));
@@ -234,7 +234,7 @@ public class MetaServiceImpl implements MetaService {
 
     @Override
     @Cacheable(value = "metaCaches", key = "'metas_' + #p0")
-    public List<MetaDomain> getMetas(MetaCond metaCond) {
+    public List<Meta> getMetas(MetaCond metaCond) {
         return metaDao.getMetasByCond(metaCond);
     }
 }

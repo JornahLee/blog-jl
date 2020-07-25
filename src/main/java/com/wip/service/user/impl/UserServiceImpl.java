@@ -8,9 +8,8 @@ package com.wip.service.user.impl;
 import com.wip.constant.ErrorConstant;
 import com.wip.dao.UserDao;
 import com.wip.exception.BusinessException;
-import com.wip.model.UserDomain;
+import com.wip.model.User;
 import com.wip.service.user.UserService;
-import com.wip.utils.APIResponse;
 import com.wip.utils.TaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +27,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDomain login(String username, String password) {
+    public User login(String username, String password) {
 
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password))
             throw BusinessException.withErrorCode(ErrorConstant.Auth.USERNAME_PASSWORD_IS_EMPTY);
 
         String pwd = TaleUtils.MD5encode(username + password);
-        UserDomain user = userDao.getUserInfoByCond(username,pwd);
+        User user = userDao.getUserInfoByCond(username,pwd);
         if (null == user)
             throw BusinessException.withErrorCode(ErrorConstant.Auth.USERNAME_PASSWORD_ERROR);
         return user;
@@ -49,14 +48,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDomain getUserInfoById(Integer uid) {
+    public User getUserInfoById(Integer uid) {
         return userDao.getUserInfoById(uid);
     }
 
     // 开启事务
     @Transactional
     @Override
-    public int updateUserInfo(UserDomain user) {
+    public int updateUserInfo(User user) {
         if (null == user.getUid())
             throw BusinessException.withErrorCode("用户编号不能为空");
         return userDao.updateUserInfo(user);

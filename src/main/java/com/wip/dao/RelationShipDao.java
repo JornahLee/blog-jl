@@ -5,7 +5,7 @@
  **/
 package com.wip.dao;
 
-import com.wip.model.RelationShipDomain;
+import com.wip.model.RelationShip;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,7 +22,7 @@ public interface RelationShipDao {
      * @param mid
      * @return
      */
-    List<RelationShipDomain> getRelationShipByMid(Integer mid);
+    List<RelationShip> getRelationShipByMid(Integer mid);
 
     /**
      * 根据meta编号删除关联
@@ -43,7 +43,7 @@ public interface RelationShipDao {
      * @param relationShip
      * @return
      */
-    int addRelationShip(RelationShipDomain relationShip);
+    int addRelationShip(RelationShip relationShip);
 
     /**
      * 根据文章编号删除关联
@@ -55,5 +55,5 @@ public interface RelationShipDao {
      * 根据文章ID获取关联
      * @param cid
      */
-    List<RelationShipDomain> getRelationShipByCid(Integer cid);
+    List<RelationShip> getRelationShipByCid(Integer cid);
 }

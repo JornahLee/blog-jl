@@ -6,7 +6,7 @@
 package com.wip.dao;
 
 import com.wip.model.dto.cond.CommentCond;
-import com.wip.model.CommentDomain;
+import com.wip.model.Comment;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,14 +22,14 @@ public interface CommentDao {
      * 添加评论
      * @param comments
      */
-    void addComment(CommentDomain comments);
+    void addComment(Comment comments);
 
     /**
      * 根据文章ID获取评论
      * @param cid
      * @return
      */
-    List<CommentDomain> getCommentByCId(@Param("cid") Integer cid);
+    List<Comment> getCommentByCId(@Param("cid") Integer cid);
 
 
     /**
@@ -49,14 +49,14 @@ public interface CommentDao {
      * @param commentCond
      * @return
      */
-    List<CommentDomain> getCommentsByCond(CommentCond commentCond);
+    List<Comment> getCommentsByCond(CommentCond commentCond);
 
     /**
      * 通过ID获取评论
      * @param coid
      * @return
      */
-    CommentDomain getCommentById(@Param("coid") Integer coid);
+    Comment getCommentById(@Param("coid") Integer coid);
 
     /**
      * 更新评论状态
