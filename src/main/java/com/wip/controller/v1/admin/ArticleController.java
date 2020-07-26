@@ -1,4 +1,4 @@
-package com.wip.controller.admin;
+package com.wip.controller.v1.admin;
 
 import com.github.pagehelper.PageInfo;
 import com.wip.constant.LogActions;

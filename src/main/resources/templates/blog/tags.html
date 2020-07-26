@@ -13,7 +13,7 @@
                 </header>
                 <div class="tag-cloud">
                     <div class="tag-cloud-title">
-                        目前共计 <th:block th:text="${tagCount}"></th:block> 个标签
+                        目前共计 <th:block th:text="${tags.size()}"></th:block> 个标签
                     </div>
                     <div class="tag-cloud-tags">
                         <th:block th:if="${tags}">

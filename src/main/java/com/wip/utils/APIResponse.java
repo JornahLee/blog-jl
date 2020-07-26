@@ -33,20 +33,20 @@ public class APIResponse <T> {
         this.msg = msg;
     }
 
-    public static APIResponse success() {
-        return new APIResponse(CODE_SUCCESS);
+    public static APIResponse<Object> success() {
+        return new APIResponse<>(CODE_SUCCESS);
     }
 
-    public static APIResponse success(Object data) {
-        return new APIResponse(CODE_SUCCESS, data);
+    public static <T> APIResponse<T> success(T data) {
+        return new APIResponse<>(CODE_SUCCESS, data);
     }
 
-    public static APIResponse fail(String msg) {
-        return new APIResponse(CODE_FAIL,msg);
+    public static APIResponse<Object> fail(String msg) {
+        return new APIResponse<>(CODE_FAIL,msg);
     }
 
-    public static APIResponse widthCode(String errorCode) {
-        return new APIResponse(errorCode);
+    public static APIResponse<Object> widthCode(String errorCode) {
+        return new APIResponse<>(errorCode);
     }
 
     public String getCode() {

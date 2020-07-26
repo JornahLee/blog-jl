@@ -1,10 +1,10 @@
-package com.wip.controller.admin;
+package com.wip.controller.v1.admin;
 
 import com.github.pagehelper.PageInfo;
 import com.wip.controller.BaseController;
 import com.wip.model.dto.cond.CommentCond;
 import com.wip.model.Comment;
-import com.wip.model.UserDomain;
+import com.wip.model.User;
 import com.wip.service.comment.CommentService;
 import com.wip.utils.APIResponse;
 import io.swagger.annotations.Api;
@@ -40,7 +40,7 @@ public class CommentController extends BaseController {
             HttpServletRequest request
 
     ) {
-        UserDomain user = this.user(request);
+        User user = this.user(request);
         PageInfo<Comment> comments = commentService.getCommentsByCond(new CommentCond(), page, limit);
         request.setAttribute("comments", comments);
         return "admin/comment_list";

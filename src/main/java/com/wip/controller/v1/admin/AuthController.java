@@ -1,14 +1,13 @@
-package com.wip.controller.admin;
+package com.wip.controller.v1.admin;
 
 import com.wip.constant.LogActions;
 import com.wip.constant.WebConst;
 import com.wip.controller.BaseController;
 import com.wip.exception.BusinessException;
-import com.wip.model.UserDomain;
+import com.wip.model.User;
 import com.wip.service.log.LogService;
 import com.wip.service.user.UserService;
 import com.wip.utils.APIResponse;
-import com.wip.utils.GsonUtils;
 import com.wip.utils.TaleUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -67,7 +66,7 @@ public class AuthController extends BaseController {
         Integer error_count = cache.get("login_error_count");
         try {
             // 调用Service登录方法
-            UserDomain userInfo = userService.login(username, password);
+            User userInfo = userService.login(username, password);
             // 设置用户信息session
             request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, userInfo);
             // 判断是否勾选记住我

@@ -1,4 +1,4 @@
-package com.wip.controller.admin;
+package com.wip.controller.v1.admin;
 
 
 import com.github.pagehelper.PageInfo;
@@ -10,7 +10,7 @@ import com.wip.exception.BusinessException;
 import com.wip.model.Comment;
 import com.wip.model.Content;
 import com.wip.model.Log;
-import com.wip.model.UserDomain;
+import com.wip.model.User;
 import com.wip.service.log.LogService;
 import com.wip.service.site.SiteService;
 import com.wip.service.user.UserService;
@@ -96,9 +96,9 @@ public class IndexController extends BaseController {
             HttpServletRequest request,
             HttpSession session
     ) {
-        UserDomain users = this.user(request);
+        User users = this.user(request);
         if (StringUtils.isNotBlank(screenName) && StringUtils.isNotBlank(email)) {
-            UserDomain temp = new UserDomain();
+            User temp = new User();
             temp.setUid(users.getUid());
             temp.setScreenName(screenName);
             temp.setEmail(email);
@@ -108,7 +108,7 @@ public class IndexController extends BaseController {
             logService.addLog(LogActions.UP_INFO.getAction(),GsonUtils.toJsonString(temp),request.getRemoteAddr(),this.getUid(request));
 
             // 更新session中的数据
-            UserDomain originAL = (UserDomain) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+            User originAL = (User) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
             originAL.setScreenName(screenName);
             originAL.setEmail(email);
             session.setAttribute(WebConst.LOGIN_SESSION_KEY, originAL);
@@ -132,7 +132,7 @@ public class IndexController extends BaseController {
             HttpServletRequest request,
             HttpSession session
     ) {
-        UserDomain users = this.user(request);
+        User users = this.user(request);
         if (StringUtils.isBlank(oldPassword) || StringUtils.isBlank(newPassword)) {
             return APIResponse.fail("请确认信息输入完整");
         }
@@ -146,7 +146,7 @@ public class IndexController extends BaseController {
         }
 
         try {
-            UserDomain temp = new UserDomain();
+            User temp = new User();
             temp.setUid(users.getUid());
             String pwd = TaleUtils.MD5encode(users.getUsername() + newPassword);
             temp.setPassword(pwd);
@@ -154,7 +154,7 @@ public class IndexController extends BaseController {
             logService.addLog(LogActions.UP_PWD.getAction(), null,request.getRemoteAddr(),this.getUid(request));
 
             // 更新session中的数据
-            UserDomain originAL = (UserDomain) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+            User originAL = (User) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
             originAL.setPassword(pwd);
             session.setAttribute(WebConst.LOGIN_SESSION_KEY,originAL);
             return APIResponse.success();

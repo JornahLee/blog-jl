@@ -1,4 +1,4 @@
-package com.wip.controller.admin;
+package com.wip.controller.v1.admin;
 
 import com.github.pagehelper.PageInfo;
 import com.wip.api.QiNiuCloudService;
@@ -10,7 +10,7 @@ import com.wip.controller.BaseController;
 import com.wip.model.dto.AttAchDto;
 import com.wip.exception.BusinessException;
 import com.wip.model.Attach;
-import com.wip.model.UserDomain;
+import com.wip.model.User;
 import com.wip.service.attach.AttAchService;
 import com.wip.service.log.LogService;
 import com.wip.utils.APIResponse;
@@ -101,7 +101,7 @@ public class AttachController extends BaseController {
                 QiNiuCloudService.upload(file, fileName);
                 Attach attach = new Attach();
                 HttpSession session = request.getSession();
-                UserDomain sessionUser = (UserDomain) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+                User sessionUser = (User) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
                 attach.setAuthorId(sessionUser.getUid());
                 attach.setFtype(TaleUtils.isImage(file.getInputStream()) ? Types.IMAGE.getType() : Types.FILE.getType());
                 attach.setFname(fileName);

@@ -13,7 +13,7 @@
                         <h1 class="post-title" itemprop="name headline">所有分类</h1>
                     </header>
                     <div class="category-all-title">
-                        目前共计 <th:block th:text="${categoryCount}"></th:block> 个分类
+                        目前共计 <th:block th:text="${categories.size()}"></th:block> 个分类
                     </div>
                     <th:block th:if="${categories}">
                         <div th:each="category : ${categories}" class="category-all">

@@ -1,10 +1,11 @@
-package com.wip.controller;
+package com.wip.controller.v1;
 
 import com.github.pagehelper.PageInfo;
 import com.vdurmont.emoji.EmojiParser;
 import com.wip.constant.ErrorConstant;
 import com.wip.constant.Types;
 import com.wip.constant.WebConst;
+import com.wip.controller.BaseController;
 import com.wip.model.dto.MetaDto;
 import com.wip.model.dto.cond.ContentCond;
 import com.wip.exception.BusinessException;
