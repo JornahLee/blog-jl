@@ -1,19 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<aside id="toc" class="toc toc-wrap" th:fragment="toc">
-    <div th:if="${article!=null}" >
-<!--    <div style="position: fixed;right: 230px;height: 400px;width: 200px;padding:10px;box-sizing:border-box;background-color:#fff;">-->
-<!--        <p style="width: 200px;">123123123123123123123123123123123123123123123123123123</p>-->
-<!--        <th:block th:if="${article!=null}" th:utext="${article.content}"></th:block>-->
-        <h1>TOC</h1>
-        <p>----------</p>
+<aside id="toc" class="toc-wrap" th:fragment="toc">
         <th:block th:utext="${commons.toc(article.content)}"></th:block>
-
-    </div>
-
-    <!--                    article.content-->
-
 </aside>
 </body>
 </html>

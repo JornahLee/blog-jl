@@ -3248,13 +3248,17 @@ pre .javascript .function {
     }
 }
 
+/*.toc-wrap {*/
+/*    width: 200px;*/
+/*    background: #a1ff36;*/
+/*    padding: 20px;*/
+/*    position: fixed;*/
+/*    left: 75%;*/
+/*    top: 0;*/
+/*}*/
 .toc-wrap {
-    width: 200px;
-    background: #fff;
-    padding: 20px;
-    position: fixed;
-    left: 75%;
-    top: 0;
+    background-color: #ffffff;
+    text-align: left;
 }
 
 .sidebar {

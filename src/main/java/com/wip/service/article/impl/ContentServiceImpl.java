@@ -99,17 +99,17 @@ public class ContentServiceImpl implements ContentService {
         contentDao.updateArticleById(content);
         int cid = content.getCid();
         relationShipDao.deleteRelationShipByCid(cid);
-        metaService.addMetas(cid,tags,Types.TAG.getType());
-        metaService.addMetas(cid,categories,Types.CATEGORY.getType());
+        metaService.addMetas(cid, tags, Types.TAG.getType());
+        metaService.addMetas(cid, categories, Types.CATEGORY.getType());
 
     }
 
     @Override
-    @Cacheable(value = "articleCaches", key = "'articlesByCond_' + #p1 + 'type_' + #p0.type")
+    @Cacheable(value = "articleCaches", key = "'articlesByCond_' + #p1+'.'+#p2 + 'type_' + #p0.type")
     public PageInfo<Content> getArticlesByCond(ContentCond contentCond, int pageNum, int pageSize) {
         if (null == contentCond)
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageNum, pageSize);
         List<Content> contents = contentDao.getArticleByCond(contentCond);
         PageInfo<Content> pageInfo = new PageInfo<>(contents);
         return pageInfo;
@@ -117,7 +117,7 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"articleCache","articleCaches"},allEntries = true, beforeInvocation = true)
+    @CacheEvict(value = {"articleCache", "articleCaches"}, allEntries = true, beforeInvocation = true)
     public void deleteArticleById(Integer cid) {
         if (null == cid)
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
@@ -142,7 +142,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    @CacheEvict(value = {"articleCache","articleCaches"}, allEntries = true, beforeInvocation = true)
+    @CacheEvict(value = {"articleCache", "articleCaches"}, allEntries = true, beforeInvocation = true)
     public void updateContentByCid(Content content) {
         if (null != content && null != content.getCid()) {
             contentDao.updateArticleById(content);

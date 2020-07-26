@@ -33,7 +33,7 @@ public class HeadingRenderer implements NodeRenderer {
         HashMap<String, String> attr = new HashMap<>();
         Map<String, String> attrs = getAttrs(headBlock, "h" + level);
         attr.put("href", "#" + attrs.get("id"));
-        attr.put("style", "display:block;border: none;color: #1d3e81;");
+        attr.put("style", "display:block;border: none;");
         String prefix="";
         switch (level){
             case 1:prefix="";break;

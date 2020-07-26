@@ -51,11 +51,17 @@
                         关于
                     </a>
                 </li>
-                <!--<li class="menu-item menu-item-search">-->
-                    <!--<a href="javascript:" class="popup-trigger">-->
-                        <!--<i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索-->
-                    <!--</a>-->
-                <!--</li>-->
+                <li class="menu-item menu-item-search">
+                    <a href="javascript:" class="popup-trigger">
+                        <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索
+                    </a>
+                </li>
+                <li id="admin" class="menu-item menu-item-about">
+                    <a href="/admin" rel="section">
+                        <i class="menu-item-icon fa fa-fw fa-pencil"></i> <br>
+                        后台管理
+                    </a>
+                </li>
             </ul>
             <div class="site-search">
                 <div class="algolia-popup popup search-popup">
@@ -68,9 +74,9 @@
                         </div>
                     </div>
                     <div class="algolia-results">
-                        <div id="algolia-stats"></div>
-                        <div id="algolia-hits"></div>
-                        <div id="algolia-pagination" class="algolia-pagination"></div>
+                        <div id="algolia-stats">test algolia-stats</div>
+                        <div id="algolia-hits">test algolia-hits</div>
+                        <div id="algolia-pagination" class="algolia-pagination"> test algolia-pagination</div>
                     </div>
                     <span class="popup-btn-close"><i class="fa fa-times-circle"></i></span>
                 </div>
