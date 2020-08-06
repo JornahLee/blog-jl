@@ -8,6 +8,7 @@ package com.wip.dao;
 
 import com.wip.model.Log;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * 日志dao层接口
  */
 @Mapper
+@Repository
 public interface LogDao {
 
     /**

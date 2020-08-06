@@ -9,6 +9,7 @@ import com.wip.model.dto.AttAchDto;
 import com.wip.model.Attach;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -16,7 +17,8 @@ import java.util.List;
  * 文件相关Dao接口
  */
 @Mapper
-public interface AttAchDao {
+@Repository
+public interface AttachDao {
 
     /**
      * 添加单个附件文件

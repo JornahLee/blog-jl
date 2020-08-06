@@ -8,6 +8,7 @@ package com.wip.dao;
 import com.wip.model.RelationShip;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * 文章和项目关联表
  */
 @Mapper
+@Repository
 public interface RelationShipDao {
 
     /**

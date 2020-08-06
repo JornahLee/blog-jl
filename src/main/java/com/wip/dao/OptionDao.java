@@ -7,6 +7,7 @@ package com.wip.dao;
 
 import com.wip.model.Options;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * 网站选项相关Dao接口
  */
 @Mapper
+@Repository
 public interface OptionDao {
 
     /**

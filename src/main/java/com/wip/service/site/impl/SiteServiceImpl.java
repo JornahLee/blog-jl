@@ -7,7 +7,7 @@ package com.wip.service.site.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.wip.constant.Types;
-import com.wip.dao.AttAchDao;
+import com.wip.dao.AttachDao;
 import com.wip.dao.CommentDao;
 import com.wip.dao.ContentDao;
 import com.wip.dao.MetaDao;
@@ -40,7 +40,7 @@ public class SiteServiceImpl implements SiteService {
     private MetaDao metaDao;
 
     @Autowired
-    private AttAchDao attAchDao;
+    private AttachDao attAchDao;
 
 
 

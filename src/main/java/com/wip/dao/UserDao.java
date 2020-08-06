@@ -3,11 +3,13 @@ package com.wip.dao;
 import com.wip.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 /**
  * 用户dao层接口
  */
 @Mapper
+@Repository
 public interface UserDao {
 
     /**

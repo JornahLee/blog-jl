@@ -10,6 +10,7 @@ import com.wip.model.dto.cond.MetaCond;
 import com.wip.model.Meta;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
  * 项目相关Dao接口
  */
 @Mapper
+@Repository
 public interface MetaDao {
 
     /**

@@ -10,6 +10,7 @@ import com.wip.model.Content;
 import com.wip.model.RelationShip;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * 文章相关Dao接口
  */
 @Mapper
+@Repository
 public interface ContentDao {
 
     /**

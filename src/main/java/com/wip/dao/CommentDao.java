@@ -9,6 +9,7 @@ import com.wip.model.dto.cond.CommentCond;
 import com.wip.model.Comment;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * 评论相关Dao接口
  */
 @Mapper
+@Repository
 public interface CommentDao {
 
     /**
