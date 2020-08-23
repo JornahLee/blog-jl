@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <body>
-    <header id="header" class="header" th:fragment="header">
+<header id="header" class="header" th:fragment="header">
     <div class="header-inner">
         <div class="site-brand-wrapper">
             <div class="site-meta">
@@ -69,11 +70,11 @@
                         <div class="algolia-search-input-icon">
                             <i class="fa fa-search"></i>
                         </div>
-                        <div class="algolia-search-input" id="algolia-search-input">
-
-                        </div>
+                        <input class="algolia-search-input" type="text" placeholder="这里输入搜索内容" onchange="doSearch(this)" id="search-input"/>
+                        <!--                        <div class="algolia-search-input" id="algolia-search-input">-->
+                        <!--                        </div>-->
                     </div>
-                    <div class="algolia-results">
+                    <div id="search-result-div" class="algolia-results" >
                         <div id="algolia-stats">test algolia-stats</div>
                         <div id="algolia-hits">test algolia-hits</div>
                         <div id="algolia-pagination" class="algolia-pagination"> test algolia-pagination</div>
@@ -84,5 +85,6 @@
         </nav>
     </div>
 </header>
+
 </body>
 </html>

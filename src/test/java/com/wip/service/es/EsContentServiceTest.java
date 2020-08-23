@@ -4,12 +4,14 @@ import com.google.gson.GsonBuilder;
 import com.wip.dao.ContentDao;
 import com.wip.model.Content;
 import com.wip.model.dto.ContentEsDTO;
+import com.wip.model.dto.SearchResult;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.core.SearchHits;
 
 import java.time.Instant;
+import java.util.List;
 
 
 @SpringBootTest
@@ -19,8 +21,7 @@ class EsContentServiceTest {
 
     @Test
     void testFind() {
-        SearchHits<ContentEsDTO> res = service.findByContentOrTitle("标题", 1, 1);
-        res.toList().forEach(r-> System.out.println("--licg---     r.getContent().toString() : " + r.getContent().toString() + "    -----"));
+        List<SearchResult> res = service.findByContentOrTitle("标题", 1, 1);
         String s = new GsonBuilder().create().toJson(res);
         System.out.println("--licg---     s : " + s + "    -----");
     }

@@ -3817,3 +3817,23 @@ span.highlighted {
     margin: 0 .75em 0 0;
     color: rgba(0, 0, 0, .4);
 }
+
+.hlt1{
+    background-color: #00a8c6;
+}
+
+.hlt2{
+    background-color: #10a8c6;
+}
+
+.hlt3{
+    background-color: #20a8c6;
+}
+
+.hlt4{
+    background-color: #30a8c6;
+}
+
+.hlt5{
+    background-color: #40a8c6;
+}
