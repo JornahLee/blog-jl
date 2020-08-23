@@ -6,6 +6,7 @@
 package com.wip.model;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 /**
  * 日志表
@@ -42,7 +43,7 @@ public class Log implements Serializable {
     /**
      * 日志创建时间
      */
-    private Integer created;
+    private Instant created;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -88,11 +89,11 @@ public class Log implements Serializable {
         this.ip = ip;
     }
 
-    public Integer getCreated() {
+    public Instant getCreated() {
         return created;
     }
 
-    public void setCreated(Integer created) {
+    public void setCreated(Instant created) {
         this.created = created;
     }
 }

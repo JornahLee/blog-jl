@@ -1,16 +1,39 @@
 package com.wip.service.es;
 
+import com.google.gson.GsonBuilder;
 import com.wip.dao.ContentDao;
 import com.wip.model.Content;
+import com.wip.model.dto.ContentEsDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.elasticsearch.core.SearchHits;
+
+import java.time.Instant;
 
 
 @SpringBootTest
 class EsContentServiceTest {
     @Autowired
     private EsContentService service;
+
+    @Test
+    void testFind() {
+        SearchHits<ContentEsDTO> res = service.findByContentOrTitle("标题", 1, 1);
+        res.toList().forEach(r-> System.out.println("--licg---     r.getContent().toString() : " + r.getContent().toString() + "    -----"));
+        String s = new GsonBuilder().create().toJson(res);
+        System.out.println("--licg---     s : " + s + "    -----");
+    }
+
+    @Test
+    void testEs() {
+        ContentEsDTO obj=new ContentEsDTO();
+        obj.setContent("this is content");
+        obj.setUrl("sss/wsfsdf");
+        obj.setCreated(Instant.now().toEpochMilli());
+        obj.setTitle("this is title");
+        service.add(obj);
+    }
 
     @Test
     public void test1(){

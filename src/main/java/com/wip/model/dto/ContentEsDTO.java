@@ -1,8 +1,10 @@
 package com.wip.model.dto;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.Instant;
 
@@ -13,6 +15,8 @@ public class ContentEsDTO {
      */
     @Id
     private String id;
+
+    private String url;
     /**
      * 内容标题
      */
@@ -21,11 +25,13 @@ public class ContentEsDTO {
     /**
      * 内容生成时的GMT unix时间戳
      */
-    private Instant created;
+    @Field(type = FieldType.Date,format = DateFormat.basic_date_time)
+    private Long created;
     /**
      * 内容更改时的GMT unix时间戳
      */
-    private Instant modified;
+    @Field(type = FieldType.Date,format = DateFormat.basic_date_time)
+    private Long modified;
     /**
      * 内容文字
      */
@@ -52,19 +58,19 @@ public class ContentEsDTO {
         this.title = title;
     }
 
-    public Instant getCreated() {
+    public Long getCreated() {
         return created;
     }
 
-    public void setCreated(Instant created) {
+    public void setCreated(Long created) {
         this.created = created;
     }
 
-    public Instant getModified() {
+    public Long getModified() {
         return modified;
     }
 
-    public void setModified(Instant modified) {
+    public void setModified(Long modified) {
         this.modified = modified;
     }
 
@@ -82,5 +88,26 @@ public class ContentEsDTO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "ContentEsDTO{" +
+                "id='" + id + '\'' +
+                ", url='" + url + '\'' +
+                ", title='" + title + '\'' +
+                ", created=" + created +
+                ", modified=" + modified +
+                ", content='" + content + '\'' +
+                ", type='" + type + '\'' +
+                '}';
     }
 }

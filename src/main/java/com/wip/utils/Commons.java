@@ -86,7 +86,11 @@ public class Commons {
      * @return
      */
     public static String blogPermalink(Integer cid) {
-        return site_url("/blog/article/" + cid.toString());
+        return site_url("/detail/" + cid.toString());
+    }
+    // 不知道这方法啥意思
+    public static String photoPermalink(Integer cid) {
+        return site_url("/detail/" + cid.toString());
     }
 
     /**
