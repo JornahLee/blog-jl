@@ -174,15 +174,16 @@
     /**
      * header页面搜索使用的js
      */
-    function doSearch(e) {
+    function doSearch() {
         $.ajax({
             type: 'post',
             url: '/article/search',
-            data: {"searchStr": e.value, "pageNum": 1, "pageSize": 10},
+            data: {"searchStr":  $('#search-input').val(), "pageNum": 1, "pageSize": 10},
             async: true,
             dataType: 'json',
             success({code, data}) {
                 if (data && code === 'success') {
+                    $('#search-result-div').empty()
                     console.log(data)
                     data.map(item => {
                         hitStr = $('#search-result-div')
@@ -191,7 +192,7 @@
                         for(let key in item.hitsWithHighLight){
                             item.hitsWithHighLight[key].map(item2=>{
                                 // str += `<div id="algolia-hits" href=${item.url}> ` + item2 + `<p style="text-align: right">${item.articleName}</p> </div>`
-                                str += `<a id="algolia-hits" href=${item.url}> ` + item2 + `</a>`
+                                str += `<a id="algolia-hits" href=${item.url}> ` + item2 + `</a><br/><br/>`
                             })
                         }
                         const $div = str
@@ -202,6 +203,13 @@
             }
         });
     }
+
+    $(".algolia-popup").keydown(function () {
+        if (window.event.keyCode==13) {
+            //如果发生了按下回车键事件，回车键对应的编号是13
+            $("#submitBtn").trigger("click");
+        }
+    });
 
 </script>
 </body>

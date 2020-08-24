@@ -72,4 +72,6 @@ public interface ContentDao {
      * @return
      */
     List<Content> getArticleByTags(List<RelationShip> cid);
+
+    List<Content> findAll();
 }

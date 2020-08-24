@@ -42,6 +42,17 @@ public class ContentEsDTO {
      */
     private String type;
 
+    public ContentEsDTO() {
+    }
+
+    public ContentEsDTO(String url, String title, Long created, Long modified, String content) {
+        this.url = url;
+        this.title = title;
+        this.created = created;
+        this.modified = modified;
+        this.content = content;
+    }
+
     public String getId() {
         return id;
     }

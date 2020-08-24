@@ -5,6 +5,7 @@ import com.wip.dao.ContentDao;
 import com.wip.model.Content;
 import com.wip.model.dto.ContentEsDTO;
 import com.wip.model.dto.SearchResult;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,9 +16,15 @@ import java.util.List;
 
 
 @SpringBootTest
+@Disabled
 class EsContentServiceTest {
     @Autowired
     private EsContentService service;
+
+    @Test
+    void testExportData() {
+        service.exportDataToEs();
+    }
 
     @Test
     void testFind() {
