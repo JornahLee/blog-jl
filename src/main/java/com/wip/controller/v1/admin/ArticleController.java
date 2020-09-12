@@ -8,6 +8,7 @@ import com.wip.model.Content;
 import com.wip.model.Meta;
 import com.wip.model.dto.cond.ContentCond;
 import com.wip.model.dto.cond.MetaCond;
+import com.wip.model.vo.ContentMetaInfo;
 import com.wip.service.article.ContentService;
 import com.wip.service.log.LogService;
 import com.wip.service.meta.MetaService;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.time.Instant.now;
 
@@ -46,6 +49,7 @@ public class ArticleController extends BaseController {
     @GetMapping(value = "")
     public String index(
             HttpServletRequest request,
+            @RequestParam Map<String,String> filters,
             @ApiParam(name = "page", value = "页数", required = false)
             @RequestParam(name = "page", required = false, defaultValue = "1")
             int page,
@@ -56,17 +60,18 @@ public class ArticleController extends BaseController {
         ContentCond contentCond = new ContentCond();
         contentCond.setHowToOrder("modified DESC");
         // ORDER BY  c.orderWeight DESC ,  c.modified DESC , created DESC
-        PageInfo<Content> articles = contentService.getArticlesByCond(contentCond, page, limit);
+        contentCond.setValuesFrom(filters);
+        PageInfo<ContentMetaInfo> articles = contentService.getArticleMetaInfos(contentCond, page, limit);
         request.setAttribute("articles",articles);
+        List<Meta> categories = metaService.getMetas(MetaCond.of(Types.CATEGORY.getType()));
+        request.setAttribute("categories",categories);
         return "admin/article_list";
     }
 
     @ApiOperation("发布新文章页")
     @GetMapping(value = "/publish")
     public String newArticle(HttpServletRequest request) {
-        MetaCond metaCond = new MetaCond();
-        metaCond.setType(Types.CATEGORY.getType());
-        List<Meta> metas = metaService.getMetas(metaCond);
+        List<Meta> metas = metaService.getMetas(MetaCond.of(Types.CATEGORY.getType()));
         request.setAttribute("categories",metas);
         return "admin/article_edit";
     }
@@ -81,9 +86,7 @@ public class ArticleController extends BaseController {
     ) {
         Content content = contentService.getArticleById(cid);
         request.setAttribute("contents", content);
-        MetaCond metaCond = new MetaCond();
-        metaCond.setType(Types.CATEGORY.getType());
-        List<Meta> categories = metaService.getMetas(metaCond);
+        List<Meta> categories = metaService.getMetas(MetaCond.of(Types.CATEGORY.getType()));
         request.setAttribute("categories", categories);
         request.setAttribute("active", "article");
         return "admin/article_edit";

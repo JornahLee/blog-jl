@@ -41,6 +41,10 @@
                                     </time>
                                     <span class="post-meta-item-text">创建</span>
                                 </span>
+                                <th:block th:if="${session.login_user!=null}">
+                                    <span class="post-meta-divider">|</span>
+                                    <a class="post-meta-item-text" th:href="@{'/admin/article/'} + ${article.cid}">编辑文章</a>
+                                </th:block>
                             </div>
                         </header>
                         <div class="post-body" itemprop="articleBody" style="opacity: 1; display: block; transform: translateY(0px);">

@@ -5,6 +5,16 @@
  **/
 package com.wip.model.dto.cond;
 
+import cn.hutool.core.util.ReflectUtil;
+import org.apache.commons.codec.digest.Md5Crypt;
+import org.springframework.beans.BeanUtils;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Map;
+
 /**
  * 文章查询条件
  */
@@ -44,9 +54,23 @@ public class ContentCond {
     private Integer endTime;
 
     /**
-     *  排序的SQL语句
+     * 排序的SQL语句
      */
     private String howToOrder;
+
+    public void setValuesFrom(Map<String, String> source) {
+        Field[] fields = ReflectUtil.getFields(this.getClass());
+        source.forEach(
+                (key, value) -> Arrays.stream(fields).filter(field -> field.getName().contains(key) && !value.contains("所有分类"))
+                        .findFirst().ifPresent(field -> {
+                            try {
+                                field.setAccessible(true);
+                                field.set(this, value);
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            }
+                        }));
+    }
 
     public String getHowToOrder() {
         return howToOrder;
@@ -118,5 +142,23 @@ public class ContentCond {
 
     public void setEndTime(Integer endTime) {
         this.endTime = endTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ContentCond{" +
+                "tag='" + tag + '\'' +
+                ", category='" + category + '\'' +
+                ", status='" + status + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", type='" + type + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", howToOrder='" + howToOrder + '\'' +
+                '}';
+    }
+    public String getMd5(){
+        return Md5Crypt.apr1Crypt(this.toString(),"1");
     }
 }

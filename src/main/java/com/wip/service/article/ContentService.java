@@ -9,6 +9,7 @@ import com.github.pagehelper.PageInfo;
 import com.wip.model.dto.cond.ContentCond;
 import com.wip.model.Content;
 import com.wip.model.Meta;
+import com.wip.model.vo.ContentMetaInfo;
 
 import java.util.List;
 
@@ -44,6 +45,8 @@ public interface ContentService {
      * @return
      */
     PageInfo<Content> getArticlesByCond(ContentCond contentCond, int page, int limit);
+
+    PageInfo<ContentMetaInfo> getArticleMetaInfos(ContentCond contentCond, int pageNum, int pageSize);
 
     /**
      * 删除文章

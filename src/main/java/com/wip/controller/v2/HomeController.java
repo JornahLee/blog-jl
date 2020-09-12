@@ -13,6 +13,7 @@ import com.wip.model.Meta;
 import com.wip.model.dto.ArticleInfo;
 import com.wip.model.dto.MetaDto;
 import com.wip.model.dto.cond.ContentCond;
+import com.wip.model.vo.ContentMetaInfo;
 import com.wip.service.article.ContentService;
 import com.wip.service.comment.CommentService;
 import com.wip.service.meta.MetaService;
@@ -33,6 +34,7 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.wip.utils.APIResponse.success;
 
@@ -72,7 +74,7 @@ public class HomeController extends BaseController {
 
     @ApiOperation("归档内容")
     @GetMapping(value = "/archives")
-    public APIResponse<PageInfo<Content>> archives(
+    public APIResponse<PageInfo<ContentMetaInfo>> archives(
             @ApiParam(name = "page", value = "页数", required = false)
             @RequestParam(name = "page", required = false, defaultValue = "1")
                     int page,
@@ -84,7 +86,9 @@ public class HomeController extends BaseController {
         cond.setStatus(ContentCond.PUBLISH);
         cond.setHowToOrder("created DESC");
         PageInfo<Content> articles = contentService.getArticlesByCond(cond, page, pageSize);
-        return success(articles);
+        List<ContentMetaInfo> collect = articles.getList().stream().map(ContentMetaInfo::convertFrom).collect(Collectors.toList());
+        PageInfo<ContentMetaInfo> articlesMetaInfo = PageInfo.of(collect);
+        return success(articlesMetaInfo);
     }
 
     @ApiOperation("获取所有分类")

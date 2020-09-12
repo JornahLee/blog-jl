@@ -20,6 +20,18 @@ public class MetaCond {
      */
     private String type;
 
+    public static MetaCond of(String name,String type){
+        MetaCond cond=new MetaCond();
+        cond.setType(type);
+        cond.setName(name);
+        return cond;
+    }
+    public static MetaCond of(String type){
+        MetaCond cond=new MetaCond();
+        cond.setType(type);
+        return cond;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
