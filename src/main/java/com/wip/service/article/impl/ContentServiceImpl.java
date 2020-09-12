@@ -22,6 +22,7 @@ import com.wip.model.Meta;
 import com.wip.model.RelationShip;
 import com.wip.model.vo.ContentMetaInfo;
 import com.wip.service.article.ContentService;
+import com.wip.service.es.EsContentService;
 import com.wip.service.meta.MetaService;
 import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +52,9 @@ public class ContentServiceImpl implements ContentService {
 
     @Autowired
     private CommentDao commentDao;
+
+    @Autowired
+    private EsContentService esContentService;
 
     @Transactional
     @Override
@@ -82,6 +86,7 @@ public class ContentServiceImpl implements ContentService {
 
         // 添加文章
         contentDao.addArticle(content);
+        esContentService.add(content);
 
         // 添加分类和标签
         int cid = content.getCid();
@@ -110,6 +115,7 @@ public class ContentServiceImpl implements ContentService {
 
         // 更新文章
         contentDao.updateArticleById(content);
+        esContentService.update(content);
         int cid = content.getCid();
         relationShipDao.deleteRelationShipByCid(cid);
         metaService.addMetas(cid, tags, Types.TAG.getType());
@@ -147,6 +153,7 @@ public class ContentServiceImpl implements ContentService {
         }
         // 删除文章
         contentDao.deleteArticleById(cid);
+        esContentService.delete(cid.toString());
 
         // 同时要删除该 文章下的所有评论
         List<Comment> comments = commentDao.getCommentByCId(cid);
@@ -170,6 +177,7 @@ public class ContentServiceImpl implements ContentService {
     public void updateContentByCid(Content content) {
         if (null != content && null != content.getCid()) {
             contentDao.updateArticleById(content);
+            esContentService.update(content);
         }
     }
 

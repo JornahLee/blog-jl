@@ -8,8 +8,12 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.Instant;
 
-@Document(indexName = "content")
+import static com.wip.model.dto.ContentEsDTO.INDEX_NAME;
+
+@Document(indexName = INDEX_NAME)
 public class ContentEsDTO {
+    public static final String INDEX_NAME="content";
+
     /**
      * 文章的主键编号
      */
@@ -45,7 +49,8 @@ public class ContentEsDTO {
     public ContentEsDTO() {
     }
 
-    public ContentEsDTO(String url, String title, Long created, Long modified, String content) {
+    public ContentEsDTO(String id,String url, String title, Long created, Long modified, String content) {
+        this.id=id;
         this.url = url;
         this.title = title;
         this.created = created;

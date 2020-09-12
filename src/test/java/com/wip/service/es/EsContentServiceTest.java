@@ -34,17 +34,19 @@ class EsContentServiceTest {
     }
 
     @Test
-    void testEs() {
-        ContentEsDTO obj=new ContentEsDTO();
-        obj.setContent("this is content");
-        obj.setUrl("sss/wsfsdf");
-        obj.setCreated(Instant.now().toEpochMilli());
-        obj.setTitle("this is title");
-        service.add(obj);
+    void testUpdate() {
+        Content content = new Content();
+        content.setCid(40);
+        content.setTitle("1235123");
+        service.update(content);
+    }
+    @Test
+    void testDelete() {
+        service.delete(40+"");
     }
 
     @Test
-    public void test1(){
+    public void test1() {
         Content content = new Content();
         content.setCid(250);
         content.setContent("这里是博客 this is content");
@@ -52,8 +54,9 @@ class EsContentServiceTest {
 
     @Autowired
     ContentDao contentDao;
+
     @Test
-    public void test2(){
+    public void test2() {
         Content content = new Content();
         content.setCid(250);
         content.setContent("这里是博客 this is content");

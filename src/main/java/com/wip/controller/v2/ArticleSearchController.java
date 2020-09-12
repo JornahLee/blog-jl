@@ -36,23 +36,5 @@ public class ArticleSearchController extends BaseController {
         System.out.println("--licg---     gson.toJson(APIResponse.success(res)) : " + gson.toJson(APIResponse.success(res)) + "    -----");
         return APIResponse.success(res);
     }
-    @RequestMapping("/random-add")
-    public APIResponse<?> randomAdd(String title,String content) {
-        ContentEsDTO  contentEsDTO=new ContentEsDTO();
-        if (title==null) {
-            contentEsDTO.setTitle("title "+ RandomUtils.nextInt(100,1000));
-        }else{
-            contentEsDTO.setTitle(title);
-        }
-        if (content==null) {
-            contentEsDTO.setContent("content "+ RandomUtils.nextInt(100,1000));
-        }else{
-            contentEsDTO.setContent(content);
-        }
-
-        esContentService.add(contentEsDTO);
-        return APIResponse.success();
-    }
-
 
 }
