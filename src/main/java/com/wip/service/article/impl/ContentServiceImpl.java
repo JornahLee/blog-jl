@@ -86,7 +86,7 @@ public class ContentServiceImpl implements ContentService {
 
         // 添加文章
         contentDao.addArticle(content);
-        esContentService.add(content);
+        esContentService.add(contentDao.getArticleById(content.getCid()));
 
         // 添加分类和标签
         int cid = content.getCid();
