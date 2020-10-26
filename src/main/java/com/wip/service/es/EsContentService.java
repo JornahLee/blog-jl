@@ -41,6 +41,7 @@ public class EsContentService {
     public List<SearchResult> findByContentOrTitle(String input, int pageNum, int pageSize) {
         int pageIndex = pageNum - 1;
         PageRequest pageRequest = PageRequest.of(pageIndex, pageSize);
+
         NativeSearchQuery query = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(input, "content", "title"))
                 .withPageable(pageRequest)
                 .withHighlightBuilder(new HighlightBuilder().field("content").field("title").tagsSchema("styled"))
@@ -72,9 +73,13 @@ public class EsContentService {
     @Async
     public void update(Content content) {
         // 更新有多种方式 https://www.jianshu.com/p/1636ff0b800d
-        UpdateQuery updateQuery = UpdateQuery.builder(content.getCid().toString()).withDocument(Document.create().append("content",content.getContent()))
-                .build();
-        template.update(updateQuery, IndexCoordinates.of(ContentEsDTO.INDEX_NAME));
+        if (template.exists(content.getCid().toString(), ContentEsDTO.class)) {
+            UpdateQuery updateQuery = UpdateQuery.builder(content.getCid().toString()).withDocument(Document.create().append("content", content.getContent()))
+                    .build();
+            template.update(updateQuery, IndexCoordinates.of(ContentEsDTO.INDEX_NAME));
+        } else {
+            add(content);
+        }
     }
 
     @Async

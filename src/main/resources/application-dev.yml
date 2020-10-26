@@ -53,7 +53,9 @@ spring:
     timeout : 5000
   elasticsearch:
     rest:
-      uris: http://118.25.187.1:9200
+      uris: http://132.232.81.70:9200
+      username: elastic
+      password: ${ES_PWD}
 #  cache.
 
 

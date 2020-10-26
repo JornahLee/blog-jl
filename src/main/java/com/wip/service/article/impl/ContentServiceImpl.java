@@ -113,8 +113,12 @@ public class ContentServiceImpl implements ContentService {
         String tags = content.getTags();
         String categories = content.getCategories();
 
+        Content legacyArticle = contentDao.getArticleById(content.getCid());
         // 更新文章
+        content.setCreated(legacyArticle.getCreated());
+        content.setModified(legacyArticle.getModified());
         contentDao.updateArticleById(content);
+
         esContentService.update(content);
         int cid = content.getCid();
         relationShipDao.deleteRelationShipByCid(cid);
