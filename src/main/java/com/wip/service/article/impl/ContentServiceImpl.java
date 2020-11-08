@@ -24,6 +24,7 @@ import com.wip.model.vo.ContentMetaInfo;
 import com.wip.service.article.ContentService;
 import com.wip.service.es.EsContentService;
 import com.wip.service.meta.MetaService;
+import com.wip.utils.MyStringUtil;
 import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
@@ -35,7 +36,17 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import static com.wip.utils.MyStringUtil.*;
 
 @Service
 @EnableAspectJAutoProxy(exposeProxy = true)
@@ -83,7 +94,7 @@ public class ContentServiceImpl implements ContentService {
         // 取到标签和分类
         String tags = content.getTags();
         String categories = content.getCategories();
-
+        content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, false));
         // 添加文章
         contentDao.addArticle(content);
         esContentService.add(contentDao.getArticleById(content.getCid()));
@@ -102,7 +113,9 @@ public class ContentServiceImpl implements ContentService {
         if (null == cid) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
-        return contentDao.getArticleById(cid);
+        Content content = contentDao.getArticleById(cid);
+        content.setContent(rmLineNumberForText(content.getContent(), LineNoRegex));
+        return content;
     }
 
     @Override
@@ -117,6 +130,7 @@ public class ContentServiceImpl implements ContentService {
         // 更新文章
         content.setCreated(legacyArticle.getCreated());
         content.setModified(legacyArticle.getModified());
+        content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, false));
         contentDao.updateArticleById(content);
 
         esContentService.update(content);
@@ -135,22 +149,22 @@ public class ContentServiceImpl implements ContentService {
         }
         PageHelper.startPage(pageNum, pageSize);
         List<Content> contents = contentDao.getArticleByCond(contentCond);
-        PageInfo<Content> pageInfo = new PageInfo<>(contents);
-        return pageInfo;
+        contents.forEach(content -> content.setContent(rmLineNumberForText(content.getContent(), LineNoRegex)));
+        return new PageInfo<>(contents);
     }
 
     @Override
-    public PageInfo<ContentMetaInfo> getArticleMetaInfos(ContentCond contentCond, int pageNum, int pageSize){
+    public PageInfo<ContentMetaInfo> getArticleMetaInfos(ContentCond contentCond, int pageNum, int pageSize) {
         ContentService contentService = (ContentService) AopContext.currentProxy();
         PageInfo<Content> articlesByCond = contentService.getArticlesByCond(contentCond, pageNum, pageSize);
-        PageInfo<ContentMetaInfo> contentMetaInfoPageInfo=new PageInfo<>();
-        BeanUtils.copyProperties(articlesByCond,contentMetaInfoPageInfo);
+        PageInfo<ContentMetaInfo> contentMetaInfoPageInfo = new PageInfo<>();
+        BeanUtils.copyProperties(articlesByCond, contentMetaInfoPageInfo);
         return contentMetaInfoPageInfo;
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = {"articleCache", "articleCaches"}, allEntries = true, beforeInvocation = true)
+    @CacheEvict(value = {"articleCache"}, allEntries = true, beforeInvocation = true)
     public void deleteArticleById(Integer cid) {
         if (null == cid) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
@@ -177,9 +191,10 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    @CacheEvict(value = {"articleCache", "articleCaches"}, allEntries = true, beforeInvocation = true)
+    @CacheEvict(value = {"articleCache"}, allEntries = true, beforeInvocation = true)
     public void updateContentByCid(Content content) {
         if (null != content && null != content.getCid()) {
+            content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, false));
             contentDao.updateArticleById(content);
             esContentService.update(content);
         }
@@ -191,7 +206,9 @@ public class ContentServiceImpl implements ContentService {
         if (null == category) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
-        return contentDao.getArticleByCategory(category);
+        List<Content> articleByCategory = contentDao.getArticleByCategory(category);
+        articleByCategory.forEach(content -> content.setContent(rmLineNumberForText(content.getContent(), LineNoRegex)));
+        return articleByCategory;
     }
 
     @Override
@@ -202,7 +219,9 @@ public class ContentServiceImpl implements ContentService {
         }
         List<RelationShip> relationShip = relationShipDao.getRelationShipByMid(tags.getMid());
         if (null != relationShip && relationShip.size() > 0) {
-            return contentDao.getArticleByTags(relationShip);
+            List<Content> articleByTags = contentDao.getArticleByTags(relationShip);
+            articleByTags.forEach(content -> content.setContent(rmLineNumberForText(content.getContent(), LineNoRegex)));
+            return articleByTags;
         }
         return null;
     }

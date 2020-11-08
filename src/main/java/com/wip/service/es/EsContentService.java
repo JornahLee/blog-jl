@@ -24,6 +24,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,8 +50,23 @@ public class EsContentService {
                 .withHighlightBuilder(new HighlightBuilder().field("content").field("title").tagsSchema("styled"))
                 .build();
         List<SearchResult> resultList = Lists.newArrayList();
-        template.search(query, ContentEsDTO.class).stream()
-                .forEach(hit -> resultList.add(new SearchResult(hit.getContent().getUrl(), hit.getContent().getTitle(), hit.getHighlightFields())));
+
+        template.search(query, ContentEsDTO.class).stream().forEach(hit -> {
+            String url = hit.getContent().getUrl();
+            String title = hit.getContent().getTitle();
+            String content = hit.getContent().getContent();
+            // get all headline and no
+            List<String> headLines = new ArrayList<>();
+            Matcher matcher = Pattern.compile("^#.+").matcher(content);
+            //TODO 从这开始写
+            while (matcher.find()) {
+                headLines.add(matcher.group());
+            }
+            Map<String, List<String>> highlightFields = hit.getHighlightFields();
+            SearchResult searchResult = new SearchResult(url, title, highlightFields);
+            resultList.add(searchResult);
+
+        });
         return resultList;
     }
 

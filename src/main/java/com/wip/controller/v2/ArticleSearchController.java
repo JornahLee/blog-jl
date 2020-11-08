@@ -26,6 +26,12 @@ public class ArticleSearchController extends BaseController {
 
     @RequestMapping("/search")
     public APIResponse<List<SearchResult>> search(ArticleSearchRequest request) {
+        List<SearchResult> res = doSearch(request);
+        return APIResponse.success(res);
+    }
+
+    // 如果有必要 要抽取到Service层中
+    private List<SearchResult> doSearch(ArticleSearchRequest request) {
         Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
         String str = gson.toJson(request);
         System.out.println("--licg---     str : " + str + "    -----");
@@ -34,7 +40,7 @@ public class ArticleSearchController extends BaseController {
         int pageSize = request.getPageSize() <= 0 ? 5 : request.getPageSize();
         List<SearchResult> res = esContentService.findByContentOrTitle(inputStr, pageNum, pageSize);
         System.out.println("--licg---     gson.toJson(APIResponse.success(res)) : " + gson.toJson(APIResponse.success(res)) + "    -----");
-        return APIResponse.success(res);
+        return res;
     }
 
 }
