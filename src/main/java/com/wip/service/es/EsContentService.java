@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.wip.dao.ContentDao;
 import com.wip.model.Content;
 import com.wip.model.dto.ArticleBodyHitInfo;
+import com.wip.model.dto.ArticleHitInfo;
 import com.wip.model.dto.ContentEsDTO;
 import com.wip.model.dto.SearchResult;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -21,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.wip.utils.MyStringUtil.LineNoRegex;
 import static java.lang.Integer.parseInt;
 import static java.util.stream.Collectors.toMap;
 
@@ -38,6 +39,7 @@ public class EsContentService {
     private ElasticsearchRestTemplate template;
 
     private static Pattern lineNoPattern = Pattern.compile("(?<=::L-)\\d+(?=::)");
+    private static Pattern headerPattern = Pattern.compile("( *#|#).+");
 
     @Autowired
     public EsContentService(ElasticsearchRestTemplate template) {
@@ -60,14 +62,36 @@ public class EsContentService {
         template.search(query, ContentEsDTO.class).stream().forEach(hit -> {
             String url = hit.getContent().getUrl();
             String title = hit.getContent().getTitle();
-            String content = hit.getContent().getContent();
-            // get all headline and no
-            //todo content新增表 用于保存目录，先暂时使用生成的方案
-            Map<Integer, String> headLines = getHeadFromContent(content);
-
             Map<String, List<String>> highlightFields = hit.getHighlightFields();
             SearchResult searchResult = new SearchResult(url, title, highlightFields);
             resultList.add(searchResult);
+
+        });
+        return resultList;
+    }
+
+    //todo 基本逻辑完成，现在只有es存储的是 ::L-1::类型的数据即可
+    public List<ArticleHitInfo> findWithAnchorByContentOrTitle(String input, int pageNum, int pageSize) {
+        int pageIndex = pageNum - 1;
+        PageRequest pageRequest = PageRequest.of(pageIndex, pageSize);
+
+        NativeSearchQuery query = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(input, "content", "title"))
+                .withPageable(pageRequest)
+                .withHighlightBuilder(new HighlightBuilder().field("content").field("title").tagsSchema("styled"))
+                .build();
+        List<ArticleHitInfo> resultList = Lists.newArrayList();
+
+        template.search(query, ContentEsDTO.class).stream().forEach(hit -> {
+            String url = hit.getContent().getUrl();
+            String title = hit.getContent().getTitle();
+            String content = hit.getContent().getContent();
+            Map<String, List<String>> highlightFields = hit.getHighlightFields();
+            // get all headline and no
+            //todo content新增表 用于保存目录，先暂时使用生成的方案
+            Map<Integer, String> headLines = getHeadFromContent(content);
+            List<ArticleBodyHitInfo> articleBodyHitInfos = generateBodyHitInfo(highlightFields.get("content"), headLines);
+            ArticleHitInfo articleHitInfo = new ArticleHitInfo(url, title, articleBodyHitInfos);
+            resultList.add(articleHitInfo);
 
         });
         return resultList;
@@ -79,17 +103,23 @@ public class EsContentService {
     private Map<Integer, String> getHeadFromContent(String content) {
         List<String> headLines = new ArrayList<>();
         Optional.ofNullable(content).ifPresent(c -> {
-            Matcher matcher = Pattern.compile("( *#|#).+").matcher(c);
+            Matcher matcher = headerPattern.matcher(c);
             while (matcher.find()) {
                 headLines.add(matcher.group());
             }
         });
         return headLines.stream()
                 .collect(toMap(
-                        str -> parseInt(lineNoPattern.matcher(str).group()),
+                        str -> {
+                            Matcher matcher = lineNoPattern.matcher(str);
+                            if (matcher.find()) {
+                                return parseInt(matcher.group());
+                            } else {
+                                throw new RuntimeException("content has no lineno str");
+                            }
+                        },
                         str -> str
                 ));
-
     }
 
     public void exportDataToEs() {
@@ -127,36 +157,33 @@ public class EsContentService {
         template.delete(id, IndexCoordinates.of(ContentEsDTO.INDEX_NAME));
     }
 
-
     private List<ArticleBodyHitInfo> generateBodyHitInfo(List<String> hitsContext, Map<Integer, String> headLines) {
         Map<Integer, String> hitWithLineNo = hitsContext.stream()
                 .collect(toMap(
                         ctx -> {
                             Matcher matcher = lineNoPattern.matcher(ctx);
-                            String lineNoStr = "";
                             if (matcher.find()) {
-                                lineNoStr = matcher.group();
+                                return parseInt(matcher.group());
                             }
-                            return parseInt(lineNoStr);
+                            throw new RuntimeException("content has no lineNo str");
                         },
                         ctx -> ctx
                 ));
-
-        List<ArticleBodyHitInfo> hitInfos = hitWithLineNo.entrySet().stream().map(
+        return hitWithLineNo.entrySet().stream().map(
                 entry -> {
                     ArticleBodyHitInfo info = new ArticleBodyHitInfo();
                     Integer lineNo = entry.getKey();
                     // 默认升序排列,第一个差值最小
                     Stream<Integer> sorted = headLines.keySet().stream()
-                            .filter(key -> key > lineNo)
-                            .sorted(Comparator.comparingInt(key -> key - lineNo));
-                    Integer integer = sorted.findFirst().orElse(1);
-                    String headLineStr = headLines.get(integer);
-                    info.setUnderHead(headLineStr);
-                    info.setContextWithHit(entry.getValue());
+                            .filter(key -> key < lineNo)
+                            .sorted(Comparator.comparingInt(key -> lineNo - key));
+                    Integer underHeadLineKey = sorted.findFirst().orElseThrow(() -> new RuntimeException(""));
+                    String headLineStr = headLines.get(underHeadLineKey);
+                    info.setUnderHeadOriginal(headLineStr);
+                    info.setHitContext(Optional.ofNullable(entry.getValue()).map(val->val.replace(LineNoRegex, "")).orElse(""));
+                    info.setUnderHead(headLineStr.trim().replaceAll("#|" + LineNoRegex, ""));
                     return info;
                 }
         ).collect(Collectors.toList());
-        return hitInfos;
     }
 }
