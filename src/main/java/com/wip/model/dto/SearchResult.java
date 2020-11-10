@@ -7,6 +7,7 @@ import java.util.Map;
 public class SearchResult {
     private String url;
     private String articleName;
+    List<ArticleBodyHitInfo> hitInfos;
 
     private Map<String, List<String>> hitsWithHighLight;
 
