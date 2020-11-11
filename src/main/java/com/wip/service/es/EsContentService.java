@@ -7,6 +7,7 @@ import com.wip.model.dto.ArticleBodyHitInfo;
 import com.wip.model.dto.ArticleHitInfo;
 import com.wip.model.dto.ContentEsDTO;
 import com.wip.model.dto.SearchResult;
+import com.wip.utils.MyStringUtil;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class EsContentService {
     private ElasticsearchRestTemplate template;
 
     private static Pattern lineNoPattern = Pattern.compile("(?<=::L-)\\d+(?=::)");
-    private static Pattern headerPattern = Pattern.compile("( *#|#).+");
+    private static Pattern headerPattern = Pattern.compile("(" + LineNoRegex + ")( *#|#).+");
 
     @Autowired
     public EsContentService(ElasticsearchRestTemplate template) {
@@ -70,7 +71,6 @@ public class EsContentService {
         return resultList;
     }
 
-    //todo 基本逻辑完成，现在只有es存储的是 ::L-1::类型的数据即可
     public List<ArticleHitInfo> findWithAnchorByContentOrTitle(String input, int pageNum, int pageSize) {
         int pageIndex = pageNum - 1;
         PageRequest pageRequest = PageRequest.of(pageIndex, pageSize);
@@ -87,7 +87,6 @@ public class EsContentService {
             String content = hit.getContent().getContent();
             Map<String, List<String>> highlightFields = hit.getHighlightFields();
             // get all headline and no
-            //todo content新增表 用于保存目录，先暂时使用生成的方案
             Map<Integer, String> headLines = getHeadFromContent(content);
             List<ArticleBodyHitInfo> articleBodyHitInfos = generateBodyHitInfo(highlightFields.get("content"), headLines);
             ArticleHitInfo articleHitInfo = new ArticleHitInfo(url, title, articleBodyHitInfos);
@@ -126,7 +125,7 @@ public class EsContentService {
         contentDao.findAll().forEach(content -> {
             ContentEsDTO contentEsDTO = new ContentEsDTO(content.getCid().toString(), "/detail/" + content.getCid(), content.getTitle(),
                     content.getCreated().toEpochMilli(), content.getModified().toEpochMilli(),
-                    content.getContent());
+                    MyStringUtil.generateLineNumberForText(content.getContent(), MyStringUtil.LineNoFormat, true));
             template.save(contentEsDTO);
         });
         // contentDao.findAll().forEach();
@@ -162,10 +161,15 @@ public class EsContentService {
                 .collect(toMap(
                         ctx -> {
                             Matcher matcher = lineNoPattern.matcher(ctx);
-                            if (matcher.find()) {
-                                return parseInt(matcher.group());
+                            List<Integer> matches = new ArrayList<>();
+                            while (matcher.find()) {
+                                matches.add(parseInt(matcher.group()));
                             }
-                            throw new RuntimeException("content has no lineNo str");
+                            if (matches.size() > 1) {
+                                return matches.get(matches.size() - 1);
+                            } else {
+                                throw new RuntimeException("content has no lineNo str");
+                            }
                         },
                         ctx -> ctx
                 ));
@@ -175,12 +179,12 @@ public class EsContentService {
                     Integer lineNo = entry.getKey();
                     // 默认升序排列,第一个差值最小
                     Stream<Integer> sorted = headLines.keySet().stream()
-                            .filter(key -> key < lineNo)
+                            .filter(key -> key <= lineNo)
                             .sorted(Comparator.comparingInt(key -> lineNo - key));
                     Integer underHeadLineKey = sorted.findFirst().orElseThrow(() -> new RuntimeException(""));
                     String headLineStr = headLines.get(underHeadLineKey);
                     info.setUnderHeadOriginal(headLineStr);
-                    info.setHitContext(Optional.ofNullable(entry.getValue()).map(val->val.replace(LineNoRegex, "")).orElse(""));
+                    info.setHitContext(Optional.ofNullable(entry.getValue()).map(val -> val.replaceAll(LineNoRegex, "")).orElse(""));
                     info.setUnderHead(headLineStr.trim().replaceAll("#|" + LineNoRegex, ""));
                     return info;
                 }

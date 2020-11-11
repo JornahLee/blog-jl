@@ -94,9 +94,9 @@ public class ContentServiceImpl implements ContentService {
         // 取到标签和分类
         String tags = content.getTags();
         String categories = content.getCategories();
-        content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, false));
         // 添加文章
         contentDao.addArticle(content);
+        content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, true));
         esContentService.add(contentDao.getArticleById(content.getCid()));
 
         // 添加分类和标签
@@ -113,9 +113,7 @@ public class ContentServiceImpl implements ContentService {
         if (null == cid) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
-        Content content = contentDao.getArticleById(cid);
-        content.setContent(rmLineNumberForText(content.getContent(), LineNoRegex));
-        return content;
+        return contentDao.getArticleById(cid);
     }
 
     @Override
@@ -130,9 +128,9 @@ public class ContentServiceImpl implements ContentService {
         // 更新文章
         content.setCreated(legacyArticle.getCreated());
         content.setModified(legacyArticle.getModified());
-        content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, false));
-        contentDao.updateArticleById(content);
 
+        contentDao.updateArticleById(content);
+        content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, true));
         esContentService.update(content);
         int cid = content.getCid();
         relationShipDao.deleteRelationShipByCid(cid);
@@ -149,7 +147,6 @@ public class ContentServiceImpl implements ContentService {
         }
         PageHelper.startPage(pageNum, pageSize);
         List<Content> contents = contentDao.getArticleByCond(contentCond);
-        contents.forEach(content -> content.setContent(rmLineNumberForText(content.getContent(), LineNoRegex)));
         return new PageInfo<>(contents);
     }
 
@@ -194,8 +191,8 @@ public class ContentServiceImpl implements ContentService {
     @CacheEvict(value = {"articleCache"}, allEntries = true, beforeInvocation = true)
     public void updateContentByCid(Content content) {
         if (null != content && null != content.getCid()) {
-            content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, false));
             contentDao.updateArticleById(content);
+            content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, true));
             esContentService.update(content);
         }
     }
@@ -206,9 +203,7 @@ public class ContentServiceImpl implements ContentService {
         if (null == category) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
-        List<Content> articleByCategory = contentDao.getArticleByCategory(category);
-        articleByCategory.forEach(content -> content.setContent(rmLineNumberForText(content.getContent(), LineNoRegex)));
-        return articleByCategory;
+        return contentDao.getArticleByCategory(category);
     }
 
     @Override
@@ -219,9 +214,7 @@ public class ContentServiceImpl implements ContentService {
         }
         List<RelationShip> relationShip = relationShipDao.getRelationShipByMid(tags.getMid());
         if (null != relationShip && relationShip.size() > 0) {
-            List<Content> articleByTags = contentDao.getArticleByTags(relationShip);
-            articleByTags.forEach(content -> content.setContent(rmLineNumberForText(content.getContent(), LineNoRegex)));
-            return articleByTags;
+            return contentDao.getArticleByTags(relationShip);
         }
         return null;
     }
