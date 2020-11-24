@@ -5,14 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.wip.controller.BaseController;
 import com.wip.model.dto.ArticleHitInfo;
 import com.wip.model.dto.ArticleSearchRequest;
-import com.wip.model.dto.ContentEsDTO;
 import com.wip.model.dto.SearchResult;
-import com.wip.service.article.ContentService;
 import com.wip.service.es.EsContentService;
 import com.wip.utils.APIResponse;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -5,7 +5,6 @@
  **/
 package com.wip.service.article.impl;
 
-import cn.hutool.crypto.digest.MD5;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.wip.constant.ErrorConstant;
@@ -14,18 +13,16 @@ import com.wip.constant.WebConst;
 import com.wip.dao.CommentDao;
 import com.wip.dao.ContentDao;
 import com.wip.dao.RelationShipDao;
-import com.wip.model.dto.cond.ContentCond;
 import com.wip.exception.BusinessException;
 import com.wip.model.Comment;
 import com.wip.model.Content;
 import com.wip.model.Meta;
 import com.wip.model.RelationShip;
+import com.wip.model.dto.cond.ContentCond;
 import com.wip.model.vo.ContentMetaInfo;
 import com.wip.service.article.ContentService;
 import com.wip.service.es.EsContentService;
 import com.wip.service.meta.MetaService;
-import com.wip.utils.MyStringUtil;
-import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
@@ -36,17 +33,10 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import static com.wip.utils.MyStringUtil.*;
+import static com.wip.utils.MyStringUtil.LineNoFormat;
+import static com.wip.utils.MyStringUtil.generateLineNumberForText;
 
 @Service
 @EnableAspectJAutoProxy(exposeProxy = true)

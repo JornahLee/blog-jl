@@ -7,11 +7,8 @@ package com.wip.model.dto.cond;
 
 import cn.hutool.core.util.ReflectUtil;
 import org.apache.commons.codec.digest.Md5Crypt;
-import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
 

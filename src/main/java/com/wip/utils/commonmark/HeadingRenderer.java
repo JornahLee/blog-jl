@@ -2,7 +2,6 @@ package com.wip.utils.commonmark;
 
 import org.commonmark.node.Heading;
 import org.commonmark.node.Node;
-import org.commonmark.node.Visitor;
 import org.commonmark.renderer.NodeRenderer;
 import org.commonmark.renderer.html.HtmlNodeRendererContext;
 import org.commonmark.renderer.html.HtmlWriter;

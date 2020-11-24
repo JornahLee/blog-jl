@@ -6,8 +6,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.time.Instant;
-
 import static com.wip.model.dto.ContentEsDTO.INDEX_NAME;
 
 @Document(indexName = INDEX_NAME)

@@ -5,8 +5,8 @@
  **/
 package com.wip.dao;
 
-import com.wip.model.dto.cond.CommentCond;
 import com.wip.model.Comment;
+import com.wip.model.dto.cond.CommentCond;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

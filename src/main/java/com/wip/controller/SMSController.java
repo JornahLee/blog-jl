@@ -5,7 +5,11 @@ import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
 import com.wip.utils.APIResponse;
 import com.wip.utils.SMSUtil;
 import org.apache.commons.lang3.RandomUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
