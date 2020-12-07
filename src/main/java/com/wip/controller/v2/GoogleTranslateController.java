@@ -30,7 +30,8 @@ public class GoogleTranslateController {
     public Object translate(@RequestBody TranslateRequest request) {
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
         String pwd = opsForValue.get("google-api-pwd");
-        if (Objects.nonNull(pwd) && StringUtils.isBlank(request.getSecret())) {
+        boolean auth = Objects.nonNull(request.getSecret()) && StringUtils.isNotBlank(pwd) && pwd.equals(request.getSecret());
+        if (!auth) {
             return "密码错误";
         }
         request.setSecret(secret);
