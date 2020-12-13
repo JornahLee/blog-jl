@@ -39,7 +39,8 @@ import static java.util.stream.Collectors.toMap;
 public class EsContentService {
     private ElasticsearchRestTemplate template;
 
-    private static Pattern lineNoPattern = Pattern.compile("(?<=::L-)\\d+(?=::)");
+    public static final String LINE_NO_REGEX = "(?<=::L-)\\d+(?=::)";
+    private static Pattern lineNoPattern = Pattern.compile(LINE_NO_REGEX);
     private static Pattern headerPattern = Pattern.compile("(" + LineNoRegex + ")( *#|#).+");
 
     @Autowired
@@ -56,6 +57,7 @@ public class EsContentService {
 
         NativeSearchQuery query = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(input, "content", "title"))
                 .withPageable(pageRequest)
+                .withFields("content","title","url")
                 .withHighlightBuilder(new HighlightBuilder().field("content").field("title").tagsSchema("styled"))
                 .build();
         List<SearchResult> resultList = Lists.newArrayList();
@@ -77,6 +79,7 @@ public class EsContentService {
 
         NativeSearchQuery query = new NativeSearchQueryBuilder().withQuery(QueryBuilders.multiMatchQuery(input, "content", "title"))
                 .withPageable(pageRequest)
+                .withFields("content","title","url")
                 .withHighlightBuilder(new HighlightBuilder().field("content").field("title").tagsSchema("styled"))
                 .build();
         List<ArticleHitInfo> resultList = Lists.newArrayList();
@@ -165,7 +168,7 @@ public class EsContentService {
                             while (matcher.find()) {
                                 matches.add(parseInt(matcher.group()));
                             }
-                            if (matches.size() > 1) {
+                            if (matches.size() > 0) {
                                 return matches.get(matches.size() - 1);
                             } else {
                                 throw new RuntimeException("content has no lineNo str");
@@ -181,8 +184,8 @@ public class EsContentService {
                     Stream<Integer> sorted = headLines.keySet().stream()
                             .filter(key -> key <= lineNo)
                             .sorted(Comparator.comparingInt(key -> lineNo - key));
-                    Integer underHeadLineKey = sorted.findFirst().orElseThrow(() -> new RuntimeException(""));
-                    String headLineStr = headLines.get(underHeadLineKey);
+                    Integer underHeadLineKey = sorted.findFirst().orElse(0);
+                    String headLineStr = Optional.ofNullable(headLines.get(underHeadLineKey)).orElse("");
                     info.setUnderHeadOriginal(headLineStr);
                     info.setHitContext(Optional.ofNullable(entry.getValue()).map(val -> val.replaceAll(LineNoRegex, "")).orElse(""));
                     info.setUnderHead(headLineStr.trim().replaceAll("#|" + LineNoRegex, ""));
