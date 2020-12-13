@@ -235,6 +235,15 @@
         </dependency>
         <!--        糊涂工具类-超全-->
 
+        <!--       flex markdown to html , which based on commonmark-->
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>0.62.2</version>
+        </dependency>
+        <!--        markdown to html-->
+
+
     </dependencies>
 
 

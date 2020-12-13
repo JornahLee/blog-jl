@@ -25,6 +25,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +37,7 @@ public class TaleUtils {
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private static final Pattern SLUG_REGEX = Pattern.compile("^[A-Za-z0-9_-]{5,100}$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern UN_FORMAT_HEAD=Pattern.compile("^#+(?=(?!.*#| ))",Pattern.MULTILINE);
 
     /**
      * 获取session中的用户
@@ -207,13 +209,9 @@ public class TaleUtils {
         if (StringUtils.isBlank(markdown)) {
             return "";
         }
-        java.util.List<Extension> extensions = Arrays.asList(TablesExtension.create(),HeadingAnchorExtension.create());
-        org.commonmark.parser.Parser parser = org.commonmark.parser.Parser.builder().extensions(extensions).build();
-        Node document = parser.parse(markdown);
-        HtmlRenderer renderer = HtmlRenderer.builder().extensions(extensions).build();
-        String content = renderer.render(document);
-        content = Commons.emoji(content);
-        return content;
+        String formatHeadLine = UN_FORMAT_HEAD.matcher(markdown).replaceAll("$0 ");
+        String content = FlexMarkdown.md2Html(formatHeadLine);
+        return Commons.emoji(content);
     }
     public static String tocFromMd(String markdown) {
         if (StringUtils.isBlank(markdown)) {

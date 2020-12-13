@@ -116,10 +116,6 @@
             <if test="content != null">
                 content = #{content, jdbcType=LONGVARCHAR},
             </if>
-            <if test="modified != null">
-                modified = #{modified,jdbcType=TIMESTAMP},
-            </if>
-
             <if test="type != null">
                 type = #{type, jdbcType=VARCHAR},
             </if>
@@ -150,6 +146,7 @@
             <if test="orderWeight != null">
                 orderWeight = #{orderWeight, jdbcType=INTEGER},
             </if>
+            modified = now()
         </set>
         WHERE
           cid = #{cid, jdbcType=INTEGER}

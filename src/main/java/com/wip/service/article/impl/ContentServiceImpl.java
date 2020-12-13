@@ -59,7 +59,7 @@ public class ContentServiceImpl implements ContentService {
 
     @Transactional
     @Override
-    @CacheEvict(value = {"articleCache", "articleCaches"}, allEntries = true, beforeInvocation = true)
+    @CacheEvict(value = "articleCache", allEntries = true, beforeInvocation = true)
     public void addArticle(Content content) {
         if (null == content) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
@@ -108,7 +108,7 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"articleCache", "articleCaches"}, allEntries = true, beforeInvocation = true)
+    @CacheEvict(value = "articleCache", allEntries = true, beforeInvocation = true)
     public void updateArticleById(Content content) {
         // 标签和分类
         String tags = content.getTags();
@@ -130,7 +130,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    @Cacheable(value = "articleCaches", key = "'articlesByCond_'+ #p0.getMd5() + '.' + #p1+'.'+#p2 ")
+    @Cacheable(value = "articleCache", key = "'articlesByCond_'+ #p0.getMd5() + '.' + #p1+'.'+#p2 ")
     public PageInfo<Content> getArticlesByCond(ContentCond contentCond, int pageNum, int pageSize) {
         if (null == contentCond) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
@@ -151,7 +151,7 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"articleCache"}, allEntries = true, beforeInvocation = true)
+    @CacheEvict(value = "articleCache", allEntries = true, beforeInvocation = true)
     public void deleteArticleById(Integer cid) {
         if (null == cid) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
