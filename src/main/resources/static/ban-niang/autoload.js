@@ -1,12 +1,14 @@
 // 注意：live2d_path 参数应使用绝对路径
 const live2d_path = "https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
 //const live2d_path = "/live2d-widget/";
+// 加载 waifu.css live2d.min.js waifu-tips.js
+domain='static.jornahlee.club'
+localpath = 'http://' + domain + '/ban-niang/'
 
 // 封装异步加载资源的方法
 function loadExternalResource(url, type) {
 	return new Promise((resolve, reject) => {
 		let tag;
-
 		if (type === "css") {
 			tag = document.createElement("link");
 			tag.rel = "stylesheet";
@@ -24,8 +26,6 @@ function loadExternalResource(url, type) {
 	});
 }
 
-// 加载 waifu.css live2d.min.js waifu-tips.js
-localpath = window.location.protocol + '//' + window.location.host + '/ban-niang/'
 // if (screen.width >= 768) {
 if (screen.width >= 0) {
 	Promise.all([
