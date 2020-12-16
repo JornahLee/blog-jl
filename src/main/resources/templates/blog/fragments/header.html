@@ -70,12 +70,24 @@
                         <div class="algolia-search-input-icon">
                             <i class="fa fa-search"></i>
                         </div>
-                        <input class="algolia-search-input" type="text" placeholder="这里输入搜索内容"  id="search-input"/>
-                        <button id="submitBtn" hidden="true" onclick="doSearch()">搜索</button>
+                        <input v-model="searchStr" class="algolia-search-input" type="text" placeholder="这里输入搜索内容"  id="search-input"/>
+                        <button id="submitBtn" hidden="true" @click="doSearch()">搜索</button>
                         <!--                        <div class="algolia-search-input" id="algolia-search-input">-->
                         <!--                        </div>-->
                     </div>
                     <div id="search-result-div" class="algolia-results" >
+                        <div v-if="isLoading"> 搜索中... </div>
+                        <div v-if="showNoResult"> 没有匹配的结果... </div>
+                        <div v-for="articleHit in hitArticles">
+                            <a style="font-weight: bold" v-bind:href="articleHit.url" >{{ articleHit.title }}</a>
+                            <div id="algolia-hits" v-for="bodyHit in articleHit.bodyHitInfoList">
+                                <a v-bind:href="articleHit.url + '#' +bodyHit.underHead"
+                                   v-html="bodyHit.hitContext">
+                                </a>
+                                <br/>
+                            </div>
+                            <hr/>
+                        </div>
 <!--                        <div id="algolia-stats">test algolia-stats</div>-->
 <!--                        <div id="algolia-hits">test algolia-hits</div>-->
 <!--                        <div id="algolia-pagination" class="algolia-pagination"> test algolia-pagination</div>-->

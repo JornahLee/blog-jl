@@ -9,7 +9,9 @@ import com.wip.model.dto.SearchResult;
 import com.wip.service.es.EsContentService;
 import com.wip.utils.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -27,7 +29,7 @@ public class ArticleSearchController extends BaseController {
         return APIResponse.success(res);
     }
     @RequestMapping("/v2/search")
-    public APIResponse<List<ArticleHitInfo>> searchWithAnchor(ArticleSearchRequest request) {
+    public APIResponse<List<ArticleHitInfo>> searchWithAnchor(@RequestBody ArticleSearchRequest request) {
         List<ArticleHitInfo> res = doV2Search(request);
         return APIResponse.success(res);
     }

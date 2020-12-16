@@ -23,8 +23,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,13 +35,12 @@ import java.util.stream.Stream;
 
 import static com.wip.utils.MyStringUtil.LineNoRegex;
 import static java.lang.Integer.parseInt;
-import static java.util.stream.Collectors.toMap;
 
 @Service
 public class EsContentService {
     private ElasticsearchRestTemplate template;
 
-    public static final String LINE_NO_REGEX = "(?<=::L-)\\d+(?=::)";
+    public static final String LINE_NO_REGEX = "(?<=:)\\d+(?=:)";
     private static Pattern lineNoPattern = Pattern.compile(LINE_NO_REGEX);
     private static Pattern headerPattern = Pattern.compile("(" + LineNoRegex + ")( *#|#).+");
 
@@ -94,7 +95,6 @@ public class EsContentService {
             List<ArticleBodyHitInfo> articleBodyHitInfos = generateBodyHitInfo(highlightFields.get("content"), headLines);
             ArticleHitInfo articleHitInfo = new ArticleHitInfo(url, title, articleBodyHitInfos);
             resultList.add(articleHitInfo);
-
         });
         return resultList;
     }
@@ -110,18 +110,18 @@ public class EsContentService {
                 headLines.add(matcher.group());
             }
         });
-        return headLines.stream()
-                .collect(toMap(
-                        str -> {
-                            Matcher matcher = lineNoPattern.matcher(str);
-                            if (matcher.find()) {
-                                return parseInt(matcher.group());
-                            } else {
-                                throw new RuntimeException("content has no lineno str");
-                            }
-                        },
-                        str -> str
-                ));
+
+        // 假如这个header他没有LineNo呢，程序应该兼容，
+        //
+        HashMap<Integer, String> headWithLineNo = new HashMap<>();
+        for (String headLine : headLines) {
+            Matcher matcher = lineNoPattern.matcher(headLine);
+            if (matcher.find()) {
+                int lineNo = parseInt(matcher.group());
+                headWithLineNo.put(lineNo, headLine);
+            }
+        }
+        return headWithLineNo;
     }
 
     public void exportDataToEs() {
@@ -131,7 +131,6 @@ public class EsContentService {
                     MyStringUtil.generateLineNumberForText(content.getContent(), MyStringUtil.LineNoFormat, true));
             template.save(contentEsDTO);
         });
-        // contentDao.findAll().forEach();
     }
 
     @Async
@@ -160,22 +159,20 @@ public class EsContentService {
     }
 
     private List<ArticleBodyHitInfo> generateBodyHitInfo(List<String> hitsContext, Map<Integer, String> headLines) {
-        Map<Integer, String> hitWithLineNo = hitsContext.stream()
-                .collect(toMap(
-                        ctx -> {
-                            Matcher matcher = lineNoPattern.matcher(ctx);
-                            List<Integer> matches = new ArrayList<>();
-                            while (matcher.find()) {
-                                matches.add(parseInt(matcher.group()));
-                            }
-                            if (matches.size() > 0) {
-                                return matches.get(matches.size() - 1);
-                            } else {
-                                throw new RuntimeException("content has no lineNo str");
-                            }
-                        },
-                        ctx -> ctx
-                ));
+        if (Objects.isNull(hitsContext) || Objects.isNull(headLines)) {
+            return null;
+        }
+        Map<Integer, String> hitWithLineNo = new HashMap<>();
+        for (String ctx : hitsContext) {
+            Matcher matcher = lineNoPattern.matcher(ctx);
+            List<Integer> matches = new ArrayList<>();
+            while (matcher.find()) {
+                matches.add(parseInt(matcher.group()));
+            }
+            if (matches.size() > 0) {
+                hitWithLineNo.put(matches.get(matches.size() - 1), ctx);
+            }
+        }
         return hitWithLineNo.entrySet().stream().map(
                 entry -> {
                     ArticleBodyHitInfo info = new ArticleBodyHitInfo();
@@ -187,8 +184,10 @@ public class EsContentService {
                     Integer underHeadLineKey = sorted.findFirst().orElse(0);
                     String headLineStr = Optional.ofNullable(headLines.get(underHeadLineKey)).orElse("");
                     info.setUnderHeadOriginal(headLineStr);
-                    info.setHitContext(Optional.ofNullable(entry.getValue()).map(val -> val.replaceAll(LineNoRegex, "")).orElse(""));
-                    info.setUnderHead(headLineStr.trim().replaceAll("#|" + LineNoRegex, ""));
+                    // 因为es命中上下文，可能存在 行号标记不全的情况，如 :1 或者 1:
+                    String regex=LineNoRegex+"|:\\d+|\\d+:";
+                    info.setHitContext(Optional.ofNullable(entry.getValue()).map(val -> val.replaceAll(regex, "")).orElse(""));
+                    info.setUnderHead(headLineStr.replaceAll("#|" + LineNoRegex, "").trim().replaceAll("\\s","-"));
                     return info;
                 }
         ).collect(Collectors.toList());

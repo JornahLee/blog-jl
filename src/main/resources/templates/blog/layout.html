@@ -50,7 +50,7 @@
 </head>
 <body>
 
-<div class="container sidebar-position-left page-home">
+<div id="app" class="container sidebar-position-left page-home">
     <div class="headband"></div>
     <div th:replace="blog/fragments/header::header"></div>
     <main id="main" class="main">
@@ -88,7 +88,9 @@
     }
 </script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://translate.jornahlee.club/js/vue.js"></script>
+<script type="text/javascript" src="http://translate.jornahlee.club/js/axios.min.js"></script>
 <script type="text/javascript" th:src="@{/blog/jquery.lazyload/1.9.3/jquery.lazyload.min.js}"></script>
 <script type="text/javascript" th:src="@{/blog/velocity/1.2.3/velocity.min.js}"></script>
 <script type="text/javascript" th:src="@{/blog/velocity/1.2.3/velocity.ui.min.js}"></script>
@@ -174,35 +176,36 @@
     /**
      * header页面搜索使用的js
      */
-    function doSearch() {
-        $.ajax({
-            type: 'post',
-            url: '/article/search',
-            data: {"searchStr":  $('#search-input').val(), "pageNum": 1, "pageSize": 10},
-            async: true,
-            dataType: 'json',
-            success({code, data}) {
-                if (data && code === 'success') {
-                    $('#search-result-div').empty()
-                    console.log(data)
-                    data.map(item => {
-                        hitStr = $('#search-result-div')
-                        console.log(hitStr)
-                        let str = '';
-                        for(let key in item.hitsWithHighLight){
-                            item.hitsWithHighLight[key].map(item2=>{
-                                // str += `<div id="algolia-hits" href=${item.url}> ` + item2 + `<p style="text-align: right">${item.articleName}</p> </div>`
-                                str += `<a id="algolia-hits" href=${item.url}> ` + item2 + `</a><br/><br/>`
-                            })
-                        }
-                        const $div = str
-                        hitStr.append($div)
-
+    new Vue({
+        el: '#app',
+        data: {
+            searchStr: '',
+            hitArticles:'',
+            bodyHitInfoList: '',
+            isLoading: false,
+            showNoResult: false
+        },
+        methods: {
+            doSearch: function () {
+                const requestBody = {"searchStr":  this.searchStr, "pageNum": 1, "pageSize": 10};
+                console.log(this.searchStr)
+                console.log(requestBody)
+                this.isLoading = true;
+                axios
+                    .post('/article/v2/search', requestBody)
+                    .then(response => {
+                        this.isLoading = false;
+                        this.hitArticles=response.data.data;
+                        console.log(this.hitArticles)
+                        this.showNoResult=this.hitArticles.length <= 0;
                     })
-                }
+                    .catch(error => { // 请求失败处理
+                        this.isLoading = false;
+                    });
             }
-        });
-    }
+        }
+    })
+
 
     $(".algolia-popup").keydown(function () {
         if (window.event.keyCode==13) {

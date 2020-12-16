@@ -5,8 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 public class MyStringUtil {
-    public static String LineNoFormat = "::L-%d::";
-    public static String LineNoRegex = "::L-\\d{1,6}::";
+    public static String LineNoFormat = ":%d:";
+    public static String LineNoRegex = ":\\d{1,6}:";
 
     public static void main(String[] args) {
         String str = "woshiadjasljdas\r\n sfsdf\n奥术大师\n sdfsdf\n\n\n\n啊撒大声地\n啊撒大声地\n";
