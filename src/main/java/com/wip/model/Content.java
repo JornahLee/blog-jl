@@ -7,6 +7,7 @@ package com.wip.model;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.LinkedHashMap;
 
 /**
  * 文章表
@@ -40,6 +41,9 @@ public class Content implements Serializable {
      * 内容文字
      */
     private String content;
+
+    private LinkedHashMap<String,Integer> toc;
+
     /**
      * 内容所属用户id
      */
@@ -229,5 +233,13 @@ public class Content implements Serializable {
 
     public void setOrderWeight(Integer orderWeight) {
         this.orderWeight = orderWeight;
+    }
+
+    public LinkedHashMap<String, Integer> getToc() {
+        return toc;
+    }
+
+    public void setToc(LinkedHashMap<String, Integer> toc) {
+        this.toc = toc;
     }
 }

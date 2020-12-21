@@ -6,7 +6,6 @@ import com.wip.model.User;
 import com.wip.utils.commonmark.HeadingRenderer;
 import org.apache.commons.lang3.StringUtils;
 import org.commonmark.Extension;
-import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.ext.heading.anchor.HeadingAnchorExtension;
 import org.commonmark.node.Node;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -23,9 +22,14 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.StringTokenizer;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,10 +41,12 @@ public class TaleUtils {
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private static final Pattern SLUG_REGEX = Pattern.compile("^[A-Za-z0-9_-]{5,100}$", Pattern.CASE_INSENSITIVE);
-    private static final Pattern UN_FORMAT_HEAD=Pattern.compile("^#+(?=(?!.*#| ))",Pattern.MULTILINE);
+    private static final Pattern UN_FORMAT_HEAD = Pattern.compile("^#+(?=(?!.*#| ))", Pattern.MULTILINE);
+    private static final Pattern HEAD_LINE = Pattern.compile("^#+.+", Pattern.MULTILINE);
 
     /**
      * 获取session中的用户
+     *
      * @param request
      * @return
      */
@@ -54,12 +60,13 @@ public class TaleUtils {
 
     /**
      * 获取cookie中的用户ID
+     *
      * @param request
      * @return
      */
-    public static Integer getCookieUid(HttpServletRequest request){
+    public static Integer getCookieUid(HttpServletRequest request) {
         if (null != request) {
-            Cookie cookie = cookieRaw(WebConst.USER_IN_COOKIE,request);
+            Cookie cookie = cookieRaw(WebConst.USER_IN_COOKIE, request);
             if (cookie != null && cookie.getValue() != null) {
                 try {
                     String uid = Tools.deAes(cookie.getValue(), WebConst.AES_SALT);
@@ -74,16 +81,17 @@ public class TaleUtils {
 
     /**
      * 从cookies中获取指定cookie
-     * @param name          名称
-     * @param request       请求
-     * @return  cookie
+     *
+     * @param name    名称
+     * @param request 请求
+     * @return cookie
      */
     private static Cookie cookieRaw(String name, HttpServletRequest request) {
         Cookie[] servletCookies = request.getCookies();
         if (servletCookies == null) {
             return null;
         }
-        for (Cookie c: servletCookies) {
+        for (Cookie c : servletCookies) {
             if (c.getName().equals(name)) {
                 return c;
             }
@@ -93,12 +101,13 @@ public class TaleUtils {
 
     /**
      * 设置记住密码cookie
+     *
      * @param response
      * @param uid
      */
-    public static void setCookie(HttpServletResponse response, Integer uid,int maxAge) {
+    public static void setCookie(HttpServletResponse response, Integer uid, int maxAge) {
         try {
-            String val= Tools.enAes(uid.toString(), WebConst.AES_SALT);
+            String val = Tools.enAes(uid.toString(), WebConst.AES_SALT);
             boolean isSSL = false;
             Cookie cookie = new Cookie(WebConst.USER_IN_COOKIE, val);
             cookie.setPath("/");
@@ -112,6 +121,7 @@ public class TaleUtils {
 
     /**
      * 获取保存文件的位置，jar所在的目录的路径
+     *
      * @return
      */
     public static String getUploadFilePath() {
@@ -137,7 +147,7 @@ public class TaleUtils {
         if (name == null) {
             return prefix + "/" + UUID.UU32() + "." + null;
         } else {
-            name = name.replace('\\','/');
+            name = name.replace('\\', '/');
             name = name.substring(name.lastIndexOf("/") + 1);
             int index = name.lastIndexOf(".");
             String ext = null;
@@ -150,6 +160,7 @@ public class TaleUtils {
 
     /**
      * 判断文件是否是图片类型
+     *
      * @param imageFile
      * @return
      */
@@ -168,8 +179,9 @@ public class TaleUtils {
 
     /**
      * MD5加密
-     * @param source    数据源
-     * @return  加密字符串
+     *
+     * @param source 数据源
+     * @return 加密字符串
      */
     public static String MD5encode(String source) {
         if (StringUtils.isBlank(source)) {
@@ -202,6 +214,7 @@ public class TaleUtils {
 
     /**
      * markdown转换为html
+     *
      * @param markdown
      * @return
      */
@@ -213,6 +226,7 @@ public class TaleUtils {
         String content = FlexMarkdown.md2Html(formatHeadLine);
         return Commons.emoji(content);
     }
+
     public static String tocFromMd(String markdown) {
         if (StringUtils.isBlank(markdown)) {
             return "";
@@ -226,16 +240,32 @@ public class TaleUtils {
         String content = renderer.render(document);
         content = Commons.emoji(content);
         Matcher matcher = Pattern.compile("<(h[12]).+\\1>").matcher(content);
-        StringBuilder res=new StringBuilder();
-        while (matcher.find()){
+        StringBuilder res = new StringBuilder();
+        while (matcher.find()) {
             res.append(matcher.group()).append("\n");
         }
-        return res.toString().replaceAll("<h\\d>|</h\\d>","");
+        return res.toString().replaceAll("<h\\d>|</h\\d>", "");
+    }
+
+    public static LinkedHashMap<String,Integer> getHeadLineFrom(String md) {
+        LinkedHashMap<String,Integer> result = new LinkedHashMap<>();
+        if (StringUtils.isBlank(md)) {
+            return result;
+        }
+        Matcher matcher = HEAD_LINE.matcher(md);
+        while (matcher.find()) {
+            String group = Optional.of(matcher.group()).orElse("").trim();
+            int level = StringUtils.countMatches(group, '#');
+            String headHref=group.replaceAll("#+","").trim();
+            result.put(headHref.replaceAll(" ","-"),level);
+        }
+
+        return result;
     }
 
     @Test
-    public void test(){
-        String res = TaleUtils.tocFromMd("# 1\n" +
+    public void test() {
+        String str = "# 1\n" +
                 "\n" +
                 "## 11\n" +
                 "\n" +
@@ -255,13 +285,15 @@ public class TaleUtils {
                 "\n" +
                 "目录\n" +
                 "\n" +
-                "[TOC]");
-        System.out.println(res);
+                "[TOC]";
+        getHeadLineFrom(str).entrySet().stream().forEach(System.out::println);
+
 
     }
 
     /**
      * 判断是否是邮箱
+     *
      * @param emailStr
      * @return
      */
@@ -272,6 +304,7 @@ public class TaleUtils {
 
     /**
      * 验证URL地址
+     *
      * @param url 格式：http://blog.csdn.net:80/xyang81/article/details/7705960? 或 http://www.csdn.net:80
      * @return 验证成功返回true，验证失败返回false
      */

@@ -25,10 +25,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -142,6 +144,7 @@ public class HomeController extends BaseController {
 
     @ApiOperation("文章内容页")
     @GetMapping(value = "/detail/{cid}")
+    @CrossOrigin(methods = RequestMethod.GET)
     public APIResponse<ArticleInfo> detail(
             @ApiParam(name = "cid", value = "文章主键", required = true)
             @PathVariable("cid")
@@ -149,6 +152,9 @@ public class HomeController extends BaseController {
             HttpServletRequest request
     ) {
         Content article = contentService.getArticleById(cid);
+        article.setToc(TaleUtils.getHeadLineFrom(article.getContent()));
+        String md = TaleUtils.mdToHtml(article.getContent());
+        article.setContent(md);
 
         if (!isFromSameIp(cid, request)) {
             // 更新文章的点击量
