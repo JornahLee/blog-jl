@@ -1,11 +1,15 @@
-package com.wip.controller.v1.admin;
+package com.wip.controller.v2.model;
 
-import com.wip.service.es.EsContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,12 +19,21 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/admin")
-public class ManualOpsController {
+@RequestMapping("/cache")
+@CrossOrigin
+public class CacheController {
     @Autowired
     private StringRedisTemplate redisTemplate;
-    @Autowired
-    private EsContentService esContentService;
+
+    @GetMapping("/get/{key}")
+    public String get(@PathVariable("key") String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
+    @PostMapping("/set")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void set(@RequestParam String key,@RequestParam String value) {
+        redisTemplate.opsForValue().set(key,value);
+    }
 
     @RequestMapping("/cache/flush")
     public Map<String,String> cleanAllCache() {
@@ -35,11 +48,4 @@ public class ManualOpsController {
         retMap.put("key count after flush",sizeAfter.toString());
         return retMap;
     }
-
-    @RequestMapping("/es/import")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void exportDataToEs(){
-        esContentService.exportDataToEs();
-    }
-
 }
