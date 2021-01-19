@@ -59,8 +59,9 @@ public class MetaServiceImpl implements MetaService {
                 // 如果有mid代表需要更新
                 if (null != mid) {
                     Meta meta = metaDao.getMetaById(mid);
-                    if (null != meta)
+                    if (null != meta) {
                         metaDomain.setMid(mid);
+                    }
                     metaDao.updateMeta(metaDomain);
                     // 更新原有的文章分类
 
@@ -99,8 +100,9 @@ public class MetaServiceImpl implements MetaService {
     @Transactional
     @CacheEvict(value = {"metaCaches","metaCache"}, allEntries = true, beforeInvocation = true)
     public void addMetas(Integer cid, String names, String type) {
-        if (null == cid)
+        if (null == cid) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
 
         if (StringUtils.isNotBlank(names) && StringUtils.isNotBlank(type)) {
             String[] nameArr = StringUtils.split(names,",");
@@ -149,8 +151,9 @@ public class MetaServiceImpl implements MetaService {
     @Transactional
     @CacheEvict(value = {"metaCaches","metaCache"}, allEntries = true, beforeInvocation = true)
     public void addMea(Meta meta) {
-        if (null == meta)
+        if (null == meta) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         metaDao.addMeta(meta);
     }
 
@@ -158,32 +161,36 @@ public class MetaServiceImpl implements MetaService {
     @Transactional
     @CacheEvict(value = {"metaCaches", "metaCache"}, allEntries = true, beforeInvocation = true)
     public void updateMeta(Meta meta) {
-        if (null == meta || null == meta.getMid())
+        if (null == meta || null == meta.getMid()) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         metaDao.updateMeta(meta);
     }
 
     @Override
     @Cacheable(value = "metaCaches", key = "'metaCountByType_'+ #p0")
     public int getMetasCountByType(String type) {
-        if (null == type)
+        if (null == type) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         return metaDao.getMetasCountByType(type).intValue();
     }
 
     @Override
     @Cacheable(value = "metaCaches", key = "'metaByName_' + #p1")
     public Meta getMetaByName(String type, String name) {
-        if (null == name)
+        if (null == name) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         return metaDao.getMetaByName(type,name);
     }
 
     @Override
     @Transactional
     public void deleteMetaById(Integer mid) {
-        if (null == mid)
+        if (null == mid) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
 
         // 通过ID找到该项目
         Meta meta = metaDao.getMetaById(mid);

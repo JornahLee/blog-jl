@@ -22,7 +22,7 @@ public interface ContentService {
      * 添加文章
      * @param content
      */
-    void addArticle(Content content);
+    long addArticle(Content content);
 
     /**
      * 根据编号获取文章

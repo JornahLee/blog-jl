@@ -1,6 +1,6 @@
 package com.wip.controller.v2;
 
-import com.wip.controller.v2.model.vo.TranslateRequest;
+import com.wip.model.vo.TranslateRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;

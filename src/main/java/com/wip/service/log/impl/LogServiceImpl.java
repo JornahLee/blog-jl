@@ -38,10 +38,8 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public PageInfo<Log> getLogs(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
-        List<Log> logs = logDao.getLogs();
-        PageInfo<Log> pageInfo = new PageInfo<>(logs);
-        return pageInfo;
+        return PageHelper.startPage(pageNum,pageSize)
+                .doSelectPageInfo(()->logDao.getLogs());
 
     }
 }

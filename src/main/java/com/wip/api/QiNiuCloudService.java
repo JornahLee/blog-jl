@@ -35,7 +35,7 @@ public class QiNiuCloudService {
     /**
      * 七牛外网访问地址
      */
-    public static final String QINIU_UPLOAD_SITE = "http://img.jornahlee.club";
+    public static final String QINIU_UPLOAD_SITE = "img.jornahlee.club/";
 
     /**
      * 上传文件到七牛公共方法
@@ -66,7 +66,7 @@ public class QiNiuCloudService {
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(),DefaultPutRet.class);
             System.out.println(putRet.key);
             System.out.println(putRet.hash);
-            return  putRet.key;
+            return  QINIU_UPLOAD_SITE + putRet.key;
         } catch (QiniuException ex) {
             Response r = ex.response;
             System.out.println(r.toString());

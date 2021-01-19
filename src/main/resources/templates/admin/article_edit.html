@@ -178,14 +178,26 @@
         editormd("my-editormd", {//注意1：这里的就是上面的DIV的id属性值
             width   : "90%",
             height  : 640,
-            syncScrolling : "single",
+            theme : "dark",
+            previewTheme : "dark",
+            editorTheme : "pastel-on-dark",
+            syncScrolling : "true",
             path    : "/admin/editormd/lib/",//注意2：你的路径
+            watch: false ,
             saveHTMLToTextarea : true,//注意3：这个配置，方便post提交表单
             /**上传图片相关配置如下*/
             imageUpload: true,
+            toolbarIcons: ["undo", "redo", "|","h1", "h2", "h3",  "|","list-ul", "list-ol", "hr", "|",
+                "bold", "del", "preview","watch", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
+                "code", "code-block", "table", "datetime", "emoji",  "pagebreak", "|",
+                "|", "help",
+            ],
             imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"], //图片上传格式
-            imageUploadURL: "/admin/attach/uploadfile",
-            onload: function (obj) { //上传成功之后的回调
+            // imageUploadURL: "/admin/attach/uploadfile",
+            imageUploadURL : "/attach/upload",
+            onload : function() {
+                console.log('onload', this);
+                initPasteDragImg(this)
             }
         });
     });
@@ -207,5 +219,6 @@
 <script th:src="@{//cdn.bootcss.com/select2/3.4.8/select2.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
 <script th:src="@{/admin/js/article.js}"></script>
+<script th:src="@{/admin/js/uploadImg.js}"></script>
 </body>
 </html>

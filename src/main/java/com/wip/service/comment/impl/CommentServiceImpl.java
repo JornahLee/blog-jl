@@ -79,8 +79,9 @@ public class CommentServiceImpl implements CommentService {
         if (null == comments.getCid()) {
             msg = "评论文章不能为空";
         }
-        if (msg != null)
+        if (msg != null) {
             throw BusinessException.withErrorCode(msg);
+        }
 
         Content article = contentService.getArticleById(comments.getCid());
         if (null == article) {
@@ -106,42 +107,45 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Cacheable(value = "commentCache", key = "'commentsByCId_' + #p0")
     public List<Comment> getCommentsByCId(Integer cid) {
-        if (null == cid)
+        if (null == cid) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         return commentDao.getCommentByCId(cid);
     }
 
     @Override
     @Cacheable(value = "commentCache", key = "'commentsByCond_'+ #p1")
     public PageInfo<Comment> getCommentsByCond(CommentCond commentCond, int pageNum, int pageSize) {
-        if (null == commentCond)
+        if (null == commentCond){
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
-        PageHelper.startPage(pageNum,pageSize);
-        List<Comment> comments = commentDao.getCommentsByCond(commentCond);
-        PageInfo<Comment> pageInfo = new PageInfo<>(comments);
-        return pageInfo;
+        }
+        return PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(() -> commentDao.getCommentsByCond(commentCond));
     }
 
     @Override
     @Cacheable(value = "commentCache",key = "'commentById_' + #p0")
     public Comment getCommentById(Integer coid) {
-        if (null == coid)
+        if (null == coid) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         return commentDao.getCommentById(coid);
     }
 
     @Override
     @CacheEvict(value = "commentCache", allEntries = true)
     public void updateCommentStatus(Integer coid, String status) {
-        if (null == coid)
+        if (null == coid) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         commentDao.updateCommentStatus(coid, status);
     }
 
     @Override
     public void deleteComment(Integer coid) {
-        if (null == coid)
+        if (null == coid) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         commentDao.deleteComment(coid);
     }
 }

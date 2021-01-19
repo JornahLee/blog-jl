@@ -1,8 +1,8 @@
 server:
-  port: 8080
+  port: 8088
 spring:
   datasource:
-    name: mysql_blog
+    name: mysql_test
     type: com.alibaba.druid.pool.DruidDataSource
     #druid相关配置
     druid:
@@ -10,9 +10,9 @@ spring:
       filters: stat
       driver-class-name: com.mysql.cj.jdbc.Driver
       #基本属性
-      url: jdbc:mysql://localhost:3306/blog_jl?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=true
-      username: {MYSQL_ACCOUNT}
-      password: {MYSQL_PWD}
+      url: jdbc:mysql://132.232.81.70:3306/blog_jl?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=true
+      username: root
+      password: mimaMysql614.
       #配置初始化大小/最小/最大
       initial-size: 1
       min-idle: 1
@@ -47,34 +47,32 @@ spring:
   #      max-request-size: 100Mb
 
   redis:
-    host: {REDIS_HOST}
-    port: {REDIS_PORT}
-    password: {REDIS_PWD}
+#    host: 132.232.81.70
+    host: localhost
+    port: 6379
+#    password: mimaredis614
     timeout : 5000
   elasticsearch:
     rest:
-      uris: {ES_HOST}
-      username: {ES_ACCOUNT}
-      password: {ES_PWD}
+      uris: http://34.92.234.192:9200
+      username: elastic
+      password: mimaelk614
 #  cache.
-
-
 logging:
   level:
-    root: INFO
     com.wip.dao: DEBUG
 
 
-mybatis:
-  mapper-locations: classpath:mapper/*.xml
+#mybatis:
+#  mapper-locations: classpath:mapper/*.xml
+#  type-aliases-package: com.wip.model
+#  configuration:
+#    map-underscore-to-camel-case: true
+mybatis-plus:
   type-aliases-package: com.wip.model
-
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 swagger:
   show: true
-#分页
-pagehelper:
-  helper-dialect: mysql
-  reasonable: true
-  support-methods-arguments: true
-  params: count=countSql
-  retrunPageInfo: check
+

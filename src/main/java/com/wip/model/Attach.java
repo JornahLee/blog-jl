@@ -39,6 +39,11 @@ public class Attach implements Serializable {
     private Integer authorId;
 
     /**
+     * 上传人的ID
+     */
+    private String md5;
+
+    /**
      * 创建的时间戳
      */
     private Instant created;
@@ -81,6 +86,14 @@ public class Attach implements Serializable {
 
     public void setAuthorId(Integer authorId) {
         this.authorId = authorId;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 
     public Instant getCreated() {

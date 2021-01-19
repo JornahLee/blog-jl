@@ -9,7 +9,7 @@
 
     <!--附件表列名-->
     <sql id="BASE_COLUMN">
-        aa.id, aa.fname, aa.ftype, aa.fkey, aa.authorId, aa.created,
+        aa.id, aa.fname, aa.ftype, aa.fkey,aa.md5, aa.authorId, aa.created
     </sql>
 
     <!--用户表-->
@@ -32,6 +32,7 @@
             ftype,
             fkey,
             authorId,
+            md5,
             created
         </trim>
         <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
@@ -39,6 +40,7 @@
             #{ftype, jdbcType=VARCHAR},
             #{fkey, jdbcType=VARCHAR},
             #{authorId, jdbcType=INTEGER},
+            #{md5, jdbcType=VARCHAR},
             NOW()
         </trim>
     </insert>
@@ -93,4 +95,9 @@
           id = #{id, jdbcType=INTEGER}
     </delete>
 
+    <select id="findByMd5" resultType="com.wip.model.Attach">
+        select <include refid="BASE_COLUMN"/>
+        from <include refid="BASE_TABLE"/> as aa
+        where md5 = #{md5}
+    </select>
 </mapper>

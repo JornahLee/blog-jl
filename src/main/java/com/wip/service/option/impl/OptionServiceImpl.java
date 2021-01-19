@@ -45,8 +45,9 @@ public class OptionServiceImpl implements OptionService {
     @Transactional
     @CacheEvict(value = {"optionsCache", "optionCache"}, allEntries = true, beforeInvocation = true)
     public void updateOptionByName(String name, String value) {
-        if (StringUtils.isBlank(name))
+        if (StringUtils.isBlank(name)) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         Options option = new Options();
         option.setName(name);
         option.setValue(value);
@@ -56,8 +57,9 @@ public class OptionServiceImpl implements OptionService {
     @Override
     @Cacheable(value = "optionCache", key = "'optionByname+' + #p0")
     public Options getOptionByName(String name) {
-        if (StringUtils.isBlank(name))
+        if (StringUtils.isBlank(name)) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         return optionDao.getOptionByName(name);
     }
 }

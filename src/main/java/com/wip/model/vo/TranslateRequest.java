@@ -1,4 +1,4 @@
-package com.wip.controller.v2.model.vo;
+package com.wip.model.vo;
 
 import java.util.Arrays;
 

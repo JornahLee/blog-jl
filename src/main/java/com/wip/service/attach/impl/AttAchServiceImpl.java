@@ -32,33 +32,34 @@ public class AttAchServiceImpl implements AttAchService {
     @Override
     @CacheEvict(value = {"attCaches", "attCache"}, allEntries = true, beforeInvocation = true)
     public void addAttAch(Attach attach) {
-        if (null == attach)
+        if (null == attach) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         attAchDao.addAttAch(attach);
     }
 
     @Override
     @Cacheable(value = "attCaches", key = "'atts' + #p0")
     public PageInfo<AttAchDto> getAtts(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<AttAchDto> atts = attAchDao.getAtts();
-        PageInfo<AttAchDto> pageInfo = new PageInfo<>(atts);
-        return pageInfo;
+        return PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(()->attAchDao.getAtts());
     }
 
     @Override
     @Cacheable(value = "attCaches", key = "'attAchByid' + #p0")
     public AttAchDto getAttAchById(Integer id) {
-        if (null == id)
+        if (null == id) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         return attAchDao.getAttAchById(id);
     }
 
     @Override
     @CacheEvict(value = {"attCaches", "attCache"}, allEntries = true, beforeInvocation = true)
     public void deleteAttAch(Integer id) {
-        if (null == id)
+        if (null == id) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         attAchDao.deleteAttAch(id);
     }
 }

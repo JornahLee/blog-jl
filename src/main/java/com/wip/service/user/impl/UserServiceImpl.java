@@ -29,22 +29,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(String username, String password) {
 
-        if (StringUtils.isBlank(username) || StringUtils.isBlank(password))
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             throw BusinessException.withErrorCode(ErrorConstant.Auth.USERNAME_PASSWORD_IS_EMPTY);
+        }
 
         String pwd = TaleUtils.MD5encode(username + password);
         User user = userDao.getUserInfoByCond(username,pwd);
-        if (null == user)
+        if (null == user) {
             throw BusinessException.withErrorCode(ErrorConstant.Auth.USERNAME_PASSWORD_ERROR);
+        }
         return user;
-    }
-
-    public static void main(String[] args) {
-        String username="admin";
-        String password="000000";
-        String pwd = TaleUtils.MD5encode(username + password);
-        System.out.println("--lcg--- pwd   " + pwd + "     -------");
-
     }
 
     @Override
@@ -56,8 +50,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public int updateUserInfo(User user) {
-        if (null == user.getUid())
+        if (null == user.getUid()) {
             throw BusinessException.withErrorCode("用户编号不能为空");
+        }
         return userDao.updateUserInfo(user);
     }
 }

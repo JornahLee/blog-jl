@@ -5,6 +5,7 @@
  **/
 package com.wip.model;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.LinkedHashMap;
@@ -16,6 +17,7 @@ public class Content implements Serializable {
     /**
      * 文章的主键编号
      */
+    @NotNull(message = "不可以为空")
     private Integer cid;
     /**
      * 内容标题
@@ -42,6 +44,9 @@ public class Content implements Serializable {
      */
     private String content;
 
+    /**
+     * 目录
+     */
     private LinkedHashMap<String,Integer> toc;
 
     /**
@@ -51,6 +56,7 @@ public class Content implements Serializable {
     /**
      * 内容类别
      */
+    //TODO  将来移除
     private String type;
     /**
      * 内容状态
@@ -59,6 +65,7 @@ public class Content implements Serializable {
     /**
      * 标签列表
      */
+    //TODO  将来移除
     private String tags;
     /**
      * 分类列表
@@ -87,7 +94,7 @@ public class Content implements Serializable {
      */
     private Integer orderWeight;
     /**
-     * 允许出现在聚合中
+     * 允许出现打赏
      */
     private Integer allowFeed;
 

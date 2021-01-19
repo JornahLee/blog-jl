@@ -56,7 +56,7 @@
 
             <th:block th:if="${pageInfo.pages != pageInfo.pageNum}">
                 <li>
-                    <a th:href="@{'?page='+${pageInfo.lastPage}}">最后一页</a>
+                    <a th:href="@{'?page='+${pageInfo.navigateLastPage}}">最后一页</a>
                 </li>
             </th:block>
 

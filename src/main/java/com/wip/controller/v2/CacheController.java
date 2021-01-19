@@ -1,4 +1,4 @@
-package com.wip.controller.v2.model;
+package com.wip.controller.v2;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;

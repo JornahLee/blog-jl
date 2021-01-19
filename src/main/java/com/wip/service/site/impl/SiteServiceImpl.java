@@ -6,6 +6,7 @@
 package com.wip.service.site.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.wip.constant.Types;
 import com.wip.dao.AttachDao;
 import com.wip.dao.CommentDao;
@@ -51,10 +52,9 @@ public class SiteServiceImpl implements SiteService {
         if (limit < 0 || limit > 10) {
             limit = 10;
         }
-        PageHelper.startPage(1,limit);
-        List<Comment> rs = commentDao.getCommentsByCond(new CommentCond());
         LOGGER.debug("Exit recentComments method");
-        return rs;
+        PageInfo<Comment> commentPageInfo = PageHelper.startPage(1, limit).doSelectPageInfo(() -> commentDao.getCommentsByCond(new CommentCond()));
+        return commentPageInfo.getList();
     }
 
     @Override
@@ -64,10 +64,10 @@ public class SiteServiceImpl implements SiteService {
         if (limit < 0 || limit > 10) {
             limit = 10;
         }
-        PageHelper.startPage(1,limit);
-        List<Content> rs = contentDao.getArticleByCond(new ContentCond());
+        PageInfo<Content> contentPageInfo = PageHelper.startPage(1, limit)
+                .doSelectPageInfo(() -> contentDao.getArticleByCond(new ContentCond()));
         LOGGER.debug("Exit recentArticles method");
-        return rs;
+        return contentPageInfo.getList();
     }
 
     @Override

@@ -5,6 +5,8 @@
  **/
 package com.wip.model.dto;
 
+import java.time.Instant;
+
 public class AttAchDto extends BaseDto {
     /**
      * 主键编号
@@ -34,7 +36,7 @@ public class AttAchDto extends BaseDto {
     /**
      * 创建的时间戳
      */
-    private Integer created;
+    private Instant created;
 
     public Integer getId() {
         return id;
@@ -76,11 +78,11 @@ public class AttAchDto extends BaseDto {
         this.authorId = authorId;
     }
 
-    public Integer getCreated() {
+    public Instant getCreated() {
         return created;
     }
 
-    public void setCreated(Integer created) {
+    public void setCreated(Instant created) {
         this.created = created;
     }
 }

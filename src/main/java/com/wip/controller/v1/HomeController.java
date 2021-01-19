@@ -111,8 +111,9 @@ public class HomeController extends BaseController {
                     String name
     ) {
         Meta category = metaService.getMetaByName(Types.CATEGORY.getType(), name);
-        if (null == category.getName())
+        if (null == category.getName()) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        }
         List<Content> articles = contentService.getArticleByCategory(category.getName());
         request.setAttribute("category", category.getName());
         request.setAttribute("articles", articles);

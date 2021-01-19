@@ -12,17 +12,21 @@ import com.wip.constant.Types;
 import com.wip.constant.WebConst;
 import com.wip.dao.CommentDao;
 import com.wip.dao.ContentDao;
+import com.wip.dao.DraftDao;
 import com.wip.dao.RelationShipDao;
 import com.wip.exception.BusinessException;
 import com.wip.model.Comment;
 import com.wip.model.Content;
+import com.wip.model.Draft;
 import com.wip.model.Meta;
 import com.wip.model.RelationShip;
 import com.wip.model.dto.cond.ContentCond;
 import com.wip.model.vo.ContentMetaInfo;
+import com.wip.service.DraftService;
 import com.wip.service.article.ContentService;
 import com.wip.service.es.EsContentService;
 import com.wip.service.meta.MetaService;
+import com.wip.utils.TextDifferenceChecker;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
@@ -57,10 +61,13 @@ public class ContentServiceImpl implements ContentService {
     @Autowired
     private EsContentService esContentService;
 
+    @Autowired
+    private DraftService draftService;
+
     @Transactional
     @Override
     @CacheEvict(value = "articleCache", allEntries = true, beforeInvocation = true)
-    public void addArticle(Content content) {
+    public long addArticle(Content content) {
         if (null == content) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
@@ -85,7 +92,11 @@ public class ContentServiceImpl implements ContentService {
         String tags = content.getTags();
         String categories = content.getCategories();
         // 添加文章
-        contentDao.addArticle(content);
+
+        long id = contentDao.addArticle(content);
+        //todo 添加草稿
+        draftService.createDraft(id,"",content.getContent());
+
         content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, true));
         esContentService.add(contentDao.getArticleById(content.getCid()));
 
@@ -93,8 +104,7 @@ public class ContentServiceImpl implements ContentService {
         int cid = content.getCid();
         metaService.addMetas(cid, tags, Types.TAG.getType());
         metaService.addMetas(cid, categories, Types.CATEGORY.getType());
-
-
+        return id;
     }
 
     @Override
@@ -114,11 +124,6 @@ public class ContentServiceImpl implements ContentService {
         String tags = content.getTags();
         String categories = content.getCategories();
 
-        Content legacyArticle = contentDao.getArticleById(content.getCid());
-        // 更新文章
-        content.setCreated(legacyArticle.getCreated());
-        content.setModified(legacyArticle.getModified());
-
         contentDao.updateArticleById(content);
         content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, true));
         esContentService.update(content);
@@ -135,9 +140,8 @@ public class ContentServiceImpl implements ContentService {
         if (null == contentCond) {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
-        PageHelper.startPage(pageNum, pageSize);
-        List<Content> contents = contentDao.getArticleByCond(contentCond);
-        return new PageInfo<>(contents);
+        return PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(() -> contentDao.getArticleByCond(contentCond));
     }
 
     @Override

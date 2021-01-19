@@ -50,4 +50,7 @@ public interface AttachDao {
      * @param id
      */
     void deleteAttAch(@Param("id") Integer id);
+
+
+    Attach findByMd5(@Param("md5") String md5);
 }
