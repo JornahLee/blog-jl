@@ -3,10 +3,10 @@ package com.wip.controller.v2;
 
 import com.wip.dao.DraftDao;
 import com.wip.model.Content;
-import com.wip.model.Draft;
+import com.wip.model.DraftStatus;
+import com.wip.service.DraftService;
 import com.wip.service.article.ContentService;
 import com.wip.utils.APIResponse;
-import com.wip.utils.TextDifferenceChecker;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
 import static java.time.Instant.now;
 
@@ -31,6 +28,8 @@ public class ArticleController {
 
     @Autowired
     private ContentService contentService;
+    @Autowired
+    private DraftService draftService;
     @Autowired
     private DraftDao draftDao;
 
@@ -51,22 +50,8 @@ public class ArticleController {
     @ApiOperation("保存草稿")
     @PostMapping(value = "/draft/save")
     public APIResponse<?> saveDraft(Content content) {
-        long contentId;
-        Draft draft = new Draft();
-        Content articleById = contentService.getArticleById(content.getCid());
-        if (Objects.isNull(articleById)) {
-            content.setModified(now());
-            content.setCreated(now());
-            contentId = contentService.addArticle(content);
-            draft.setDiffText(content.getContent());
-            draft.setContentId(contentId);
-        } else {
-            draft.setDiffText(TextDifferenceChecker.getDiff(articleById.getContent(), content.getContent()));
-            draft.setContentId(articleById.getCid());
-        }
-
-        draftDao.insert(draft);
-        // 保留分类
+        draftService.createDraft(content.getCid(),content.getContent(), DraftStatus.getByString(content.getStatus()));
+        //todo 保留分类
         // 直接分类以逗号为分隔符，存分类编号，这样也避免了联查的烦恼，约定值就直接存在localCache里
         // 添加文章
 

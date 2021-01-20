@@ -12,21 +12,24 @@ import com.wip.constant.Types;
 import com.wip.constant.WebConst;
 import com.wip.dao.CommentDao;
 import com.wip.dao.ContentDao;
-import com.wip.dao.DraftDao;
+import com.wip.dao.LogDao;
 import com.wip.dao.RelationShipDao;
 import com.wip.exception.BusinessException;
 import com.wip.model.Comment;
 import com.wip.model.Content;
-import com.wip.model.Draft;
+import com.wip.model.DraftStatus;
+import com.wip.model.Log;
 import com.wip.model.Meta;
 import com.wip.model.RelationShip;
 import com.wip.model.dto.cond.ContentCond;
 import com.wip.model.vo.ContentMetaInfo;
 import com.wip.service.DraftService;
 import com.wip.service.article.ContentService;
+import com.wip.service.cache.CacheService;
 import com.wip.service.es.EsContentService;
 import com.wip.service.meta.MetaService;
-import com.wip.utils.TextDifferenceChecker;
+import com.wip.utils.IPKit;
+import com.wip.utils.MapCache;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
@@ -34,10 +37,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import static com.wip.utils.MyStringUtil.LineNoFormat;
 import static com.wip.utils.MyStringUtil.generateLineNumberForText;
@@ -46,6 +53,7 @@ import static com.wip.utils.MyStringUtil.generateLineNumberForText;
 @EnableAspectJAutoProxy(exposeProxy = true)
 public class ContentServiceImpl implements ContentService {
 
+    private static final MapCache cache = MapCache.single();
     @Autowired
     private ContentDao contentDao;
 
@@ -63,6 +71,12 @@ public class ContentServiceImpl implements ContentService {
 
     @Autowired
     private DraftService draftService;
+
+    @Autowired
+    private LogDao logDao;
+
+    @Autowired
+    private CacheService cacheService;
 
     @Transactional
     @Override
@@ -94,8 +108,7 @@ public class ContentServiceImpl implements ContentService {
         // 添加文章
 
         long id = contentDao.addArticle(content);
-        //todo 添加草稿
-        draftService.createDraft(id,"",content.getContent());
+        draftService.createDraft(id, "", content.getContent(), DraftStatus.getByString(content.getStatus()));
 
         content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, true));
         esContentService.add(contentDao.getArticleById(content.getCid()));
@@ -124,6 +137,7 @@ public class ContentServiceImpl implements ContentService {
         String tags = content.getTags();
         String categories = content.getCategories();
 
+        draftService.createDraft(content.getCid(), content.getContent(), DraftStatus.getByString(content.getStatus()));
         contentDao.updateArticleById(content);
         content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, true));
         esContentService.update(content);
@@ -161,15 +175,15 @@ public class ContentServiceImpl implements ContentService {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
         // 删除文章
-        contentDao.deleteArticleById(cid);
+        // contentDao.deleteArticleById(cid);
+        contentDao.updateStatusById(cid, "deleted");
+        draftService.createDraftForDelete(cid, DraftStatus.PUBLISHED);
         esContentService.delete(cid.toString());
 
         // 同时要删除该 文章下的所有评论
         List<Comment> comments = commentDao.getCommentByCId(cid);
         if (null != comments && comments.size() > 0) {
-            comments.forEach(comment -> {
-                commentDao.deleteComment(comment.getCoid());
-            });
+            comments.forEach(comment -> commentDao.deleteComment(comment.getCoid()));
         }
 
         // 删除标签和分类关联
@@ -185,6 +199,7 @@ public class ContentServiceImpl implements ContentService {
     @CacheEvict(value = {"articleCache"}, allEntries = true, beforeInvocation = true)
     public void updateContentByCid(Content content) {
         if (null != content && null != content.getCid()) {
+            draftService.createDraft(content.getCid(), content.getContent(), DraftStatus.getByString(content.getStatus()));
             contentDao.updateArticleById(content);
             content.setContent(generateLineNumberForText(content.getContent(), LineNoFormat, true));
             esContentService.update(content);
@@ -211,5 +226,49 @@ public class ContentServiceImpl implements ContentService {
             return contentDao.getArticleByTags(relationShip);
         }
         return null;
+    }
+
+
+    /**
+     * 更新文章的点击率
+     *
+     * @param cid
+     * @param chits
+     */
+    @Override
+    public void updateArticleHits(Integer cid, Integer chits) {
+        Integer hits = cache.hget("article", "hits");
+        if (chits == null) {
+            chits = 0;
+        }
+        hits = null == hits ? 1 : hits + 1;
+        if (hits >= WebConst.HIT_BUFFER_SIZE) {
+            contentDao.updateHitsById(cid, chits + hits);
+            cache.hset("article", "hits", null);
+        } else {
+            cache.hset("article", "hits", hits);
+        }
+    }
+
+    @Override
+    public boolean isFromSameIp(Integer cid, HttpServletRequest request) {
+        String uniqHitKey = String.format("%s::%s", IPKit.getIpAddressByRequest(request), cid);
+        String uniqHitValue = cache.get(uniqHitKey);
+        if (Objects.nonNull(uniqHitValue)) {
+            return true;
+        } else {
+            cache.set(uniqHitKey, "y", TimeUnit.DAYS.toMillis(1));
+            return false;
+        }
+    }
+
+    @Override
+    @Async
+    public void logVisit(Integer cid, String detail, HttpServletRequest request) {
+        Log log = new Log();
+        log.setAction("浏览文章");
+        log.setData(detail);
+        log.setIp(IPKit.getIpAddressByRequest(request));
+        logDao.addLog(log);
     }
 }

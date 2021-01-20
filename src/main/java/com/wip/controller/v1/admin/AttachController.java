@@ -44,7 +44,7 @@ import java.util.Objects;
 
 @Api("文件管理")
 @RestController
-@RequestMapping("attach")
+@RequestMapping("/admin/attach")
 @CrossOrigin
 public class AttachController extends BaseController {
 

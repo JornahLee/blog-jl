@@ -11,6 +11,7 @@ import com.wip.model.Meta;
 import com.wip.model.dto.cond.ContentCond;
 import com.wip.model.vo.ContentMetaInfo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -73,4 +74,10 @@ public interface ContentService {
      * @return
      */
     List<Content> getArticleByTags(Meta tags);
+
+    void updateArticleHits(Integer cid, Integer chits);
+
+    boolean isFromSameIp(Integer cid, HttpServletRequest request);
+
+    void logVisit(Integer cid, String logVisit, HttpServletRequest request);
 }

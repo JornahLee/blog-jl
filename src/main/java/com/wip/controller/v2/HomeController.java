@@ -6,6 +6,7 @@ import com.wip.constant.ErrorConstant;
 import com.wip.constant.Types;
 import com.wip.constant.WebConst;
 import com.wip.controller.BaseController;
+import com.wip.dao.ContentDao;
 import com.wip.exception.BusinessException;
 import com.wip.model.Comment;
 import com.wip.model.Content;
@@ -40,8 +41,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.wip.utils.APIResponse.success;
@@ -53,6 +52,9 @@ public class HomeController extends BaseController {
 
     @Autowired
     private ContentService contentService;
+
+    @Autowired
+    private ContentDao contentDao;
 
     @Autowired
     private CommentService commentService;
@@ -155,49 +157,14 @@ public class HomeController extends BaseController {
         article.setToc(TaleUtils.getHeadLineFrom(article.getContent()));
         String md = TaleUtils.mdToHtml(article.getContent());
         article.setContent(md);
-
-        if (!isFromSameIp(cid, request)) {
+        contentService.logVisit(cid,  article.getTitle(), request);
+        if (!contentService.isFromSameIp(cid, request)) {
             // 更新文章的点击量
-            this.updateArticleHits(article.getCid(), article.getHits());
+            contentService.updateArticleHits(article.getCid(), article.getHits());
         }
         // 获取评论
         List<Comment> comments = commentService.getCommentsByCId(cid);
         return success(new ArticleInfo(article,comments));
-    }
-
-    private boolean isFromSameIp(Integer cid, HttpServletRequest request) {
-        String uniqHitKey = String.format("%s::%s", IPKit.getIpAddressByRequest(request), cid);
-        String uniqHitValue = cache.get(uniqHitKey);
-        if (Objects.nonNull(uniqHitValue)) {
-            return true;
-        } else {
-            cache.set(uniqHitKey, "y", TimeUnit.DAYS.toMillis(1));
-            return false;
-        }
-    }
-
-    /**
-     * 更新文章的点击率
-     *
-     * @param cid
-     * @param chits
-     */
-    private void updateArticleHits(Integer cid, Integer chits) {
-        Integer hits = cache.hget("article", "hits");
-        if (chits == null) {
-            chits = 0;
-        }
-        hits = null == hits ? 1 : hits + 1;
-        if (hits >= WebConst.HIT_BUFFER_SIZE) {
-            Content temp = new Content();
-            temp.setCid(cid);
-            temp.setHits(chits + hits);
-            contentService.updateContentByCid(temp);
-            cache.hset("article", "hits", null);
-        } else {
-            cache.hset("article", "hits", hits);
-        }
-
     }
 
     @PostMapping(value = "/comment")

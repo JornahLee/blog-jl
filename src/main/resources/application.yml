@@ -10,9 +10,9 @@ spring:
       filters: stat
       driver-class-name: com.mysql.cj.jdbc.Driver
       #基本属性
-      url: jdbc:mysql://132.232.81.70:3306/blog_jl?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=true
-      username: root
-      password: mimaMysql614.
+      url: jdbc:mysql://localhost:3306/blog_jl?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=true
+      username: {MYSQL_ACCOUNT}
+      password: {MYSQL_PWD}
       #配置初始化大小/最小/最大
       initial-size: 1
       min-idle: 1
@@ -47,16 +47,15 @@ spring:
   #      max-request-size: 100Mb
 
   redis:
-#    host: 132.232.81.70
-    host: localhost
-    port: 6379
-#    password: mimaredis614
+    host: {REDIS_HOST}
+    port: {REDIS_PORT}
+    password: {REDIS_PWD}
     timeout : 5000
   elasticsearch:
     rest:
-      uris: http://34.92.234.192:9200
-      username: elastic
-      password: mimaelk614
+      uris: {ES_HOST}
+      username: {ES_ACCOUNT}
+      password: {ES_PWD}
 #  cache.
 logging:
   level:

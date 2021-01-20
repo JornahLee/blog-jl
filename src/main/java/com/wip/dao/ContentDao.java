@@ -5,11 +5,13 @@
  **/
 package com.wip.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wip.model.Content;
 import com.wip.model.RelationShip;
 import com.wip.model.dto.cond.ContentCond;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,16 +21,18 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface ContentDao {
+public interface ContentDao extends BaseMapper<Content> {
 
     /**
      * 添加文章
+     *
      * @param content
      */
     long addArticle(Content content);
 
     /**
      * 根据编号获取文章
+     *
      * @param cid
      * @return
      */
@@ -36,12 +40,21 @@ public interface ContentDao {
 
     /**
      * 更新文章
+     *
      * @param content
      */
     void updateArticleById(Content content);
 
+
+    @Update("update t_contents set status=#{status} where cid =#{id}")
+    void updateStatusById(int id, String status);
+
+    @Update("update t_contents set hits=#{hits} where cid =#{id}")
+    void updateHitsById(int id, long hits);
+
     /**
      * 根据条件获取文章列表
+     *
      * @param contentCond
      * @return
      */
@@ -49,18 +62,21 @@ public interface ContentDao {
 
     /**
      * 删除文章
+     *
      * @param cid
      */
     void deleteArticleById(Integer cid);
 
     /**
      * 获取文章总数
+     *
      * @return
      */
     Long getArticleCount();
 
     /**
      * 通过分类名获取文章
+     *
      * @param category
      * @return
      */
@@ -68,6 +84,7 @@ public interface ContentDao {
 
     /**
      * 通过标签获取文章
+     *
      * @param cid
      * @return
      */

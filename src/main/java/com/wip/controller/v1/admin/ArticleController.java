@@ -149,8 +149,6 @@ public class ArticleController extends BaseController {
         contentDomain.setOrderWeight(orderWeight);
         contentDomain.setModified(now());
 
-        LOGGER.debug("param-orderWeight:{}",orderWeight);
-        LOGGER.debug("contentDomain-orderWeight:{}",contentDomain.getOrderWeight());
         contentService.updateArticleById(contentDomain);
 
         return APIResponse.success();

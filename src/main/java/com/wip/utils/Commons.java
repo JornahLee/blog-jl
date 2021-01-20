@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -75,6 +76,7 @@ public class Commons {
     }
     public static String fmtdate(Instant unixTime, String patten) {
         if (null != unixTime && StringUtils.isNotBlank(patten)) {
+            unixTime.atOffset(ZoneOffset.of("+8"));
             return DateKit.formatDateByUnixTime(unixTime,patten);
         }
         return "";

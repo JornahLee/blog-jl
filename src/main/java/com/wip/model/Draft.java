@@ -1,22 +1,32 @@
 package com.wip.model;
 
 public class Draft extends BaseEntity{
-    private long contentId;
+    private Long contentId;
     private String diffText;
+    private Integer status;
     // id 就可以充当版本号的作用
     // private int versionNumber;
 
     public Draft(){}
-    public Draft(long contentId, String diffText) {
+    public Draft(long contentId, String diffText ,Integer status) {
         this.contentId = contentId;
         this.diffText = diffText;
+        this.status = status;
     }
 
-    public long getContentId() {
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Long getContentId() {
         return contentId;
     }
 
-    public void setContentId(long contentId) {
+    public void setContentId(Long contentId) {
         this.contentId = contentId;
     }
 

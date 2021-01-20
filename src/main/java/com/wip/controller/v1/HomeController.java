@@ -35,8 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 @Api("博客前台页面")
 @Controller
@@ -162,10 +160,11 @@ public class HomeController extends BaseController {
     ) {
         Content article = contentService.getArticleById(cid);
         request.setAttribute("article", article);
+        contentService.logVisit(cid, article.getTitle(), request);
 
-        if (!isFromSameIp(cid, request)) {
+        if (!contentService.isFromSameIp(cid, request)) {
             // 更新文章的点击量
-            this.updateArticleHits(article.getCid(), article.getHits());
+            contentService.updateArticleHits(article.getCid(), article.getHits());
         }
         // 获取评论
         List<Comment> comments = commentService.getCommentsByCId(cid);
@@ -174,40 +173,6 @@ public class HomeController extends BaseController {
         return "blog/detail";
     }
 
-    private boolean isFromSameIp(Integer cid, HttpServletRequest request) {
-        String uniqHitKey = String.format("%s::%s", IPKit.getIpAddressByRequest(request), cid);
-        String uniqHitValue = cache.get(uniqHitKey);
-        if (Objects.nonNull(uniqHitValue)) {
-            return true;
-        } else {
-            cache.set(uniqHitKey, "y", TimeUnit.DAYS.toMillis(1));
-            return false;
-        }
-    }
-
-    /**
-     * 更新文章的点击率
-     *
-     * @param cid
-     * @param chits
-     */
-    private void updateArticleHits(Integer cid, Integer chits) {
-        Integer hits = cache.hget("article", "hits");
-        if (chits == null) {
-            chits = 0;
-        }
-        hits = null == hits ? 1 : hits + 1;
-        if (hits >= WebConst.HIT_BUFFER_SIZE) {
-            Content temp = new Content();
-            temp.setCid(cid);
-            temp.setHits(chits + hits);
-            contentService.updateContentByCid(temp);
-            cache.hset("article", "hits", null);
-        } else {
-            cache.hset("article", "hits", hits);
-        }
-
-    }
 
     @PostMapping(value = "/comment")
     @ResponseBody
