@@ -19,6 +19,15 @@
                                     <span class="post-meta-item-icon">
                                     <i class="fa fa-calendar-o"></i>
                                     </span>
+                                    <time th:text="${commons.fmtdate(post.created, 'yyyy-MM-dd')}" title="创建于" datetime="2018-07-07T15:40:56+08:00">
+                                    </time>
+                                    <span class="post-meta-item-text">创建</span>
+                                </span>
+                                <span class="post-time">
+                                    <span class="post-meta-divider">|</span>
+                                    <span class="post-meta-item-icon">
+                                    <i class="fa fa-calendar-o"></i>
+                                    </span>
                                     <time th:text="${commons.fmtdate(post.modified, 'yyyy-MM-dd')}" title="修改于" datetime="2018-07-07T15:40:56+08:00">
                                     </time>
                                     <span class="post-meta-item-text">修改</span>

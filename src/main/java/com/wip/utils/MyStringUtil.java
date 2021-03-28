@@ -3,6 +3,7 @@ package com.wip.utils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 public class MyStringUtil {
     public static String LineNoFormat = ":%d:";
@@ -17,10 +18,7 @@ public class MyStringUtil {
     }
 
     public static String generateLineNumberForText(String input, String lineNoFormat, boolean atHead) {
-        if (Objects.isNull(input)) {
-            return "";
-        }
-        String macStyle = StringUtils.replace(input, "\r\n", "\n");
+        String macStyle = StringUtils.replace(Objects.isNull(input) ? EMPTY : input, "\r\n", "\n");
         // 统一一下，换行符，如果是windows \r\n，存入的时候，自动替换为 \n
         String[] source = macStyle.split("\n");
         String[] target = new String[source.length];
