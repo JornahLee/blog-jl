@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='保存文章',active='publish'">
 <header th:replace="admin/fragments/header::headerFragment(${title},${active})"></header>
+
+
 <link th:href="@{/admin/plugins/tagsinput/jquery.tagsinput.css}" rel="stylesheet"/>
 <link th:href="@{/admin/plugins/select2.dist.css/select2-bootstrap.css}" rel="stylesheet"/>
 <link th:href="@{/admin/plugins/toggles/toggles.css}" rel="stylesheet"/>
@@ -11,6 +13,9 @@
 <!-- editor.md -->
 <link th:href="@{/admin/editormd/css/editormd.css}" rel="stylesheet"/>
 <style>
+    .navbar-default {
+        visibility:hidden;
+    }
     #tags_tagsinput {
         background-color: #fafafa;
         border: 1px solid #eeeeee;
@@ -23,6 +28,10 @@
     #tags_addTag {
         margin-top: -5px;
     }
+    body {
+        overflow: hidden;
+        height: 640px;
+    }
 </style>
 <body class="fixed-left">
 <div id="wrapper">
@@ -32,16 +41,22 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h4 class="page-title">
-                            <th:block th:if="${null != contents}">
-                                编辑文章
-                            </th:block>
-                            <th:block th:unless="${null != contents}">
-                                发布文章
-                            </th:block>
-                        </h4>
+<!--                        <h4 class="page-title">-->
+<!--                            <th:block th:if="${null != contents}">-->
+<!--                                编辑文章-->
+<!--                            </th:block>-->
+<!--                            <th:block th:unless="${null != contents}">-->
+<!--                                发布文章-->
+<!--                            </th:block>-->
+<!--                        </h4>-->
                     </div>
                     <div class="col-md-12">
+                        <div id="my-editormd" >
+                                <textarea id="my-text" name="my-text" style="display:none;" class="markdown-textarea"
+                                          th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>
+                            <!-- 注意：name属性的值-->
+                            <textarea id="text" name="text" style="display:none;" ></textarea>
+                        </div>
                         <form id="articleForm" role="form" novalidate="novalidate">
                             <input type="hidden" name="categories" id="categories"/>
                             <input type="hidden" name="type" id="type"/>
@@ -64,106 +79,106 @@
                                    id="order_weight"/>
                             <input type="hidden" name="content" id="content-editor"/>
 
-                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
-                                <input type="text" class="form-control" placeholder="请输入文章标题（必须）" name="title"
-                                       required="required"
-                                       aria-required="true"
-                                       th:value="${contents!=null and contents.title!=null }?${contents.title}: ''"/>
-                            </div>
+<!--                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;">-->
+<!--                                <input type="text" class="form-control" placeholder="请输入文章标题（必须）" name="title"-->
+<!--                                       required="required"-->
+<!--                                       aria-required="true"-->
+<!--                                       th:value="${contents!=null and contents.title!=null }?${contents.title}: ''"/>-->
+<!--                            </div>-->
 
-                            <div class="form-group col-md-6" style="padding: 0 0 0 10px;">
-                                <select id="multiple-type" class="select2 form-control"
-                                        data-placeholder="请选择文章类型..">
-                                    <th:block th:if="${null == contents}">
-                                        <option value="post" selected="selected">默认博文</option>
-                                        <option value="photo" >作品</option>
-                                    </th:block>
-                                    <th:block th:unless="${null == contents}">
-                                        <option value="post" th:selected="${null != contents and contents.type=='post'} ? true : false">默认博文</option>
-                                        <option value="photo" th:selected="${null != contents and contents.type=='photo'} ? true : false" >作品</option>
-                                    </th:block>
-                                </select>
-                            </div>
+<!--                            <div class="form-group col-md-6" style="padding: 0 0 0 10px;">-->
+<!--                                <select id="multiple-type" class="select2 form-control"-->
+<!--                                        data-placeholder="请选择文章类型..">-->
+<!--                                    <th:block th:if="${null == contents}">-->
+<!--                                        <option value="post" selected="selected">默认博文</option>-->
+<!--                                        <option value="photo" >作品</option>-->
+<!--                                    </th:block>-->
+<!--                                    <th:block th:unless="${null == contents}">-->
+<!--                                        <option value="post" th:selected="${null != contents and contents.type=='post'} ? true : false">默认博文</option>-->
+<!--                                        <option value="photo" th:selected="${null != contents and contents.type=='photo'} ? true : false" >作品</option>-->
+<!--                                    </th:block>-->
+<!--                                </select>-->
+<!--                            </div>-->
 
 
-                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
-                                <!-- 如果是作品类，那么暂时不允许使用标签 -->
-                                <input name="tags" id="tags"  type="text" class="form-control" placeholder="请填写文章标签"
-                                       th:value="${contents!=null and contents.tags !=null}?${contents.tags}: ''"/>
-                            </div>
-                            <div class="form-group col-md-6" >
-                                <select id="multiple-sel"   class="select2 form-control" multiple="multiple"
-                                        data-placeholder="请选择分类...">
-                                    <th:block th:if="${null == categories}">
-                                        <option value="默认分类" selected="selected">默认分类</option>
-                                    </th:block>
-                                    <th:block th:unless="${null == categories}">
-                                        <th:block th:each="c : ${categories}">
-                                            <option th:value="${c.name}" th:text="${c.name}"
-                                                    th:selected="${null !=contents and adminCommons.exist_cat(c, contents.categories)}?true:false"></option>
-                                        </th:block>
-                                    </th:block>
-                                </select>
-                            </div>
+<!--                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;">-->
+<!--                                &lt;!&ndash; 如果是作品类，那么暂时不允许使用标签 &ndash;&gt;-->
+<!--                                <input name="tags" id="tags"  type="text" class="form-control" placeholder="请填写文章标签"-->
+<!--                                       th:value="${contents!=null and contents.tags !=null}?${contents.tags}: ''"/>-->
+<!--                            </div>-->
+<!--                            <div class="form-group col-md-6" >-->
+<!--                                <select id="multiple-sel"   class="select2 form-control" multiple="multiple"-->
+<!--                                        data-placeholder="请选择分类...">-->
+<!--                                    <th:block th:if="${null == categories}">-->
+<!--                                        <option value="默认分类" selected="selected">默认分类</option>-->
+<!--                                    </th:block>-->
+<!--                                    <th:block th:unless="${null == categories}">-->
+<!--                                        <th:block th:each="c : ${categories}">-->
+<!--                                            <option th:value="${c.name}" th:text="${c.name}"-->
+<!--                                                    th:selected="${null !=contents and adminCommons.exist_cat(c, contents.categories)}?true:false"></option>-->
+<!--                                        </th:block>-->
+<!--                                    </th:block>-->
+<!--                                </select>-->
+<!--                            </div>-->
 
                             <div class="clearfix"></div>
-                            <div id="my-editormd" >
-                                <textarea id="my-text" name="my-text" style="display:none;" class="markdown-textarea"
-                                          th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>
-                                <!-- 注意：name属性的值-->
-                                <textarea id="text" name="text" style="display:none;" ></textarea>
-                            </div>
+<!--                            <div id="my-editormd" >-->
+<!--                                <textarea id="my-text" name="my-text" style="display:none;" class="markdown-textarea"-->
+<!--                                          th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>-->
+<!--                                &lt;!&ndash; 注意：name属性的值&ndash;&gt;-->
+<!--                                <textarea id="text" name="text" style="display:none;" ></textarea>-->
+<!--                            </div>-->
                             <!--<div class="form-group">-->
                                 <!--<textarea style="height: 450px" autocomplete="off" id="text" name="text"-->
                                           <!--class="markdown-textarea"-->
                                           <!--th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>-->
                             <!--</div>-->
 
-                            <div class="form-group col-md-3 col-sm-4" id="comment-div">
-                                <label class="col-sm-4">开启评论</label>
-                                <div class="col-sm-8">
-                                    <div th:class="${contents!=null and contents.allowComment!=null }?'toggle toggle-success allow-'+${contents.allowComment}:'toggle toggle-success allow-true'"
-                                         onclick="allow_comment(this);"></div>
-                                </div>
-                            </div>
+<!--                            <div class="form-group col-md-3 col-sm-4" id="comment-div">-->
+<!--                                <label class="col-sm-4">开启评论</label>-->
+<!--                                <div class="col-sm-8">-->
+<!--                                    <div th:class="${contents!=null and contents.allowComment!=null }?'toggle toggle-success allow-'+${contents.allowComment}:'toggle toggle-success allow-true'"-->
+<!--                                         onclick="allow_comment(this);"></div>-->
+<!--                                </div>-->
+<!--                            </div>-->
 
-                            <div class="form-group col-md-3 col-sm-4">
-                                <label class="col-sm-4">允许Ping</label>
-                                <div class="col-sm-8">
-                                    <div th:class="${contents!=null and contents.allowPing !=null}?'toggle toggle-success allow-'+${contents.allowPing}:'toggle toggle-success allow-true'"
-                                         onclick="allow_ping(this);"></div>
-                                </div>
-                            </div>
+<!--                            <div class="form-group col-md-3 col-sm-4">-->
+<!--                                <label class="col-sm-4">允许Ping</label>-->
+<!--                                <div class="col-sm-8">-->
+<!--                                    <div th:class="${contents!=null and contents.allowPing !=null}?'toggle toggle-success allow-'+${contents.allowPing}:'toggle toggle-success allow-true'"-->
+<!--                                         onclick="allow_ping(this);"></div>-->
+<!--                                </div>-->
+<!--                            </div>-->
 
-                            <div class="form-group col-md-3 col-sm-4">
-                                <label class="col-sm-4">允许订阅</label>
-                                <div class="col-sm-8">
-                                    <div th:class="${contents!=null and  contents.allowFeed !=null}?'toggle toggle-success allow-'+${contents.allowFeed}: 'toggle toggle-success allow-true'"
-                                         onclick="allow_feed(this);"></div>
-                                </div>
-                            </div>
+<!--                            <div class="form-group col-md-3 col-sm-4">-->
+<!--                                <label class="col-sm-4">允许订阅</label>-->
+<!--                                <div class="col-sm-8">-->
+<!--                                    <div th:class="${contents!=null and  contents.allowFeed !=null}?'toggle toggle-success allow-'+${contents.allowFeed}: 'toggle toggle-success allow-true'"-->
+<!--                                         onclick="allow_feed(this);"></div>-->
+<!--                                </div>-->
+<!--                            </div>-->
 
-                            <div class="form-group col-md-3 col-sm-4">
-                                <label class="col-sm-4">排序加权</label>
-                                <div class="col-sm-8">
-                                    <div  th:class="${contents!=null and  contents.orderWeight !=null and contents.orderWeight==0}?'toggle toggle-success allow-false': 'toggle toggle-success allow-true'"
-                                         onclick="order_weight(this); " ></div>
-                                </div>
-                            </div>
+<!--                            <div class="form-group col-md-3 col-sm-4">-->
+<!--                                <label class="col-sm-4">排序加权</label>-->
+<!--                                <div class="col-sm-8">-->
+<!--                                    <div  th:class="${contents!=null and  contents.orderWeight !=null and contents.orderWeight==0}?'toggle toggle-success allow-false': 'toggle toggle-success allow-true'"-->
+<!--                                         onclick="order_weight(this); " ></div>-->
+<!--                                </div>-->
+<!--                            </div>-->
 
-                            <div class="clearfix"></div>
+<!--                            <div class="clearfix"></div>-->
 
-                            <div class="text-right">
-                                <a class="btn btn-default waves-effect waves-light" th:href="@{/admin/article}">返回列表</a>
-                                <button type="button" class="btn btn-primary waves-effect waves-light"
-                                        onclick="subArticle('publish');">
-                                    保存文章
-                                </button>
-                                <button type="button" class="btn btn-warning waves-effect waves-light"
-                                        onclick="subArticle('draft');">
-                                    存为草稿
-                                </button>
-                            </div>
+<!--                            <div class="text-right">-->
+<!--                                <a class="btn btn-default waves-effect waves-light" th:href="@{/admin/article}">返回列表</a>-->
+<!--                                <button type="button" class="btn btn-primary waves-effect waves-light"-->
+<!--                                        onclick="subArticle('publish');">-->
+<!--                                    保存文章-->
+<!--                                </button>-->
+<!--                                <button type="button" class="btn btn-warning waves-effect waves-light"-->
+<!--                                        onclick="subArticle('draft');">-->
+<!--                                    存为草稿-->
+<!--                                </button>-->
+<!--                            </div>-->
                         </form>
                     </div>
                 </div>
@@ -176,7 +191,7 @@
 <script type="text/javascript">
     $(function() {
         editormd("my-editormd", {//注意1：这里的就是上面的DIV的id属性值
-            width   : "90%",
+            width   : "100%",
             height  : 640,
             theme : "dark",
             previewTheme : "dark",

@@ -7,16 +7,11 @@ import com.wip.model.DraftStatus;
 import com.wip.service.DraftService;
 import com.wip.service.article.ContentService;
 import com.wip.utils.APIResponse;
+import com.wip.utils.TaleUtils;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -24,6 +19,7 @@ import static java.time.Instant.now;
 
 @RestController("v2ArticleController")
 @RequestMapping("/v2/article")
+@CrossOrigin
 public class ArticleController {
 
     @Autowired
@@ -45,6 +41,14 @@ public class ArticleController {
         content.setCreated(now());
         contentService.addArticle(content);
         return APIResponse.success();
+    }
+    @ApiOperation("查询文档")
+    @GetMapping(value = "/get/{id}")
+    @ResponseBody
+    public APIResponse<?> getArticle(@PathVariable Long id ) {
+        Content article = contentService.getArticleById(id.intValue());
+        article.setToc(TaleUtils.getHeadLineFrom(article.getContent()));
+        return APIResponse.success( article);
     }
 
     @ApiOperation("保存草稿")
