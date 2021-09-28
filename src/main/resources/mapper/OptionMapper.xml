@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wip.dao.OptionDao">
+<mapper namespace="com.jornah.dao.OptionDao">
 
     <!--表名-->
     <sql id="BASE_TABLE">
@@ -12,7 +12,7 @@
     </sql>
 
     <!--查找全部配置信息-->
-    <select id="getOptions" resultType="com.wip.model.Options">
+    <select id="getOptions" resultType="com.jornah.model.Options">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM
@@ -36,7 +36,7 @@
     </update>
 
     <!--通过名称网站配置-->
-    <select id="getOptionByName" resultType="com.wip.model.Options">
+    <select id="getOptionByName" resultType="com.jornah.model.Options">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM

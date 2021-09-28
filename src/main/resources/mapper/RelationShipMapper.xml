@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wip.dao.RelationShipDao">
+<mapper namespace="com.jornah.dao.RelationShipDao">
     <!--表名-->
     <sql id="BASE_TABLE">
         t_relationships
@@ -12,7 +12,7 @@
     </sql>
 
     <!--根据meta编号获取对应的标签或则分类-->
-    <select id="getRelationShipByMid" resultType="com.wip.model.RelationShip">
+    <select id="getRelationShipByMid" resultType="com.jornah.model.RelationShip">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM
@@ -51,7 +51,7 @@
     </select>
 
     <!--添加-->
-    <insert id="addRelationShip" parameterType="com.wip.model.RelationShip">
+    <insert id="addRelationShip" parameterType="com.jornah.model.RelationShip">
         INSERT INTO
           <include refid="BASE_TABLE"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -64,7 +64,7 @@
     </insert>
 
     <!--根据文章ID获取对应的标签或分类-->
-    <select id="getRelationShipByCid" resultType="com.wip.model.RelationShip">
+    <select id="getRelationShipByCid" resultType="com.jornah.model.RelationShip">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM

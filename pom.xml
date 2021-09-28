@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.wip</groupId>
+    <groupId>com.jornah</groupId>
     <artifactId>blog-jl</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -31,7 +31,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <!--打jar包启动类-->
                 <configuration>
-                    <mainClass>com.wip.MyBlogApplication</mainClass>
+                    <mainClass>com.jornah.MyBlogApplication</mainClass>
                 </configuration>
             </plugin>
             <!--打jar包需要-->
@@ -50,16 +50,6 @@
     </build>
 
     <dependencies>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>nz.net.ultraq.thymeleaf</groupId>
-            <artifactId>thymeleaf-layout-dialect</artifactId>
-        </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -82,12 +72,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- EhCache 相关 -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-cache</artifactId>-->
-        <!--        </dependency>-->
 
 
         <dependency>
@@ -134,12 +118,6 @@
             <version>2.9.2</version>
         </dependency>
 
-        <!-- 关闭thymeleft强校验 -->
-        <!--        <dependency>-->
-        <!--            <groupId>net.sourceforge.nekohtml</groupId>-->
-        <!--            <artifactId>nekohtml</artifactId>-->
-        <!--            <version>1.9.22</version>-->
-        <!--        </dependency>-->
 
         <!-- 腾讯云对象存储 -->
         <dependency>
@@ -152,24 +130,6 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.0</version>
-        </dependency>
-
-        <!--markdown处理-->
-        <dependency>
-            <groupId>com.atlassian.commonmark</groupId>
-            <artifactId>commonmark</artifactId>
-            <version>0.8.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.atlassian.commonmark</groupId>
-            <artifactId>commonmark-ext-gfm-tables</artifactId>
-            <version>0.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.atlassian.commonmark</groupId>
-            <artifactId>commonmark-ext-heading-anchor</artifactId>
-            <version>0.8.0</version>
         </dependency>
 
 
@@ -253,6 +213,11 @@
             <version>2.2.5.RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.4</version>
+        </dependency>
 
 
     </dependencies>

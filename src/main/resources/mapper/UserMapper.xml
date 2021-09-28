@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wip.dao.UserDao">
+<mapper namespace="com.jornah.dao.UserDao">
 
     <!--表名-->
     <sql id="BASE_TABLE">
@@ -12,7 +12,7 @@
     </sql>
 
     <!--通过用户名和密码获取用户信息-->
-    <select id="getUserInfoByCond" resultType="com.wip.model.User">
+    <select id="getUserInfoByCond" resultType="com.jornah.model.newP.User">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM
@@ -28,7 +28,7 @@
 
     </select>
     <!--通过用户ID获取用户信息-->
-    <select id="getUserInfoById" resultType="com.wip.model.User">
+    <select id="getUserInfoById" resultType="com.jornah.model.newP.User">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM
@@ -37,7 +37,7 @@
           uid = #{uid, jdbcType=INTEGER}
     </select>
     <!--更改用户信息-->
-    <update id="updateUserInfo" parameterType="com.wip.model.User">
+    <update id="updateUserInfo" parameterType="com.jornah.model.newP.User">
         UPDATE
           <include refid="BASE_TABLE"/>
         <set>

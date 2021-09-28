@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wip.dao.AttachDao">
+<mapper namespace="com.jornah.dao.AttachDao">
 
     <!--表名-->
     <sql id="BASE_TABLE">
@@ -14,7 +14,7 @@
 
     <!--用户表-->
     <sql id="TABLE_USER">
-         <include refid="com.wip.dao.UserDao.BASE_TABLE"/>
+         <include refid="com.jornah.dao.UserDao.BASE_TABLE"/>
     </sql>
 
     <!--关联查询的用户表需要的字段-->
@@ -24,7 +24,7 @@
 
 
     <!--新增单个附件-->
-    <insert id="addAttAch" parameterType="com.wip.model.Attach">
+    <insert id="addAttAch" parameterType="com.jornah.model.Attach">
         INSERT INTO
           <include refid="BASE_TABLE"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -46,7 +46,7 @@
     </insert>
 
     <!--获取所有的附件信息-->
-    <select id="getAtts" resultType="com.wip.model.dto.AttAchDto">
+    <select id="getAtts" resultType="com.jornah.model.dto.AttAchDto">
         SELECT
             <trim suffix="" suffixOverrides=",">
                 <include refid="BASE_COLUMN"/>
@@ -71,7 +71,7 @@
     </select>
 
     <!--通过ID获取附件信息-->
-    <select id="getAttAchById" resultType="com.wip.model.dto.AttAchDto">
+    <select id="getAttAchById" resultType="com.jornah.model.dto.AttAchDto">
         SELECT
             <trim suffix="" suffixOverrides=",">
                 <include refid="BASE_COLUMN"/>
@@ -95,7 +95,7 @@
           id = #{id, jdbcType=INTEGER}
     </delete>
 
-    <select id="findByMd5" resultType="com.wip.model.Attach">
+    <select id="findByMd5" resultType="com.jornah.model.Attach">
         select <include refid="BASE_COLUMN"/>
         from <include refid="BASE_TABLE"/> as aa
         where md5 = #{md5}
