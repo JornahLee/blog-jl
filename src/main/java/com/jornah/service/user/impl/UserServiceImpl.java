@@ -5,16 +5,17 @@
  **/
 package com.jornah.service.user.impl;
 
-import com.jornah.constant.ErrorConstant;
+import com.jornah.cache.CacheService;
 import com.jornah.dao.UserDao;
 import com.jornah.exception.BusinessException;
 import com.jornah.model.newP.User;
 import com.jornah.service.user.UserService;
-import com.jornah.utils.TaleUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Duration;
+import java.util.Objects;
 
 /**
  * 用户相关Service接口实现
@@ -22,28 +23,34 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserServiceImpl implements UserService {
 
+    public static final String LOGIN_FAIL_COUNT = "login:fail:count";
     @Autowired
     private UserDao userDao;//这里会报错，但是并不影响
+    @Autowired
+    private CacheService cacheService;//这里会报错，但是并不影响
 
 
     @Override
     public User login(String username, String password) {
-
-        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-            throw BusinessException.withErrorCode(ErrorConstant.Auth.USERNAME_PASSWORD_IS_EMPTY);
-        }
-
-        String pwd = TaleUtils.MD5encode(username + password);
-        User user = userDao.getUserInfoByCond(username,pwd);
-        if (null == user) {
-            throw BusinessException.withErrorCode(ErrorConstant.Auth.USERNAME_PASSWORD_ERROR);
-        }
+        //todo 先暂时用用明文 后期优化再使用BCryptPasswordEncoder
+        User user = userDao.findByUsernameAndPassword(username, password);
+        checkLoginCount(user);
         return user;
     }
 
+    private void checkLoginCount(User user) {
+        if (Objects.isNull(user)) {
+            cacheService.setValueIfAbsent(LOGIN_FAIL_COUNT, String.valueOf(1), Duration.ofSeconds(60));
+            if (cacheService.increment(LOGIN_FAIL_COUNT) > 3) {
+                throw BusinessException.withErrorCode("密码错误此处过多");
+            }
+            throw BusinessException.withErrorCode("密码错");
+        }
+    }
+
     @Override
-    public User getUserInfoById(Integer uid) {
-        return userDao.getUserInfoById(uid);
+    public User getById(Long uid) {
+        return userDao.selectById(uid);
     }
 
     // 开启事务
@@ -53,6 +60,6 @@ public class UserServiceImpl implements UserService {
 //        if (null == user.getUid()) {
 //            throw BusinessException.withErrorCode("用户编号不能为空");
 //        }
-        return userDao.updateUserInfo(user);
+        return 0;
     }
 }

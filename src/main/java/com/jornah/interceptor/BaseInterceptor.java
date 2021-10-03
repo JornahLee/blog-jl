@@ -1,141 +1,43 @@
-//package com.wip.interceptor;
-//
-//import com.wip.constant.Types;
-//import com.wip.constant.WebConst;
-//import com.wip.model.Options;
-//import com.wip.model.newP.User;
-//import com.wip.model.dto.MetaDto;
-//import com.wip.model.dto.StatisticsDto;
-//import com.wip.service.meta.MetaService;
-//import com.wip.service.option.OptionService;
-//import com.wip.service.site.SiteService;
-//import com.wip.service.user.UserService;
-//import com.wip.utils.AdminCommons;
-//import com.wip.utils.Commons;
-//import com.wip.utils.IPKit;
-//import com.wip.utils.MapCache;
-//import com.wip.utils.TaleUtils;
-//import com.wip.utils.UUID;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Component;
-//import org.springframework.web.servlet.HandlerInterceptor;
-//import org.springframework.web.servlet.ModelAndView;
-//
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-//import javax.servlet.http.HttpSession;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//
-///**
-// * 自定义拦截器
-// */
-//@Component
-//public class BaseInterceptor implements HandlerInterceptor {
-//
-//    private static final Logger LOGGER = LoggerFactory.getLogger(BaseInterceptor.class);
-//    private static final String USER_AGENT = "User-Agent";
-//
-//
-//    @Autowired
-//    private UserService userService;
-//
-//    @Autowired
-//    private OptionService optionService;
-//
-//    @Autowired
-//    private Commons commons;
-//
-//    @Autowired
-//    private AdminCommons adminCommons;
-//
-//    @Autowired
-//    private SiteService siteService;
-//
-//    @Autowired
-//    private HttpSession session;
-//
-//
-//    private MapCache cache = MapCache.single();
-//
-//
-//    @Override
-//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-//
-//        // 请求URL不包含域名
-//        String uri = request.getRequestURI();
-//        // 日志输出
-//        LOGGER.info("UserAgent：{}", request.getHeader(USER_AGENT));
-//        LOGGER.info("用户访问地址：{}，来路地址：{}",uri, IPKit.getIpAddressByRequest(request));
-//
-//        // 请求拦截处理
-//        User user = TaleUtils.getLoginUser(request);
-//        if (null == user) {
-//            Integer uid = TaleUtils.getCookieUid(request);
-//            if (null != uid) {
-//                //这里还是有安全隐患,cookie是可以伪造的
-//                user = userService.getUserInfoById(uid);
-//                request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
-//            }
-//        }
-//
-//        if (uri.startsWith("/admin") && !uri.startsWith("/admin/login") && null == user
-//                && !uri.startsWith("/admin/css") && !uri.startsWith("/admin/images")
-//                && !uri.startsWith("/admin/js") && !uri.startsWith("/admin/plugins")
-//                && !uri.startsWith("/admin/editormd")) {
-//            response.sendRedirect(request.getContextPath() + "/admin/login");
-//            return false;
-//        }
-//
-//        // 设置GET请求的token
-//        if (request.getMethod().equals("GET")) {
-//            String csrf_token = UUID.UU64();
-//            // 默认存储30分钟
-//            cache.hset(Types.CSRF_TOKEN.getType(), csrf_token, uri,30 * 60);
-//            request.setAttribute("_csrf_token", csrf_token);
-//        }
-//        // 返回true才会执行postHandle
-//        return true;
-//    }
-//
-//    @Override
-//    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView view) throws Exception {
-//        Options ov = optionService.getOptionByName("site_record");
-//        // 分类总数
-//        int categoryCount = metaService.getMetasCountByType(Types.CATEGORY.getType());
-//        // 标签总数
-//        int tagCount = metaService.getMetasCountByType(Types.TAG.getType());
-//        // 获取文章总数
-//        StatisticsDto statistics = siteService.getStatistics();
-//        // 获取友情链接
-//        List<MetaDto> links = metaService.getMetaList(Types.LINK.getType(),null,WebConst.MAX_POSTS);
-//
-//        session.setAttribute("categoryCount",categoryCount);
-//        session.setAttribute("tagCount",tagCount);
-//        session.setAttribute("articleCount",statistics.getArticles());
-//        session.setAttribute("links",links);
-//        request.setAttribute("commons", commons);
-//        request.setAttribute("option", ov);
-//        request.setAttribute("adminCommons", adminCommons);
-//        initSiteConfig(request);
-//    }
-//
-//    private void initSiteConfig(HttpServletRequest request) {
-//        if (WebConst.initConfig.isEmpty()) {
-//            List<Options> options = optionService.getOptions();
-//            Map<String, String> querys = new HashMap<>();
-//            options.forEach(option -> {
-//                querys.put(option.getName(),option.getValue());
-//            });
-//            WebConst.initConfig = querys;
-//        }
-//    }
-//
-//    @Override
-//    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-//
-//    }
-//}
+package com.jornah.interceptor;
+
+import com.jornah.model.UserInfo;
+import com.jornah.utils.JwtUtil;
+import com.jornah.utils.WebRequestHelper;
+import io.jsonwebtoken.Claims;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * 自定义拦截器
+ */
+@Component
+public class BaseInterceptor implements HandlerInterceptor {
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
+        String auth = request.getHeader("Authorization");
+        if (StringUtils.isBlank(auth)) {
+            WebRequestHelper.setCurrentUserInfo(UserInfo.tourist());
+            return true;
+        }
+        Claims claims = JwtUtil.getSingleton().parseToken(auth);
+//        entries.
+        WebRequestHelper.setCurrentUserInfo(claims);
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView view) throws Exception {
+    }
+
+
+    @Override
+    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+
+    }
+}

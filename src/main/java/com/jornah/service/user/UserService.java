@@ -25,7 +25,7 @@ public interface UserService {
      * @param uid   主键
      * @return
      */
-    User getUserInfoById(Integer uid);
+    User getById(Long id);
 
     /**
      * 更改用户信息

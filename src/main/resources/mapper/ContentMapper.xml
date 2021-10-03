@@ -15,10 +15,6 @@
         c.allowPing, c.allowFeed, c.orderWeight
     </sql>
 
-    <!--添加文章-->
-    <sql id="TABLE_USER">
-        <include refid="com.jornah.dao.UserDao.BASE_TABLE"/>
-    </sql>
 
     <!--根据文章ID获取文章信息-->
     <insert id="addArticle" parameterType="com.jornah.model.newP.Article" useGeneratedKeys="true" keyProperty="cid">

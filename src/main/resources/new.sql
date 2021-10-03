@@ -61,3 +61,18 @@ CREATE TABLE `article_tag`
 );
 
 
+drop table if EXISTS `music`;
+
+CREATE TABLE `music` (
+                         `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                         `src` varchar(200) DEFAULT NULL COMMENT '资源地址',
+                         `title` varchar(200) DEFAULT NULL COMMENT '音乐名',
+                         `pic` varchar(128) DEFAULT NULL COMMENT '音乐封面',
+                         `artist` varchar(200) DEFAULT NULL COMMENT '作者',
+                         `md5` char(64) not null,
+                         `created` datetime DEFAULT CURRENT_TIMESTAMP,
+                         `updated` datetime DEFAULT CURRENT_TIMESTAMP,
+                         PRIMARY KEY (`id`) USING BTREE,
+                         UNIQUE KEY `md5` (`md5`) USING BTREE,
+                         KEY `created` (`created`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=170 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
