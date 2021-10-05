@@ -15,6 +15,6 @@ import java.io.Serializable;
 @Data
 public class Tag extends BaseEntity implements Serializable {
 
-    private String tagName;
+    private String name;
 
 }

@@ -3,6 +3,7 @@ package com.jornah.model.qo;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -12,6 +13,7 @@ import java.util.Objects;
 @Data
 @Builder
 public class ArticleQo {
+    private Map<String,Long> queryKeyColumns;
     private int pageSize;
     private int pageNum;
     private String sortField;

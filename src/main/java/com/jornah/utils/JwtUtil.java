@@ -57,7 +57,7 @@ public final class JwtUtil implements InitializingBean {
                     .parseClaimsJws(jwt);
             return claimsJws.getBody();
         } catch (Throwable e) {
-            throw BusinessException.withErrorCode("token解析失败");
+            throw BusinessException.of("token解析失败");
         }
 
     }

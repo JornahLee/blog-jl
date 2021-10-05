@@ -42,9 +42,9 @@ public class UserServiceImpl implements UserService {
         if (Objects.isNull(user)) {
             cacheService.setValueIfAbsent(LOGIN_FAIL_COUNT, String.valueOf(1), Duration.ofSeconds(60));
             if (cacheService.increment(LOGIN_FAIL_COUNT) > 3) {
-                throw BusinessException.withErrorCode("密码错误此处过多");
+                throw BusinessException.of("密码错误此处过多");
             }
-            throw BusinessException.withErrorCode("密码错");
+            throw BusinessException.of("密码错");
         }
     }
 

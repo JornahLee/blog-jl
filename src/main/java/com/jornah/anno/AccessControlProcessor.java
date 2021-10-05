@@ -1,6 +1,8 @@
 package com.jornah.anno;
 
+import com.jornah.constant.ExceptionType;
 import com.jornah.exception.BusinessException;
+import com.jornah.model.UserInfo;
 import com.jornah.utils.WebRequestHelper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,7 +12,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * @author licong
@@ -30,11 +31,16 @@ public class AccessControlProcessor {
         MethodSignature signature = (MethodSignature) point.getSignature();
         Class<?> clazz = point.getTarget().getClass();
         Method method = clazz.getDeclaredMethod(name, signature.getParameterTypes());
-        AccessControl accessControl = method.getAnnotation(AccessControl.class);
-        boolean hasRight = WebRequestHelper.getCurrentUserInfo().getRoles().containsAll(Arrays.asList(accessControl.role()));
-        if (!hasRight) {
-            throw BusinessException.withErrorCode("错误");
+//        AccessControl accessControl = method.getAnnotation(AccessControl.class);
+        if (WebRequestHelper.getCurrentUserInfo().getUserId() == UserInfo.TOURIST_USER_ID) {
+            throw BusinessException.of(ExceptionType.NOT_LOGIN, "请登录");
         }
+
+        //todo 暂时不做细粒度的权限校验， 只做登录校验
+//        WebRequestHelper.getCurrentUserInfo().getRoles().removeAll(Arrays.asList(accessControl.role()));
+//        if (!shouldPass) {
+//            throw BusinessException.withErrorCode("错误");
+//        }
 
 
     }

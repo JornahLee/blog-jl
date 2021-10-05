@@ -44,7 +44,7 @@ public class MusicServiceImpl implements MusicService {
 
         Music findInDb = musicDao.selectOne(new LambdaQueryWrapper<Music>().eq(Music::getMd5, md5));
         if (Objects.nonNull(findInDb)) {
-            throw BusinessException.withErrorCode("已存在");
+            throw BusinessException.of("已存在");
         }
         boolean isSuccess = musicDao.insert(music) > 0;
         saveToDisk(music.getMd5() + musicUploadQo.getFileExtend(), fileBytes);

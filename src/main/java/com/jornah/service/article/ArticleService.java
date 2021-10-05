@@ -19,11 +19,15 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface ArticleService  {
 
-    long addArticle(ArticleSaveBo articleSaveBo);
+    long saveOrUpdate(ArticleSaveBo articleSaveBo);
 
     ArticleVo getArticleBy(Long arId);
 
-    PageInfo<Article> getArticlesOrderBy(ArticleQo articleQo);
+    PageInfo<ArticleVo> getArticlesOrderBy(ArticleQo articleQo);
+
+    PageInfo<ArticleVo> getArticleByCate(Long cateId, int pageNum, int pageSize);
+
+    PageInfo<ArticleVo> getArticleByTag(Long tagId, int pageNum, int pageSize);
 
     void updateArticleHits(Integer cid, Integer chits);
 

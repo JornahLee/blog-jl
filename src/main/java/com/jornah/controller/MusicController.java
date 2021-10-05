@@ -31,7 +31,7 @@ public class MusicController extends BaseController {
 
     @ApiOperation("音乐上传")
     @PostMapping(value = "/upload")
-    @AccessControl(role={Role.ADMIN,Role.TOURIST})
+    @AccessControl
     public APIResponse<String> musicUpload(MusicUploadQo musicUploadQo) throws IOException {
         boolean ret = musicService.uploadMusic(musicUploadQo);
         return APIResponse.success(ret ? "成功" : "失败");

@@ -57,7 +57,7 @@ class EsArticleServiceTest {
         Article article = new Article();
         article.setId(250L);
         article.setContent("这里是博客 this is content");
-        articleDao.addArticle(article);
+        articleDao.insert(article);
     }
 
 }

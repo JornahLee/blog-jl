@@ -16,35 +16,6 @@
     </sql>
 
 
-    <!--根据文章ID获取文章信息-->
-    <insert id="addArticle" parameterType="com.jornah.model.newP.Article" useGeneratedKeys="true" keyProperty="cid">
-        INSERT INTO
-          <include refid="BASE_TABLE"/>
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            title, titlePic, slug, created,modified, article, authorId,
-            type, status, tags, categories, hits, commentsNum, allowComment,
-            allowPing, allowFeed ,orderWeight
-        </trim>
-        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
-            #{title, jdbcType=VARCHAR},
-            #{titlePic, jdbcType=VARCHAR},
-            #{slug, jdbcType=VARCHAR},
-            NOW(),
-            NOW(),
-            #{article, jdbcType=LONGVARCHAR},
-            #{authorId, jdbcType=INTEGER},
-            #{type, jdbcType=VARCHAR},
-            #{status, jdbcType=VARCHAR},
-            #{tags, jdbcType=VARCHAR},
-            #{categories, jdbcType=VARCHAR},
-            #{hits, jdbcType=INTEGER},
-            #{commentsNum, jdbcType=INTEGER},
-            #{allowComment, jdbcType=INTEGER},
-            #{allowPing, jdbcType=INTEGER},
-            #{allowFeed, jdbcType=INTEGER},
-            #{orderWeight, jdbcType=INTEGER}
-        </trim>
-    </insert>
 
     <!--删除文章-->
     <delete id="deleteArticleById">
@@ -54,26 +25,6 @@
           cid = #{cid, jdbcType=INTEGER}
     </delete>
 
-    <!--获取文章总数-->
-    <select id="getArticleCount" resultType="java.lang.Long">
-        SELECT
-          COUNT(*)
-        FROM
-          <include refid="BASE_TABLE"/>
-    </select>
-
-    <!--通过标签获取 文章-->
-    <select id="getArticleByTags" resultType="com.jornah.model.newP.Article">
-        SELECT
-          <include refid="BASE_COLUMN"/>
-        FROM
-          <include refid="BASE_TABLE"/> AS c
-        WHERE
-          c.cid IN
-        <foreach collection="list" item="param" index="index" open="(" close=")" separator=",">
-            #{param.cid, jdbcType=INTEGER}
-        </foreach>
-    </select>
     <select id="findAll" resultType="com.jornah.model.newP.Article">
         SELECT
           <include refid="BASE_COLUMN"/>

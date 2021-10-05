@@ -15,6 +15,6 @@ import java.io.Serializable;
 @Data
 public class Category extends BaseEntity implements Serializable {
 
-    private String cateName;
+    private String name;
 
 }

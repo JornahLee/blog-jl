@@ -5,8 +5,6 @@
  **/
 package com.jornah.service.comment.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.jornah.constant.ErrorConstant;
 import com.jornah.dao.CommentDao;
 import com.jornah.exception.BusinessException;
@@ -99,7 +97,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> getCommentsByCId(Integer cid) {
         if (null == cid) {
-            throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+            throw BusinessException.of(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
         return commentDao.getCommentByCId(cid);
     }
@@ -107,7 +105,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment getCommentById(Integer coid) {
         if (null == coid) {
-            throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+            throw BusinessException.of(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
         return commentDao.getCommentById(coid);
     }
@@ -115,7 +113,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void updateCommentStatus(Integer coid, String status) {
         if (null == coid) {
-            throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+            throw BusinessException.of(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
         commentDao.updateCommentStatus(coid, status);
     }
@@ -123,7 +121,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Integer coid) {
         if (null == coid) {
-            throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+            throw BusinessException.of(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
         commentDao.deleteComment(coid);
     }

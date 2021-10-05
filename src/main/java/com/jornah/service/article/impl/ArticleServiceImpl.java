@@ -14,12 +14,11 @@ import com.jornah.dao.CommentDao;
 import com.jornah.dao.ArticleDao;
 import com.jornah.dao.LogDao;
 import com.jornah.dao.TagDao;
+import com.jornah.model.converter.ArticleConverter;
 import com.jornah.model.dto.ArticleSaveBo;
 import com.jornah.model.newP.Article;
 import com.jornah.model.DraftStatus;
 import com.jornah.model.Log;
-import com.jornah.model.newP.Category;
-import com.jornah.model.newP.Tag;
 import com.jornah.model.qo.ArticleQo;
 import com.jornah.model.vo.ArticleVo;
 import com.jornah.service.DraftService;
@@ -28,6 +27,7 @@ import com.jornah.service.cache.CacheService;
 import com.jornah.service.es.EsContentService;
 import com.jornah.utils.IPKit;
 import com.jornah.utils.MapCache;
+import com.jornah.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.Async;
@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -52,10 +53,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private CategoryDao categoryDao;
 
-
-    @Autowired
-    private CommentDao commentDao;
-
     @Autowired
     private EsContentService esContentService;
 
@@ -65,30 +62,32 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private LogDao logDao;
 
-    @Autowired
-    private CacheService cacheService;
-
     @Transactional
     @Override
-    public long addArticle(ArticleSaveBo articleSaveBo) {
-        long arId = articleDao.addArticle(articleSaveBo.getArticle());
-        articleSaveBo.getTagIds().forEach(tId -> tagDao.insertMap(arId, tId));
-        articleSaveBo.getCategoryIds().forEach(caId -> categoryDao.insertMap(arId, caId));
-        draftService.createDraft(arId, "", articleSaveBo.getArticle().getContent(), DraftStatus.getByString(articleSaveBo.getArticle().getStatus()));
+    public long saveOrUpdate(ArticleSaveBo articleSaveBo) {
+        Article article = ArticleConverter.INSTANCE.toEntity(articleSaveBo);
+        if (Objects.isNull(article.getId())) {
+            article.setCreated(Instant.now());
+            article.setUpdated(Instant.now());
+            articleDao.insert(article);
+            //todo 元数据放到另外一个接口中
+//            articleSaveBo.getTagIds().forEach(tId -> tagDao.insertMap(article.getId(), tId));
+//            articleSaveBo.getCategoryIds().forEach(caId -> categoryDao.insertMap(article.getId(), caId));
+        } else {
+            article.setUpdated(Instant.now());
+            articleDao.updateById(article);
+        }
+//        draftService.createDraft(article.getId(), "", article.getContent(), DraftStatus.getByString(article.getStatus()));
         //todo 搜索 根据行号跳转功能 待重构
 //        articleSaveBo.setContent(generateLineNumberForText(articleSaveBo.getContent(), LineNoFormat, true));
-        esContentService.add(articleDao.selectById(arId));
-        return arId;
+//        esContentService.add(article);
+        return article.getId();
     }
 
     @Override
     public ArticleVo getArticleBy(Long arId) {
-        List<Category> categories = categoryDao.getCategoryBy(arId);
-        List<Tag> tags = tagDao.findTagBy(arId);
-        return ArticleVo.builder()
-                .article(articleDao.selectById(arId))
-                .categories(categories).tags(tags)
-                .build();
+        Article article = articleDao.selectById(arId);
+        return ArticleConverter.INSTANCE.toVo(article);
     }
 
     public List<ArticleVo> getArticlesBy(List<Long> arIds) {
@@ -113,21 +112,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public PageInfo<Article> getArticlesOrderBy(ArticleQo articleQo) {
+    public PageInfo<ArticleVo> getArticlesOrderBy(ArticleQo articleQo) {
         QueryWrapper<Article> wrapper = new QueryWrapper<Article>()
-                .select("id","title","created","updated","author_id","hits","comments_num","allow_comment","allow_ping", "allow_feed", "order_weight")
+                .select("id", "title", "created", "updated", "author_id", "hits", "comments_num", "allow_comment", "allow_ping", "allow_feed", "order_weight")
                 .orderBy(Objects.nonNull(articleQo), articleQo.isAsc(), articleQo.getSortField());
         PageInfo<Article> pageInfo = PageHelper.startPage(articleQo.getPageNum(), articleQo.getPageSize())
                 .doSelectPageInfo(() -> articleDao.selectList(wrapper));
-        List<ArticleVo> articleVos = pageInfo.getList().stream()
-                .map(article -> ArticleVo.builder().article(article).categories(categoryDao.getCategoryBy(article.getId()))
-                        .tags(tagDao.findTagBy(article.getId())).build())
-                .collect(Collectors.toList());
-        // TODO 这是一种投机取巧的解法 不行
-        List list = pageInfo.getList();
-        list.clear();
-        list.addAll(articleVos);
-        return pageInfo;
+        return PageUtil.toVo(pageInfo, ArticleConverter.INSTANCE::toVo);
     }
 
     @Transactional
@@ -155,16 +146,18 @@ public class ArticleServiceImpl implements ArticleService {
         esContentService.update(article);
     }
 
-    public List<ArticleVo> getArticleByCate(Long cateId) {
-        //todo 排序和分页
-        List<Long> arIds = categoryDao.findArIdsBy(cateId);
-        return arIds.stream().map(this::getArticleBy).collect(Collectors.toList());
+    @Override
+    public PageInfo<ArticleVo> getArticleByCate(Long cateId, int pageNum, int pageSize) {
+        PageInfo<Article> pageInfo = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(() -> articleDao.findArticlesByCategory(cateId));
+        return PageUtil.toVo(pageInfo, ArticleConverter.INSTANCE::toVo);
     }
 
-    public List<ArticleVo> getArticleByTags(Long tagId) {
-        //todo 排序和分页
-        List<Long> arIds = tagDao.findArIdsBy(tagId);
-        return arIds.stream().map(this::getArticleBy).collect(Collectors.toList());
+    @Override
+    public PageInfo<ArticleVo> getArticleByTag(Long tagId, int pageNum, int pageSize) {
+        PageInfo<Article> pageInfo = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(() -> articleDao.findArticlesByTag(tagId));
+        return PageUtil.toVo(pageInfo, ArticleConverter.INSTANCE::toVo);
     }
 
 

@@ -123,8 +123,8 @@ public class AttachController extends BaseController {
 
         } catch (IOException e) {
             e.printStackTrace();
-            throw BusinessException.withErrorCode(ErrorConstant.Att.ADD_NEW_ATT_FAIL)
-                    .withErrorMessageArguments(e.getMessage());
+            throw BusinessException.of(ErrorConstant.Att.ADD_NEW_ATT_FAIL);
+
         }
 
     }
@@ -141,7 +141,7 @@ public class AttachController extends BaseController {
         try {
             AttAchDto attach = attAchService.getAttAchById(id);
             if (null == attach) {
-                throw BusinessException.withErrorCode(ErrorConstant.Att.DELETE_ATT_FAIL + ": 文件不存在");
+                throw BusinessException.of(ErrorConstant.Att.DELETE_ATT_FAIL + ": 文件不存在");
             }
             attAchService.deleteAttAch(id);
             // 写入日志
@@ -149,7 +149,7 @@ public class AttachController extends BaseController {
             return APIResponse.success();
         } catch (Exception e) {
             e.printStackTrace();
-            throw BusinessException.withErrorCode(e.getMessage());
+            throw BusinessException.of(e.getMessage());
         }
     }
 

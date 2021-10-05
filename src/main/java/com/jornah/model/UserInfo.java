@@ -11,13 +11,13 @@ import java.util.List;
  */
 @Data
 public class UserInfo {
+    public static final long TOURIST_USER_ID = -1;
     private Long userId;
-    private List<Role> roles=new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 
     public static UserInfo tourist() {
         UserInfo userInfo = new UserInfo();
-        userInfo.setUserId(-1L);
-        userInfo.roles.add(Role.ADMIN);
+        userInfo.setUserId(TOURIST_USER_ID);
         userInfo.roles.add(Role.TOURIST);
         return userInfo;
     }

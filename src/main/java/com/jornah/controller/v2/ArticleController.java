@@ -2,7 +2,8 @@ package com.jornah.controller.v2;
 
 
 import com.github.pagehelper.PageInfo;
-import com.jornah.dao.DraftDao;
+import com.google.common.collect.ImmutableMap;
+import com.jornah.anno.AccessControl;
 import com.jornah.model.dto.ArticleSaveBo;
 import com.jornah.model.newP.Article;
 import com.jornah.model.DraftStatus;
@@ -26,33 +27,48 @@ public class ArticleController {
     private ArticleService articleService;
     @Autowired
     private DraftService draftService;
-    @Autowired
-    private DraftDao draftDao;
 
-    @ApiOperation("发布新文章")
-    @PostMapping(value = "/publish")
-    public APIResponse<?> publishArticle(ArticleSaveBo articleSaveBo) {
-        articleSaveBo.getArticle().setUpdated(now());
-        articleSaveBo.getArticle().setCreated(now());
-        articleService.addArticle(articleSaveBo);
-        return APIResponse.success();
+    @ApiOperation("保存或更新")
+    @PostMapping(value = "/saveOrUpdate")
+    @AccessControl
+    public APIResponse<?> saveOrUpdate(@RequestBody ArticleSaveBo articleSaveBo) {
+        long ret = articleService.saveOrUpdate(articleSaveBo);
+        return APIResponse.success(ImmutableMap.of("id", ret));
     }
-    @ApiOperation("查询文档")
+
+    @ApiOperation("查询单个文档")
     @GetMapping(value = "/{id}")
-    public APIResponse<ArticleVo> getArticle(@PathVariable Long id ) {
+    public APIResponse<ArticleVo> getArticle(@PathVariable Long id) {
         ArticleVo articleVo = articleService.getArticleBy(id);
-        return APIResponse.success( articleVo);
+        return APIResponse.success(articleVo);
     }
 
-    @ApiOperation("查询文档")
+    @ApiOperation("分页查询文档")
     @PostMapping(value = "/list")
-    public APIResponse<?> getArticleList(@RequestBody ArticleQo qo) {
-        PageInfo orderBy = articleService.getArticlesOrderBy(qo);
+    public APIResponse<PageInfo<ArticleVo>> getArticleList(@RequestBody ArticleQo qo) {
+        PageInfo<ArticleVo> orderBy = articleService.getArticlesOrderBy(qo);
+        return APIResponse.success(orderBy);
+    }
+
+    @ApiOperation("按标签 分页查询文档")
+    @PostMapping(value = "/list/byTag")
+    public APIResponse<PageInfo<ArticleVo>> getArticleListByTag(@RequestBody ArticleQo qo) {
+        Long tagId = qo.getQueryKeyColumns().get("byTag");
+        PageInfo<ArticleVo> orderBy = articleService.getArticleByTag(tagId, qo.getPageNum(), qo.getPageSize());
+        return APIResponse.success(orderBy);
+    }
+
+    @ApiOperation("按分类 分页查询文档")
+    @PostMapping(value = "/list/byCate")
+    public APIResponse<PageInfo<ArticleVo>> getArticleListByCate(@RequestBody ArticleQo qo) {
+        Long cateId = qo.getQueryKeyColumns().get("byCate");
+        PageInfo<ArticleVo> orderBy = articleService.getArticleByCate(cateId, qo.getPageNum(), qo.getPageSize());
         return APIResponse.success(orderBy);
     }
 
     @ApiOperation("保存草稿")
     @PostMapping(value = "/draft/save")
+    @AccessControl
     public APIResponse<?> saveDraft(Article article) {
         draftService.createDraft(article.getId(), article.getContent(), DraftStatus.getByString(article.getStatus()));
 

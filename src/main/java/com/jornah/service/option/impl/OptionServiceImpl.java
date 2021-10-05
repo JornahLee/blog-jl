@@ -44,7 +44,7 @@ public class OptionServiceImpl implements OptionService {
 
     public void updateOptionByName(String name, String value) {
         if (StringUtils.isBlank(name)) {
-            throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+            throw BusinessException.of(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
         Options option = new Options();
         option.setName(name);
@@ -56,7 +56,7 @@ public class OptionServiceImpl implements OptionService {
 
     public Options getOptionByName(String name) {
         if (StringUtils.isBlank(name)) {
-            throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+            throw BusinessException.of(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
         return optionDao.getOptionByName(name);
     }

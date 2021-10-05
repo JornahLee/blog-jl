@@ -24,12 +24,6 @@ import java.util.List;
 @Repository
 public interface ArticleDao extends BaseMapper<Article> {
 
-    /**
-     * 添加文章
-     *
-     * @param article
-     */
-    long addArticle(Article article);
 
     @Update("update article set status=#{status} where id =#{id}")
     void updateStatusById(Long id, String status);
@@ -45,22 +39,16 @@ public interface ArticleDao extends BaseMapper<Article> {
      */
     void deleteArticleById(Integer cid);
 
-    /**
-     * 获取文章总数
-     *
-     * @return
-     */
-    Long getArticleCount();
+    @Select("select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping, a.allow_feed, a.order_weight " +
+            "from article a join article_category ac on a.id=ac.article_id where ac.category_id=#{cateId} order by a.created")
+    List<Article> findArticlesByCategory(@Param("cateId") Long cateId);
 
-    @Select("select a.* from article a join category c on a.id=c.ar_id where c.cateId=#{cateId}")
-    List<Article> getArticleByCategory(@Param("cateId") Long cateId);
+    //todo 如果的确有需求 可以做一个  通过多个tag过滤出文章的功能
+    @Select("select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping, a.allow_feed, a.order_weight " +
+            "from article a join article_tag art on a.id=art.article_id where art.tag_Id=#{tagId} order by a.created")
+    List<Article> findArticlesByTag(@Param("tagId") Long tagId);
 
-    /**
-     * 通过标签获取文章
-     *
-     * @param cid
-     * @return
-     */
+    @Select("")
     List<Article> getArticleByTags(List<RelationShip> cid);
 
     List<Article> findAll();

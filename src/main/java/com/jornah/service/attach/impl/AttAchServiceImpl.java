@@ -28,7 +28,7 @@ public class AttAchServiceImpl implements AttAchService {
     @Override
     public void addAttAch(Attach attach) {
         if (null == attach) {
-            throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+            throw BusinessException.of(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
         attAchDao.addAttAch(attach);
     }
@@ -42,7 +42,7 @@ public class AttAchServiceImpl implements AttAchService {
     @Override
     public AttAchDto getAttAchById(Integer id) {
         if (null == id) {
-            throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+            throw BusinessException.of(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
         return attAchDao.getAttAchById(id);
     }
@@ -51,7 +51,7 @@ public class AttAchServiceImpl implements AttAchService {
 
     public void deleteAttAch(Integer id) {
         if (null == id) {
-            throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+            throw BusinessException.of(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
         attAchDao.deleteAttAch(id);
     }
