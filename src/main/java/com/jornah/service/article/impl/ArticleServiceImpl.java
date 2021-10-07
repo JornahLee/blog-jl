@@ -5,6 +5,7 @@
  **/
 package com.jornah.service.article.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -113,11 +114,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public PageInfo<ArticleVo> getArticlesOrderBy(ArticleQo articleQo) {
-        QueryWrapper<Article> wrapper = new QueryWrapper<Article>()
-                .select("id", "title", "created", "updated", "author_id", "hits", "comments_num", "allow_comment", "allow_ping", "allow_feed", "order_weight")
-                .orderBy(Objects.nonNull(articleQo), articleQo.isAsc(), articleQo.getSortField());
         PageInfo<Article> pageInfo = PageHelper.startPage(articleQo.getPageNum(), articleQo.getPageSize())
-                .doSelectPageInfo(() -> articleDao.selectList(wrapper));
+                .doSelectPageInfo(() -> articleDao.findArticles());
         return PageUtil.toVo(pageInfo, ArticleConverter.INSTANCE::toVo);
     }
 

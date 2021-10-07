@@ -4,15 +4,15 @@ import com.github.pagehelper.PageInfo;
 import com.jornah.api.QiNiuCloudService;
 import com.jornah.constant.ErrorConstant;
 import com.jornah.constant.LogActions;
-import com.jornah.constant.Types;
+import com.jornah.constant.AttachType;
 import com.jornah.constant.WebConst;
 import com.jornah.controller.BaseController;
 import com.jornah.dao.AttachDao;
 import com.jornah.exception.BusinessException;
 import com.jornah.model.Attach;
 import com.jornah.model.newP.User;
-import com.jornah.model.dto.AttAchDto;
-import com.jornah.service.attach.AttAchService;
+import com.jornah.model.dto.AttachDto;
+import com.jornah.service.attach.AttachService;
 import com.jornah.service.log.LogService;
 import com.jornah.utils.APIResponse;
 import com.jornah.utils.Commons;
@@ -52,7 +52,7 @@ public class AttachController extends BaseController {
     public static final String CLASSPATH = TaleUtils.getUploadFilePath();
 
     @Autowired
-    private AttAchService attAchService;
+    private AttachService attAchService;
     @Autowired
     private AttachDao attachDao;
 
@@ -71,9 +71,9 @@ public class AttachController extends BaseController {
             @RequestParam(name = "limit", required = false, defaultValue = "12")
                     int limit
     ) {
-        PageInfo<AttAchDto> atts = attAchService.getAtts(page, limit);
+        PageInfo<AttachDto> atts = attAchService.getAtts(page, limit);
         request.setAttribute("attachs", atts);
-        request.setAttribute(Types.ATTACH_URL.getType(), Commons.site_option(Types.ATTACH_URL.getType(), Commons.site_url()));
+        request.setAttribute(AttachType.ATTACH_URL.getType(), Commons.site_option(AttachType.ATTACH_URL.getType(), Commons.site_url()));
         request.setAttribute("max_file_size", WebConst.MAX_FILE_SIZE / 1024);
         return "admin/attach";
     }
@@ -113,10 +113,10 @@ public class AttachController extends BaseController {
                 if (Objects.nonNull(sessionUser)) {
 //                    attach.setAuthorId(sessionUser.getUid());
                 }
-                attach.setFtype(TaleUtils.isImage(file.getInputStream()) ? Types.IMAGE.getType() : Types.FILE.getType());
+                attach.setFtype(TaleUtils.isImage(file.getInputStream()) ? AttachType.IMAGE.getType() : AttachType.FILE.getType());
                 attach.setFname(fileName);
                 attach.setFkey(QiNiuCloudService.QINIU_UPLOAD_SITE + fileName);
-                attAchService.addAttAch(attach);
+                attAchService.addAttach(attach);
             }
             String result = String.join(",", fileUrlList);
             return APIResponse.success(result);
@@ -139,11 +139,11 @@ public class AttachController extends BaseController {
                     Integer id
     ) {
         try {
-            AttAchDto attach = attAchService.getAttAchById(id);
+            AttachDto attach = attAchService.getAttachById(id);
             if (null == attach) {
                 throw BusinessException.of(ErrorConstant.Att.DELETE_ATT_FAIL + ": 文件不存在");
             }
-            attAchService.deleteAttAch(id);
+            attAchService.deleteAttach(id);
             // 写入日志
             logService.addLog(LogActions.DEL_ATTACH.getAction(), this.user(request).getUsername() + "用户", request.getRemoteAddr(), this.getUid(request));
             return APIResponse.success();

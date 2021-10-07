@@ -1,5 +1,6 @@
 package com.jornah.model;
 
+import com.jornah.constant.Role;
 import lombok.Data;
 
 import java.util.ArrayList;

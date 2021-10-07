@@ -1,6 +1,7 @@
 package com.jornah.anno;
 
-import com.jornah.model.Role;
+
+import com.jornah.constant.Role;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

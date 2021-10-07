@@ -7,18 +7,18 @@ package com.jornah.service.attach;
 
 import com.github.pagehelper.PageInfo;
 import com.jornah.model.Attach;
-import com.jornah.model.dto.AttAchDto;
+import com.jornah.model.dto.AttachDto;
 
 /**
  * 文件相关接口
  */
-public interface AttAchService {
+public interface AttachService {
 
     /**
      * 添加单个附件信息
      * @param attach
      */
-    void addAttAch(Attach attach);
+    void addAttach(Attach attach);
 
     /**
      * 获取所有的附件信息
@@ -26,18 +26,18 @@ public interface AttAchService {
      * @param pageSize
      * @return
      */
-    PageInfo<AttAchDto> getAtts(int pageNum, int pageSize);
+    PageInfo<AttachDto> getAtts(int pageNum, int pageSize);
 
     /**
      * 通过ID获取附件信息
      * @param id
      * @return
      */
-    AttAchDto getAttAchById(Integer id);
+    AttachDto getAttachById(Integer id);
 
     /**
      * 通过ID删除附件信息
      * @param id
      */
-    void deleteAttAch(Integer id);
+    void deleteAttach(Integer id);
 }

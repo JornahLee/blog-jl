@@ -80,7 +80,7 @@
 //        Long links = metaDao.getMetasCountByType(Types.LINK.getType());
 //
 //        // 获取附件数
-//        Long attAches = attAchDao.getAttAchCount();
+//        Long attAches = attAchDao.getAttachCount();
 //
 //        StatisticsDto rs = new StatisticsDto();
 //        rs.setArticles(articles);

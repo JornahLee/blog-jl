@@ -1,4 +1,4 @@
-package com.jornah.model;
+package com.jornah.constant;
 
 /**
  * @author licong

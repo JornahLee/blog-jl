@@ -1,23 +1,20 @@
 /**
  * Created by IntelliJ IDEA.
  * User: Jornah Lee
- * DateTime: 2018/8/3 16:18
+ * DateTime: 2018/8/3 16:31
  **/
-package com.jornah.model;
+package com.jornah.model.dto;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.jornah.model.newP.BaseEntity;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.time.Instant;
 
-/**
- * 网站图片文件相关表
- */
 @Data
-public class Attach extends BaseEntity implements Serializable {
+public class AttachDto  {
+    /**
+     * 主键编号
+     */
+    private Long id;
 
     /**
      * 文件名称
@@ -40,9 +37,8 @@ public class Attach extends BaseEntity implements Serializable {
     private Integer authorId;
 
     /**
-     * 上传人的ID
+     * 创建的时间戳
      */
-    private String md5;
-
+    private Instant created;
 
 }

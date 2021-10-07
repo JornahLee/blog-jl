@@ -17,14 +17,6 @@
 
 
 
-    <!--删除文章-->
-    <delete id="deleteArticleById">
-        DELETE FROM
-          <include refid="BASE_TABLE"/>
-        WHERE
-          cid = #{cid, jdbcType=INTEGER}
-    </delete>
-
     <select id="findAll" resultType="com.jornah.model.newP.Article">
         SELECT
           <include refid="BASE_COLUMN"/>

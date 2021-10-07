@@ -5,8 +5,9 @@
  **/
 package com.jornah.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jornah.model.Attach;
-import com.jornah.model.dto.AttAchDto;
+import com.jornah.model.dto.AttachDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -19,49 +20,16 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface AttachDao {
-
-    /**
-     * 添加单个附件文件
-     *
-     * @param attach
-     */
-    @Select("")
-    void addAttAch(Attach attach);
+public interface AttachDao extends BaseMapper<Attach> {
 
     /**
      * 获取所有的附件信息
      *
      * @return
      */
-    @Select("")
-    List<AttAchDto> getAtts();
+    @Select("select * from attach")
+    List<AttachDto> getAtts();
 
-    /**
-     * 获取附件总数
-     *
-     * @return
-     */
-    @Select("")
-    Long getAttAchCount();
-
-    /**
-     * 通过ID获取附件信息
-     *
-     * @param id
-     * @return
-     */
-    @Select("")
-    AttAchDto getAttAchById(@Param("id") Integer id);
-
-    /**
-     * 通过ID删除附件信息
-     *
-     * @param id
-     */
-    @Select("")
-    void deleteAttAch(@Param("id") Integer id);
-
-    @Select("")
+    @Select("select * from attach where md5=#{md5}")
     Attach findByMd5(@Param("md5") String md5);
 }

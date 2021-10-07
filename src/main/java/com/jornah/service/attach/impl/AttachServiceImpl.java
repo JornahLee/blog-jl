@@ -11,8 +11,9 @@ import com.jornah.constant.ErrorConstant;
 import com.jornah.dao.AttachDao;
 import com.jornah.exception.BusinessException;
 import com.jornah.model.Attach;
-import com.jornah.model.dto.AttAchDto;
-import com.jornah.service.attach.AttAchService;
+import com.jornah.model.converter.AttachConverter;
+import com.jornah.model.dto.AttachDto;
+import com.jornah.service.attach.AttachService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,39 +21,34 @@ import org.springframework.stereotype.Service;
  * 文件接口实现
  */
 @Service
-public class AttAchServiceImpl implements AttAchService {
+public class AttachServiceImpl implements AttachService {
 
     @Autowired
     private AttachDao attAchDao;
 
     @Override
-    public void addAttAch(Attach attach) {
-        if (null == attach) {
-            throw BusinessException.of(ErrorConstant.Common.PARAM_IS_EMPTY);
-        }
-        attAchDao.addAttAch(attach);
+    public void addAttach(Attach attach) {
+        attAchDao.insert(attach);
     }
 
     @Override
-    public PageInfo<AttAchDto> getAtts(int pageNum, int pageSize) {
+    public PageInfo<AttachDto> getAtts(int pageNum, int pageSize) {
         return PageHelper.startPage(pageNum, pageSize)
                 .doSelectPageInfo(()->attAchDao.getAtts());
     }
 
     @Override
-    public AttAchDto getAttAchById(Integer id) {
-        if (null == id) {
-            throw BusinessException.of(ErrorConstant.Common.PARAM_IS_EMPTY);
-        }
-        return attAchDao.getAttAchById(id);
+    public AttachDto getAttachById(Integer id) {
+        Attach attach = attAchDao.selectById(id);
+        return AttachConverter.INSTANCE.toDto(attach);
     }
 
     @Override
 
-    public void deleteAttAch(Integer id) {
+    public void deleteAttach(Integer id) {
         if (null == id) {
             throw BusinessException.of(ErrorConstant.Common.PARAM_IS_EMPTY);
         }
-        attAchDao.deleteAttAch(id);
+        attAchDao.deleteById(id);
     }
 }
