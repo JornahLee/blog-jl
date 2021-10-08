@@ -1,10 +1,8 @@
 package com.jornah.model.converter;
 
 import com.jornah.model.dto.ArticleSaveBo;
-import com.jornah.model.newP.Article;
-import com.jornah.model.newP.User;
+import com.jornah.model.entity.Article;
 import com.jornah.model.vo.ArticleVo;
-import com.jornah.model.vo.UserVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

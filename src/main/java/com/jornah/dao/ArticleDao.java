@@ -6,9 +6,7 @@
 package com.jornah.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jornah.model.newP.Article;
-import com.jornah.model.RelationShip;
-import com.jornah.model.qo.ArticleQo;
+import com.jornah.model.entity.Article;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -30,18 +28,18 @@ public interface ArticleDao extends BaseMapper<Article> {
     @Update("update article set hits=#{hits} where cid =#{id}")
     void updateHitsById(int id, long hits);
 
-    @Select("select * from article where status='PUBLISH' order by updated")
+    @Select("select * from article where status='PUBLISH' order by updated desc")
     List<Article> findArticles();
 
     @Select("select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping, a.allow_feed, a.order_weight " +
             "from article a join article_category ac on a.id=ac.article_id " +
-            "where ac.category_id=#{cateId} and a.status='PUBLISH' order by a.created")
+            "where ac.category_id=#{cateId} and a.status='PUBLISH' order by a.created desc")
     List<Article> findArticlesByCategory(@Param("cateId") Long cateId);
 
     //todo 如果的确有需求 可以做一个  通过多个tag过滤出文章的功能
     @Select("select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping, a.allow_feed, a.order_weight " +
             "from article a join article_tag art on a.id=art.article_id " +
-            "where art.tag_Id=#{tagId} and a.status='PUBLISH' order by a.created")
+            "where art.tag_Id=#{tagId} and a.status='PUBLISH' order by a.created desc")
     List<Article> findArticlesByTag(@Param("tagId") Long tagId);
 
 

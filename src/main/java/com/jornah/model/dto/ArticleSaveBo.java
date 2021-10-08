@@ -1,9 +1,6 @@
 package com.jornah.model.dto;
 
-import com.jornah.model.newP.Article;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class ArticleSaveBo {

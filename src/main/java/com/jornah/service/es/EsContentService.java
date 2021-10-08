@@ -2,7 +2,7 @@ package com.jornah.service.es;
 
 import com.google.common.collect.Lists;
 import com.jornah.dao.ArticleDao;
-import com.jornah.model.newP.Article;
+import com.jornah.model.entity.Article;
 import com.jornah.model.dto.ArticleBodyHitInfo;
 import com.jornah.model.dto.ArticleHitInfo;
 import com.jornah.model.dto.ContentEsDTO;

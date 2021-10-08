@@ -6,7 +6,7 @@
 package com.jornah.service.attach;
 
 import com.github.pagehelper.PageInfo;
-import com.jornah.model.Attach;
+import com.jornah.model.entity.Attach;
 import com.jornah.model.dto.AttachDto;
 
 /**

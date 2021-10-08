@@ -10,7 +10,7 @@ import com.github.pagehelper.PageInfo;
 import com.jornah.constant.ErrorConstant;
 import com.jornah.dao.AttachDao;
 import com.jornah.exception.BusinessException;
-import com.jornah.model.Attach;
+import com.jornah.model.entity.Attach;
 import com.jornah.model.converter.AttachConverter;
 import com.jornah.model.dto.AttachDto;
 import com.jornah.service.attach.AttachService;

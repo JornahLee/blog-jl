@@ -7,7 +7,7 @@ package com.jornah.dao;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jornah.model.Draft;
+import com.jornah.model.entity.Draft;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

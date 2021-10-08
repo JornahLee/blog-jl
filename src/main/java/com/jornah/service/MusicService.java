@@ -1,6 +1,6 @@
 package com.jornah.service;
 
-import com.jornah.model.Music;
+import com.jornah.model.entity.Music;
 import com.jornah.model.qo.MusicUploadQo;
 
 import java.io.IOException;

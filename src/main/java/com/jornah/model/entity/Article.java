@@ -3,7 +3,7 @@
  * User: Jornah Lee
  * DateTime: 2018/7/25 16:30
  **/
-package com.jornah.model.newP;
+package com.jornah.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

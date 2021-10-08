@@ -1,4 +1,4 @@
-package com.jornah.model.newP;
+package com.jornah.model.entity;
 
 import lombok.Data;
 

@@ -5,7 +5,7 @@
  **/
 package com.jornah.service.user;
 
-import com.jornah.model.newP.User;
+import com.jornah.model.entity.User;
 
 /**
  * 用户相关Service接口

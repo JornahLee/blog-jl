@@ -6,7 +6,7 @@
 package com.jornah.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jornah.model.Attach;
+import com.jornah.model.entity.Attach;
 import com.jornah.model.dto.AttachDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

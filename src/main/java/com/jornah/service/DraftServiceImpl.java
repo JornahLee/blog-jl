@@ -2,8 +2,8 @@ package com.jornah.service;
 
 import com.jornah.dao.ArticleDao;
 import com.jornah.dao.DraftDao;
-import com.jornah.model.newP.Article;
-import com.jornah.model.Draft;
+import com.jornah.model.entity.Article;
+import com.jornah.model.entity.Draft;
 import com.jornah.utils.TextDifferenceChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

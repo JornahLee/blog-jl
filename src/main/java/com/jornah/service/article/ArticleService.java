@@ -7,7 +7,6 @@ package com.jornah.service.article;
 
 import com.github.pagehelper.PageInfo;
 import com.jornah.model.dto.ArticleSaveBo;
-import com.jornah.model.newP.Article;
 import com.jornah.model.qo.ArticleQo;
 import com.jornah.model.vo.ArticleVo;
 import org.springframework.scheduling.annotation.Async;

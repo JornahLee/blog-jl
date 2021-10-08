@@ -2,7 +2,7 @@ package com.jornah.controller;
 
 import com.google.common.collect.ImmutableMap;
 import com.jornah.model.converter.UserConverter;
-import com.jornah.model.newP.User;
+import com.jornah.model.entity.User;
 import com.jornah.model.qo.LoginQo;
 import com.jornah.model.vo.UserVo;
 import com.jornah.service.user.UserService;

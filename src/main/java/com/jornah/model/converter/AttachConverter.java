@@ -1,9 +1,7 @@
 package com.jornah.model.converter;
 
-import com.jornah.model.Attach;
-import com.jornah.model.Music;
+import com.jornah.model.entity.Attach;
 import com.jornah.model.dto.AttachDto;
-import com.jornah.model.qo.MusicUploadQo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

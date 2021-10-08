@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jornah.dao.MusicDao;
 import com.jornah.exception.BusinessException;
-import com.jornah.model.Music;
+import com.jornah.model.entity.Music;
 import com.jornah.model.converter.MusicConverter;
 import com.jornah.model.qo.MusicUploadQo;
 import org.apache.commons.codec.digest.DigestUtils;

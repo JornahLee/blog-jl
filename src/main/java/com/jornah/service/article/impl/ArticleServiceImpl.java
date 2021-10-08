@@ -5,26 +5,22 @@
  **/
 package com.jornah.service.article.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jornah.constant.WebConst;
 import com.jornah.dao.CategoryDao;
-import com.jornah.dao.CommentDao;
 import com.jornah.dao.ArticleDao;
 import com.jornah.dao.LogDao;
 import com.jornah.dao.TagDao;
 import com.jornah.model.converter.ArticleConverter;
 import com.jornah.model.dto.ArticleSaveBo;
-import com.jornah.model.newP.Article;
+import com.jornah.model.entity.Article;
 import com.jornah.model.DraftStatus;
 import com.jornah.model.Log;
 import com.jornah.model.qo.ArticleQo;
 import com.jornah.model.vo.ArticleVo;
 import com.jornah.service.DraftService;
 import com.jornah.service.article.ArticleService;
-import com.jornah.service.cache.CacheService;
 import com.jornah.service.es.EsContentService;
 import com.jornah.utils.IPKit;
 import com.jornah.utils.MapCache;

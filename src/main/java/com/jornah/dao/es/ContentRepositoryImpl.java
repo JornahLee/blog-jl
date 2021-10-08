@@ -5,7 +5,7 @@ package com.jornah.dao.es;
 // import org.springframework.data.repository.CrudRepository;
 // import org.springframework.stereotype.Repository;
 //
-import com.jornah.model.newP.Article;
+import com.jornah.model.entity.Article;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;

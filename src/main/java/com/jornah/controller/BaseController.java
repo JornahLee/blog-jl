@@ -1,6 +1,6 @@
 package com.jornah.controller;
 
-import com.jornah.model.newP.User;
+import com.jornah.model.entity.User;
 import com.jornah.utils.MapCache;
 import com.jornah.utils.TaleUtils;
 

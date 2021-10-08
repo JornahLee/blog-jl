@@ -1,6 +1,6 @@
-package com.jornah.model;
+package com.jornah.model.entity;
 
-import com.jornah.model.newP.BaseEntity;
+import com.jornah.model.entity.BaseEntity;
 
 public class Draft extends BaseEntity {
     private Long contentId;

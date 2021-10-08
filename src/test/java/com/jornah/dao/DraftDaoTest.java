@@ -1,7 +1,7 @@
 package com.jornah.dao;
 
 
-import com.jornah.model.Draft;
+import com.jornah.model.entity.Draft;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

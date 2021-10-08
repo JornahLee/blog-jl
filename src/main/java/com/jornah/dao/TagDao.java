@@ -1,7 +1,7 @@
 package com.jornah.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jornah.model.newP.Tag;
+import com.jornah.model.entity.Tag;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;

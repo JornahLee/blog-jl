@@ -1,6 +1,6 @@
 package com.jornah.dao.es;
 
-import com.jornah.model.newP.Article;
+import com.jornah.model.entity.Article;
 
 import java.util.List;
 

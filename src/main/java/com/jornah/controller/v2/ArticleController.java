@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.ImmutableMap;
 import com.jornah.anno.AccessControl;
 import com.jornah.model.dto.ArticleSaveBo;
-import com.jornah.model.newP.Article;
+import com.jornah.model.entity.Article;
 import com.jornah.model.DraftStatus;
 import com.jornah.model.qo.ArticleQo;
 import com.jornah.model.vo.ArticleVo;

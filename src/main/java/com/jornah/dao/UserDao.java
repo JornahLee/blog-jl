@@ -1,7 +1,7 @@
 package com.jornah.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jornah.model.newP.User;
+import com.jornah.model.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

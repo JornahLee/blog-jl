@@ -3,7 +3,7 @@
  * User: Administrator
  * DateTime: 2018/7/24 23:03
  **/
-package com.jornah.model.newP;
+package com.jornah.model.entity;
 
 import lombok.Data;
 

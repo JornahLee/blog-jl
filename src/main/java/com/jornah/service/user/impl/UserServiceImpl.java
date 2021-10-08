@@ -8,7 +8,7 @@ package com.jornah.service.user.impl;
 import com.jornah.cache.CacheService;
 import com.jornah.dao.UserDao;
 import com.jornah.exception.BusinessException;
-import com.jornah.model.newP.User;
+import com.jornah.model.entity.User;
 import com.jornah.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

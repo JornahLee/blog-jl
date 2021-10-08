@@ -1,9 +1,8 @@
 package com.jornah.controller.v1.admin;
 
-import com.github.pagehelper.PageInfo;
 import com.jornah.controller.BaseController;
 import com.jornah.model.Comment;
-import com.jornah.model.newP.User;
+import com.jornah.model.entity.User;
 import com.jornah.service.comment.CommentService;
 import com.jornah.utils.APIResponse;
 import io.swagger.annotations.Api;

@@ -2,7 +2,7 @@ package com.jornah.service.es;
 
 import com.google.gson.GsonBuilder;
 import com.jornah.dao.ArticleDao;
-import com.jornah.model.newP.Article;
+import com.jornah.model.entity.Article;
 import com.jornah.model.dto.SearchResult;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

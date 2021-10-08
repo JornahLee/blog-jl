@@ -17,7 +17,7 @@
 
 
 
-    <select id="findAll" resultType="com.jornah.model.newP.Article">
+    <select id="findAll" resultType="com.jornah.model.entity.Article">
         SELECT
           <include refid="BASE_COLUMN"/>
         FROM

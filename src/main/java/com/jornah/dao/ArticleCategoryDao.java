@@ -1,7 +1,7 @@
 package com.jornah.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jornah.model.newP.ArticleCategoryMap;
+import com.jornah.model.entity.ArticleCategoryMap;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

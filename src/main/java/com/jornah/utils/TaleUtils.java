@@ -2,7 +2,7 @@ package com.jornah.utils;
 
 import com.jornah.constant.WebConst;
 import com.jornah.controller.v1.admin.AttachController;
-import com.jornah.model.newP.User;
+import com.jornah.model.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
