@@ -27,12 +27,12 @@ public interface CategoryDao extends BaseMapper<Category> {
     @Delete("delete from article_category where article_id=#{arId}")
     void deleteAllMapBy(@Param("arId") Long arId);
 
-    @Select("select ar_id from article_category where ca_id=#{caId}")
+    @Select("select article_id from article_category where ca_id=#{caId}")
     List<Long> findArIdsBy(@Param("caId") Long caId);
 
-    @Delete("delete from article_category where ar_id=#{arId} and ca_id=#{cateId}")
+    @Delete("delete from article_category where article_id=#{arId} and ca_id=#{cateId}")
     void deleteMap(@Param("arId") Long arId, @Param("cateId") Long cateId);
 
-    @Delete("delete from article_category where ar_id=#{arId}")
+    @Delete("delete from article_category where article_id=#{arId}")
     void deleteMapBy(@Param("arId") Long arId);
 }

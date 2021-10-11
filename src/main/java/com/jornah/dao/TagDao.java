@@ -22,15 +22,15 @@ public interface TagDao extends BaseMapper<Tag> {
     @Select("select * from article_tag a join tag t on a.tag_id=t.id where a.article_id=#{arId}")
     List<Tag> findTagBy(@Param("arId") Long arId);
 
-    @Insert(" insert article_tag(ar_id,tag_id) values(#{arId},#{tagId})")
+    @Insert(" insert article_tag(article_id,tag_id) values(#{arId},#{tagId})")
     Long insertMap(@Param("arId") Long arId, @Param("tagId") Long tagId);
 
-    @Select("select ar_id from article_tag where tag_id=#{tagId}")
+    @Select("select article_id from article_tag where tag_id=#{tagId}")
     List<Long> findArIdsBy(@Param("tagId") Long tagId);
 
-    @Delete("delete from article_tag where ar_id=#{arId} and tag_id=#{tagId}")
+    @Delete("delete from article_tag where article_id=#{arId} and tag_id=#{tagId}")
     void deleteMap(@Param("arId") Long arId, @Param("tagId") Long tagId);
 
-    @Delete("delete from article_tag where ar_id=#{arId}")
+    @Delete("delete from article_tag where article_id=#{arId}")
     void deleteMapBy(@Param("arId") Long arId);
 }

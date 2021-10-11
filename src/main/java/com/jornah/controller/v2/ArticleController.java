@@ -75,14 +75,12 @@ public class ArticleController {
         return APIResponse.success();
     }
 
-//    @ApiOperation("删除文章")
-//    @PostMapping("/delete")
-//    public APIResponse<?> deleteArticle(@ApiParam(name = "cid", value = "文章ID", required = true)
-//                                        @RequestParam(name = "cid") Integer cid) {
-//        // 删除文章
-//        articleService.deleteArticleById(cid);
-//        return APIResponse.success();
-//    }
+    @ApiOperation("删除文章")
+    @DeleteMapping("/{id}")
+    public APIResponse<?> deleteArticle(@PathVariable("id") Long id) {
+        articleService.deleteBy(id);
+        return APIResponse.success();
+    }
 //
 //    @ApiOperation("更新文章")
 //    @PostMapping("/update")

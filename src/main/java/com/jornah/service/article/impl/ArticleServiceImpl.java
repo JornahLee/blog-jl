@@ -7,6 +7,7 @@ package com.jornah.service.article.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jornah.constant.ArticleStatus;
 import com.jornah.constant.WebConst;
 import com.jornah.dao.CategoryDao;
 import com.jornah.dao.ArticleDao;
@@ -116,12 +117,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Transactional
-    public void deleteArticleById(Long arId) {
+    @Override
+    public void deleteBy(Long arId) {
         // 删除文章
-        // contentDao.deleteArticleById(arId);
-        articleDao.updateStatusById(arId, "deleted");
-        draftService.createDraftForDelete(arId, DraftStatus.PUBLISHED);
-        esContentService.delete(arId.toString());
+
+        articleDao.updateStatusById(arId, ArticleStatus.DELETED.toString());
+//        draftService.createDraftForDelete(arId, DraftStatus.PUBLISHED);
+//        esContentService.delete(arId.toString());
 
         // 同时要删除该 文章下的所有评论
 //        List<Comment> comments = commentDao.getCommentByCId(arId);

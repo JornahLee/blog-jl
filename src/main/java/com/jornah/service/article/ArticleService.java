@@ -10,6 +10,7 @@ import com.jornah.model.dto.ArticleSaveBo;
 import com.jornah.model.qo.ArticleQo;
 import com.jornah.model.vo.ArticleVo;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,6 +24,9 @@ public interface ArticleService  {
     ArticleVo getArticleBy(Long arId);
 
     PageInfo<ArticleVo> getArticlesOrderBy(ArticleQo articleQo);
+
+    @Transactional
+    void deleteBy(Long arId);
 
     PageInfo<ArticleVo> getArticleByCate(Long cateId, int pageNum, int pageSize);
 
