@@ -8,7 +8,7 @@ package com.jornah.service.comment.impl;
 import com.jornah.constant.ErrorConstant;
 import com.jornah.dao.CommentDao;
 import com.jornah.exception.BusinessException;
-import com.jornah.model.Comment;
+import com.jornah.model.entity.Comment;
 import com.jornah.service.article.ArticleService;
 import com.jornah.service.comment.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -8,7 +8,7 @@ package com.jornah.service.log.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jornah.dao.LogDao;
-import com.jornah.model.Log;
+import com.jornah.model.entity.Log;
 import com.jornah.service.log.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class LogServiceImpl implements LogService {
 
 
     @Override
-    public void addLog(String action, String data, String ip, Integer authorId) {
+    public void addLog(String action, String data, String ip, Long authorId) {
         Log log = new Log();
         log.setAuthorId(authorId);
         log.setIp(ip);
@@ -36,8 +36,8 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public PageInfo<Log> getLogs(int pageNum, int pageSize) {
-        return PageHelper.startPage(pageNum,pageSize)
-                .doSelectPageInfo(()->logDao.getLogs());
+        return PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(() -> logDao.getLogs());
 
     }
 }

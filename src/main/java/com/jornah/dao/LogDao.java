@@ -6,7 +6,7 @@
 package com.jornah.dao;
 
 
-import com.jornah.model.Log;
+import com.jornah.model.entity.Log;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.jornah.controller.v2;
+package com.jornah.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -7,7 +7,7 @@ package com.jornah.service.log;
 
 
 import com.github.pagehelper.PageInfo;
-import com.jornah.model.Log;
+import com.jornah.model.entity.Log;
 
 /**
  * 日志相关Service接口
@@ -21,7 +21,7 @@ public interface LogService {
      * @param ip        产生IP
      * @param authorId  产生人
      */
-    void addLog(String action, String data, String ip, Integer authorId);
+    void addLog(String action, String data, String ip, Long authorId);
 
     /**
      * 获取日志

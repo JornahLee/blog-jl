@@ -1,13 +1,16 @@
-package com.jornah.controller.v2;
+package com.jornah.controller;
 
 
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
 import com.jornah.anno.AccessControl;
+import com.jornah.cache.CacheService;
 import com.jornah.model.dto.ArticleSaveBo;
 import com.jornah.model.entity.Article;
 import com.jornah.model.DraftStatus;
 import com.jornah.model.qo.ArticleQo;
+import com.jornah.model.vo.ArticleMetaInfo;
 import com.jornah.model.vo.ArticleVo;
 import com.jornah.service.DraftService;
 import com.jornah.service.article.ArticleService;
@@ -16,17 +19,21 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+
 import static java.time.Instant.now;
 
 @RestController()
 @RequestMapping("/blog/article")
 @CrossOrigin
-public class ArticleController {
+public class ArticleController extends BaseController{
 
     @Autowired
     private ArticleService articleService;
     @Autowired
     private DraftService draftService;
+    @Autowired
+    private CacheService cacheService;
 
     @ApiOperation("保存或更新")
     @PostMapping(value = "/saveOrUpdate")
@@ -55,6 +62,8 @@ public class ArticleController {
     public APIResponse<PageInfo<ArticleVo>> getArticleListByTag(@RequestBody ArticleQo qo) {
         Long tagId = qo.getQueryKeyColumns().get("byTag");
         PageInfo<ArticleVo> orderBy = articleService.getArticleByTag(tagId, qo.getPageNum(), qo.getPageSize());
+        Gson gson = new Gson();
+        cacheService.setValue("ariticle:list",gson.toJson(orderBy.getList()));
         return APIResponse.success(orderBy);
     }
 
@@ -63,6 +72,8 @@ public class ArticleController {
     public APIResponse<PageInfo<ArticleVo>> getArticleListByCate(@RequestBody ArticleQo qo) {
         Long cateId = qo.getQueryKeyColumns().get("byCate");
         PageInfo<ArticleVo> orderBy = articleService.getArticleByCate(cateId, qo.getPageNum(), qo.getPageSize());
+        Gson gson = new Gson();
+        cacheService.setValue("ariticle:list",gson.toJson(orderBy.getList()));
         return APIResponse.success(orderBy);
     }
 
@@ -89,4 +100,10 @@ public class ArticleController {
 //        articleService.updateArticleById(article);
 //        return APIResponse.success();
 //    }
+
+    @ApiOperation("获取文章信息，分类，标签，评论等")
+    @GetMapping("/meta/{articleId}")
+    public APIResponse<ArticleMetaInfo> getMetaInfo(@PathVariable("articleId") Long articleId){
+        return APIResponse.success(articleService.getArticleMetaInfo(articleId));
+    }
 }

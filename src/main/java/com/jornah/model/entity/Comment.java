@@ -3,7 +3,7 @@
  * User: Jornah Lee
  * DateTime: 2018/7/31 15:27
  **/
-package com.jornah.model;
+package com.jornah.model.entity;
 
 import java.io.Serializable;
 import java.time.Instant;

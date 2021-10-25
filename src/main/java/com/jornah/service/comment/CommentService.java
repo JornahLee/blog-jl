@@ -5,8 +5,7 @@
  **/
 package com.jornah.service.comment;
 
-import com.github.pagehelper.PageInfo;
-import com.jornah.model.Comment;
+import com.jornah.model.entity.Comment;
 
 import java.util.List;
 

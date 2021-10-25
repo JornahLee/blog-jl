@@ -43,5 +43,6 @@ public interface ArticleDao extends BaseMapper<Article> {
     List<Article> findArticlesByTag(@Param("tagId") Long tagId);
 
 
+    @Select("select * from article")
     List<Article> findAll();
 }

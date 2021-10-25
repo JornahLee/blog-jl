@@ -7,6 +7,7 @@ package com.jornah.service.article.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jornah.cache.CacheService;
 import com.jornah.constant.ArticleStatus;
 import com.jornah.constant.WebConst;
 import com.jornah.dao.CategoryDao;
@@ -17,8 +18,9 @@ import com.jornah.model.converter.ArticleConverter;
 import com.jornah.model.dto.ArticleSaveBo;
 import com.jornah.model.entity.Article;
 import com.jornah.model.DraftStatus;
-import com.jornah.model.Log;
+import com.jornah.model.entity.Log;
 import com.jornah.model.qo.ArticleQo;
+import com.jornah.model.vo.ArticleMetaInfo;
 import com.jornah.model.vo.ArticleVo;
 import com.jornah.service.DraftService;
 import com.jornah.service.article.ArticleService;
@@ -46,6 +48,8 @@ public class ArticleServiceImpl implements ArticleService {
     private static final MapCache cache = MapCache.single();
     @Autowired
     private ArticleDao articleDao;
+    @Autowired
+    private CacheService cacheService;
     @Autowired
     private TagDao tagDao;
     @Autowired
@@ -198,5 +202,12 @@ public class ArticleServiceImpl implements ArticleService {
         log.setData(detail);
         log.setIp(IPKit.getIpAddressByRequest(request));
         logDao.addLog(log);
+    }
+
+    @Override
+    public ArticleMetaInfo getArticleMetaInfo(Long articleId) {
+//        cacheService.getValue()
+        return ArticleMetaInfo.builder().tags(tagDao.findTagBy(articleId))
+                .category(categoryDao.findCategoryBy(articleId)).build();
     }
 }

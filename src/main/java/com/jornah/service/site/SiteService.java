@@ -5,7 +5,7 @@
  **/
 package com.jornah.service.site;
 
-import com.jornah.model.Comment;
+import com.jornah.model.entity.Comment;
 import com.jornah.model.entity.Article;
 import com.jornah.model.dto.StatisticsDto;
 

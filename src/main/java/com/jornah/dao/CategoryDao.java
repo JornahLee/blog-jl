@@ -18,8 +18,8 @@ import java.util.List;
 @Repository
 @Mapper
 public interface CategoryDao extends BaseMapper<Category> {
-    @Select("select * from article_category a join category c on a.category_id=c.id where a.article_id=#{arId}")
-    List<Category> getCategoryBy(@Param("arId") Long arId);
+    @Select("select c.* from article_category a join category c on a.category_id=c.id where a.article_id=#{arId} limit 1")
+    Category findCategoryBy(@Param("arId") Long arId);
 
     @Insert(" insert article_category(article_id,category_id) values(#{arId},#{cateId})")
     Long insertMap(@Param("arId") Long arId, @Param("cateId") Long cateId);

@@ -5,11 +5,14 @@
  **/
 package com.jornah.model.dto;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * 后台统计对象
  */
+@Data
 public class StatisticsDto implements Serializable {
 
     /**
@@ -32,35 +35,4 @@ public class StatisticsDto implements Serializable {
      */
     private Long attachs;
 
-    public Long getArticles() {
-        return articles;
-    }
-
-    public void setArticles(Long articles) {
-        this.articles = articles;
-    }
-
-    public Long getComments() {
-        return comments;
-    }
-
-    public void setComments(Long comments) {
-        this.comments = comments;
-    }
-
-    public Long getLinks() {
-        return links;
-    }
-
-    public void setLinks(Long links) {
-        this.links = links;
-    }
-
-    public Long getAttachs() {
-        return attachs;
-    }
-
-    public void setAttachs(Long attachs) {
-        this.attachs = attachs;
-    }
 }

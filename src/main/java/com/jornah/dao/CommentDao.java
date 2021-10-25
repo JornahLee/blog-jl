@@ -5,7 +5,7 @@
  **/
 package com.jornah.dao;
 
-import com.jornah.model.Comment;
+import com.jornah.model.entity.Comment;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

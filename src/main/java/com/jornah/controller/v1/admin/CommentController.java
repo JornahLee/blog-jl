@@ -1,10 +1,12 @@
 package com.jornah.controller.v1.admin;
 
 import com.jornah.controller.BaseController;
-import com.jornah.model.Comment;
+import com.jornah.model.UserInfo;
+import com.jornah.model.entity.Comment;
 import com.jornah.model.entity.User;
 import com.jornah.service.comment.CommentService;
 import com.jornah.utils.APIResponse;
+import com.jornah.utils.WebRequestHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -42,7 +44,7 @@ public class CommentController extends BaseController {
             HttpServletRequest request
 
     ) {
-        User user = this.user(request);
+        UserInfo userInfo = WebRequestHelper.getCurrentUserInfo();
 //        PageInfo<Comment> comments = commentService.getCommentsByCond(new CommentCond(), page, limit);
 //        request.setAttribute("comments", comments);
         return "admin/comment_list";

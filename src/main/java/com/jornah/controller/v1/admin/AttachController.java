@@ -9,14 +9,15 @@ import com.jornah.constant.WebConst;
 import com.jornah.controller.BaseController;
 import com.jornah.dao.AttachDao;
 import com.jornah.exception.BusinessException;
+import com.jornah.model.UserInfo;
 import com.jornah.model.entity.Attach;
 import com.jornah.model.entity.User;
 import com.jornah.model.dto.AttachDto;
 import com.jornah.service.attach.AttachService;
 import com.jornah.service.log.LogService;
 import com.jornah.utils.APIResponse;
-import com.jornah.utils.Commons;
 import com.jornah.utils.TaleUtils;
+import com.jornah.utils.WebRequestHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -26,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,24 +59,6 @@ public class AttachController extends BaseController {
     @Autowired
     private LogService logService;
 
-
-    @ApiOperation("文件管理首页")
-    @GetMapping(value = "")
-    public String index(
-            HttpServletRequest request,
-            @ApiParam(name = "page", value = "页数", required = false)
-            @RequestParam(name = "page", required = false, defaultValue = "1")
-                    int page,
-            @ApiParam(name = "limit", value = "条数", required = false)
-            @RequestParam(name = "limit", required = false, defaultValue = "12")
-                    int limit
-    ) {
-        PageInfo<AttachDto> atts = attAchService.getAtts(page, limit);
-        request.setAttribute("attachs", atts);
-        request.setAttribute(AttachType.ATTACH_URL.getType(), Commons.site_option(AttachType.ATTACH_URL.getType(), Commons.site_url()));
-        request.setAttribute("max_file_size", WebConst.MAX_FILE_SIZE / 1024);
-        return "admin/attach";
-    }
 
     @ApiOperation("小文件上传")
     @PostMapping(value = "/upload")
@@ -145,7 +127,8 @@ public class AttachController extends BaseController {
             }
             attAchService.deleteAttach(id);
             // 写入日志
-            logService.addLog(LogActions.DEL_ATTACH.getAction(), this.user(request).getUsername() + "用户", request.getRemoteAddr(), this.getUid(request));
+            UserInfo currentUserInfo = WebRequestHelper.getCurrentUserInfo();
+            logService.addLog(LogActions.DEL_ATTACH.getAction(), currentUserInfo.getUserId() + "用户", request.getRemoteAddr(), currentUserInfo.getUserId());
             return APIResponse.success();
         } catch (Exception e) {
             e.printStackTrace();

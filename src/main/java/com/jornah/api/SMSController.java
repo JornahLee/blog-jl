@@ -1,4 +1,4 @@
-package com.jornah.controller;
+package com.jornah.api;
 
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;

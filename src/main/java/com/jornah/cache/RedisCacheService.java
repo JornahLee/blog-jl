@@ -29,6 +29,11 @@ public class RedisCacheService implements CacheService {
     }
 
     @Override
+    public void setValue(String key, String value) {
+        redisTemplate.opsForValue().set(key, value);
+    }
+
+    @Override
     public <T> T getValue(String key, Class<T> requireType) {
         String str = redisTemplate.opsForValue().get(key);
         if (Integer.class.getName().equals(requireType.getName())) {
