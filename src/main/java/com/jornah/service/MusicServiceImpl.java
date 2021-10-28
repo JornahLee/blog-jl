@@ -4,17 +4,18 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jornah.dao.MusicDao;
 import com.jornah.exception.BusinessException;
-import com.jornah.model.entity.Music;
 import com.jornah.model.converter.MusicConverter;
+import com.jornah.model.entity.Music;
 import com.jornah.model.qo.MusicUploadQo;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.IOUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,7 +37,9 @@ public class MusicServiceImpl implements MusicService {
     public boolean uploadMusic(MusicUploadQo musicUploadQo) throws IOException {
         MultipartFile file = musicUploadQo.getFile();
         InputStream inputStream = file.getInputStream();
-        byte[] fileBytes = IOUtils.readAllBytes(inputStream);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IOUtils.copy(inputStream, out);
+        byte[] fileBytes = out.toByteArray();
         String md5 = DigestUtils.md5Hex(fileBytes);
         Music music = MusicConverter.INSTANCE.toEntity(musicUploadQo);
         music.setMd5(md5);
