@@ -1,5 +1,7 @@
 package com.jornah.cache;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
+
 import java.time.Duration;
 
 public interface CacheService {
@@ -12,4 +14,6 @@ public interface CacheService {
     <T> T getValue(String key, Class<T> requireType);
 
     Long increment(String key);
+
+    StringRedisTemplate redisTemplate();
 }

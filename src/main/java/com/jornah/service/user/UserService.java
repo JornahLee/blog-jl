@@ -6,6 +6,9 @@
 package com.jornah.service.user;
 
 import com.jornah.model.entity.User;
+import com.jornah.model.qo.ReadRecord;
+
+import java.util.List;
 
 /**
  * 用户相关Service接口
@@ -34,4 +37,7 @@ public interface UserService {
      */
     int updateUserInfo(User user);
 
+    void saveReadRecord(ReadRecord readRecord);
+
+    List<ReadRecord> getRecentRead();
 }

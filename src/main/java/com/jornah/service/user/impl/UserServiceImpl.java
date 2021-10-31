@@ -5,29 +5,49 @@
  **/
 package com.jornah.service.user.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.google.common.collect.Sets;
 import com.jornah.cache.CacheService;
+import com.jornah.dao.ArticleDao;
+import com.jornah.dao.ReadRecordDao;
 import com.jornah.dao.UserDao;
 import com.jornah.exception.BusinessException;
+import com.jornah.model.entity.Article;
 import com.jornah.model.entity.User;
+import com.jornah.model.qo.ReadRecord;
+import com.jornah.service.user.BaseService;
 import com.jornah.service.user.UserService;
+import com.jornah.utils.WebRequestHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 用户相关Service接口实现
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseService implements UserService {
 
     public static final String LOGIN_FAIL_COUNT = "login:fail:count";
+    public static final String RECENT_READ = "RecentRead";
     @Autowired
-    private UserDao userDao;//这里会报错，但是并不影响
+    private UserDao userDao;
     @Autowired
-    private CacheService cacheService;//这里会报错，但是并不影响
+    private CacheService cacheService;
+    @Autowired
+    private ArticleDao articleDao;
+    @Autowired
+    private ReadRecordDao readRecordDao;
 
 
     @Override
@@ -62,4 +82,19 @@ public class UserServiceImpl implements UserService {
 //        }
         return 0;
     }
+
+    @Override
+    public void saveReadRecord(ReadRecord readRecord) {
+        Long userId = WebRequestHelper.getCurrentUserInfo().getUserId();
+        readRecord.setUserId(userId);
+        String title = articleDao.selectOne(new LambdaQueryWrapper<Article>().eq(Article::getId, readRecord.getArticleId())).getTitle();
+        readRecord.setTitle(title);
+        readRecordDao.insertOrUpdate(readRecord);
+    }
+
+    @Override
+    public List<ReadRecord> getRecentRead() {
+        return readRecordDao.getRecentRead();
+    }
+
 }

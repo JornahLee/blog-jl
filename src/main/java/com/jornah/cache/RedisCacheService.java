@@ -48,7 +48,11 @@ public class RedisCacheService implements CacheService {
     @Override
     public Long increment(String key) {
         return redisTemplate.opsForValue().increment(key);
+    }
 
+    @Override
+    public StringRedisTemplate redisTemplate(){
+        return this.redisTemplate;
     }
 
 }
