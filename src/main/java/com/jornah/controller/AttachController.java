@@ -1,12 +1,10 @@
-package com.jornah.controller.v1.admin;
+package com.jornah.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.jornah.api.QiNiuCloudService;
 import com.jornah.constant.ErrorConstant;
 import com.jornah.constant.LogActions;
 import com.jornah.constant.AttachType;
 import com.jornah.constant.WebConst;
-import com.jornah.controller.BaseController;
 import com.jornah.dao.AttachDao;
 import com.jornah.exception.BusinessException;
 import com.jornah.model.UserInfo;

@@ -2,19 +2,19 @@ package com.jornah.model.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Data
 public class ArticleSaveBo {
-    //todo 一篇文章 可以有多个标签 多个分类，所以标签和分类重复了
-    // 需要的信息 id ， 标题，内容主体，状态，作者，日期，创建时间，修改时间，播放量，rank值，是否允许评论，打赏
-    // 保留草稿，可能会有许多冗余信息，所以新增草稿审计，版本号，如果需要发布，则将草稿内容同步到conten表，
-    // 草稿表 外键 content表的id，
-    // 附加信息，异步加载？ 评论 等
 
-
+    @NotNull
     private Long id;
     /**
      * 内容标题
      */
+    @NotBlank
     private String title;
     /**
      * 标题图片
@@ -23,6 +23,7 @@ public class ArticleSaveBo {
     /**
      * 内容文字
      */
+    @NotBlank
     private String content;
 
     /**

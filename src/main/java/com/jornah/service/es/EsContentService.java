@@ -34,16 +34,18 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.jornah.utils.MyStringUtil.LineNoFormat;
 import static com.jornah.utils.MyStringUtil.LineNoRegex;
+import static com.jornah.utils.MyStringUtil.generateLineNumberForText;
 import static java.lang.Integer.parseInt;
 
 @Service
 public class EsContentService {
-    private ElasticsearchRestTemplate template;
+    private final ElasticsearchRestTemplate template;
 
     public static final String LINE_NO_REGEX = "(?<=:)\\d+(?=:)";
-    private static Pattern lineNoPattern = Pattern.compile(LINE_NO_REGEX);
-    private static Pattern headerPattern = Pattern.compile("(" + LineNoRegex + ")( *#|#).+");
+    private static final Pattern lineNoPattern = Pattern.compile(LINE_NO_REGEX);
+    private static final Pattern headerPattern = Pattern.compile("(" + LineNoRegex + ")( *#|#).+");
 
     @Autowired
     public EsContentService(ElasticsearchRestTemplate template) {
@@ -137,6 +139,7 @@ public class EsContentService {
 
     @Async
     public void add(Article article) {
+        article.setContent(generateLineNumberForText(article.getContent(), LineNoFormat, true));
         ContentEsDTO contentEsDTO = new ContentEsDTO(article.getId().toString(), "/detail/" + article.getId(), article.getTitle(),
                 article.getCreated().toEpochMilli(), article.getUpdated().toEpochMilli(),
                 article.getContent());
@@ -146,6 +149,7 @@ public class EsContentService {
     @Async
     public void update(Article article) {
         // 更新有多种方式 https://www.jianshu.com/p/1636ff0b800d
+        article.setContent(generateLineNumberForText(article.getContent(), LineNoFormat, true));
         if (template.exists(article.getId().toString(), ContentEsDTO.class)) {
             UpdateQuery updateQuery = UpdateQuery.builder(article.getId().toString()).withDocument(Document.create().append("content", article.getContent()))
                     .build();

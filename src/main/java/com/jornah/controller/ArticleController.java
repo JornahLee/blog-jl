@@ -6,26 +6,39 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.jornah.anno.AccessControl;
 import com.jornah.cache.CacheService;
+import com.jornah.model.DraftStatus;
 import com.jornah.model.dto.ArticleSaveBo;
 import com.jornah.model.entity.Article;
-import com.jornah.model.DraftStatus;
 import com.jornah.model.qo.ArticleQo;
 import com.jornah.model.vo.ArticleMetaInfo;
 import com.jornah.model.vo.ArticleVo;
 import com.jornah.service.DraftService;
 import com.jornah.service.article.ArticleService;
 import com.jornah.utils.APIResponse;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Duration;
-
-import static java.time.Instant.now;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 @RestController()
 @RequestMapping("/blog/article")
 @CrossOrigin
+@Validated
+@Slf4j
+@Api("文章")
 public class ArticleController extends BaseController{
 
     @Autowired
@@ -52,14 +65,15 @@ public class ArticleController extends BaseController{
 
     @ApiOperation("分页查询文档")
     @PostMapping(value = "/list")
-    public APIResponse<PageInfo<ArticleVo>> getArticleList(@RequestBody ArticleQo qo) {
+    public APIResponse<PageInfo<ArticleVo>> getArticleList(@RequestBody @Validated ArticleQo qo) {
         PageInfo<ArticleVo> orderBy = articleService.getArticlesOrderBy(qo);
+//        log.error(bindingResult.toString());
         return APIResponse.success(orderBy);
     }
 
     @ApiOperation("按标签 分页查询文档")
     @PostMapping(value = "/list/byTag")
-    public APIResponse<PageInfo<ArticleVo>> getArticleListByTag(@RequestBody ArticleQo qo) {
+    public APIResponse<PageInfo<ArticleVo>> getArticleListByTag(@RequestBody @Validated ArticleQo qo) {
         Long tagId = qo.getQueryKeyColumns().get("byTag");
         PageInfo<ArticleVo> orderBy = articleService.getArticleByTag(tagId, qo.getPageNum(), qo.getPageSize());
         Gson gson = new Gson();
@@ -69,7 +83,7 @@ public class ArticleController extends BaseController{
 
     @ApiOperation("按分类 分页查询文档")
     @PostMapping(value = "/list/byCate")
-    public APIResponse<PageInfo<ArticleVo>> getArticleListByCate(@RequestBody ArticleQo qo) {
+    public APIResponse<PageInfo<ArticleVo>> getArticleListByCate(@RequestBody @Validated ArticleQo qo) {
         Long cateId = qo.getQueryKeyColumns().get("byCate");
         PageInfo<ArticleVo> orderBy = articleService.getArticleByCate(cateId, qo.getPageNum(), qo.getPageSize());
         Gson gson = new Gson();
@@ -92,14 +106,6 @@ public class ArticleController extends BaseController{
         articleService.deleteBy(id);
         return APIResponse.success();
     }
-//
-//    @ApiOperation("更新文章")
-//    @PostMapping("/update")
-//    public APIResponse<?> updateArticle(Article article) {
-//        article.setModified(now());
-//        articleService.updateArticleById(article);
-//        return APIResponse.success();
-//    }
 
     @ApiOperation("获取文章信息，分类，标签，评论等")
     @GetMapping("/meta/{articleId}")

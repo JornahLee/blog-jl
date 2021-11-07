@@ -2,6 +2,7 @@ package com.jornah.model.qo;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -10,6 +11,7 @@ import java.util.List;
  */
 @Data
 public class MetaInfoQo {
+    @NotNull
     private Long articleId;
     private Long cateId;
     private List<Long> tagIds;

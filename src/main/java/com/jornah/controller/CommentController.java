@@ -1,9 +1,7 @@
-package com.jornah.controller.v1.admin;
+package com.jornah.controller;
 
-import com.jornah.controller.BaseController;
 import com.jornah.model.UserInfo;
 import com.jornah.model.entity.Comment;
-import com.jornah.model.entity.User;
 import com.jornah.service.comment.CommentService;
 import com.jornah.utils.APIResponse;
 import com.jornah.utils.WebRequestHelper;

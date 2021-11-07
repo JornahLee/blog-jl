@@ -33,6 +33,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
@@ -40,6 +41,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import static com.jornah.utils.MyStringUtil.LineNoFormat;
+import static com.jornah.utils.MyStringUtil.generateLineNumberForText;
 
 @Service
 @EnableAspectJAutoProxy(exposeProxy = true)
@@ -72,17 +76,13 @@ public class ArticleServiceImpl implements ArticleService {
             article.setCreated(Instant.now());
             article.setUpdated(Instant.now());
             articleDao.insert(article);
-            //todo 元数据放到另外一个接口中
-//            articleSaveBo.getTagIds().forEach(tId -> tagDao.insertMap(article.getId(), tId));
-//            articleSaveBo.getCategoryIds().forEach(caId -> categoryDao.insertMap(article.getId(), caId));
+            esContentService.add(article);
         } else {
             article.setUpdated(Instant.now());
             articleDao.updateById(article);
+            esContentService.update(article);
         }
-//        draftService.createDraft(article.getId(), "", article.getContent(), DraftStatus.getByString(article.getStatus()));
-        //todo 搜索 根据行号跳转功能 待重构
-//        articleSaveBo.setContent(generateLineNumberForText(articleSaveBo.getContent(), LineNoFormat, true));
-//        esContentService.add(article);
+
         return article.getId();
     }
 
@@ -114,7 +114,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public PageInfo<ArticleVo> getArticlesOrderBy(ArticleQo articleQo) {
+    public PageInfo<ArticleVo> getArticlesOrderBy(@Validated  ArticleQo articleQo) {
         PageInfo<Article> pageInfo = PageHelper.startPage(articleQo.getPageNum(), articleQo.getPageSize())
                 .doSelectPageInfo(() -> articleDao.findArticles());
         return PageUtil.toVo(pageInfo, ArticleConverter.INSTANCE::toVo);
