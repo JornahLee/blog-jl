@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 文章相关Service接口
@@ -32,6 +33,8 @@ public interface ArticleService  {
     PageInfo<ArticleVo> getArticleByCate(Long cateId, int pageNum, int pageSize);
 
     PageInfo<ArticleVo> getArticleByTag(Long tagId, int pageNum, int pageSize);
+
+    List<ArticleVo> getRecommendArticle(int size);
 
     void updateArticleHits(Integer cid, Integer chits);
 

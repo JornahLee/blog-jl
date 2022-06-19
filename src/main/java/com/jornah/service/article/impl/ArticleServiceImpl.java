@@ -10,14 +10,14 @@ import com.github.pagehelper.PageInfo;
 import com.jornah.cache.CacheService;
 import com.jornah.constant.ArticleStatus;
 import com.jornah.constant.WebConst;
-import com.jornah.dao.CategoryDao;
 import com.jornah.dao.ArticleDao;
+import com.jornah.dao.CategoryDao;
 import com.jornah.dao.LogDao;
 import com.jornah.dao.TagDao;
+import com.jornah.model.DraftStatus;
 import com.jornah.model.converter.ArticleConverter;
 import com.jornah.model.dto.ArticleSaveBo;
 import com.jornah.model.entity.Article;
-import com.jornah.model.DraftStatus;
 import com.jornah.model.entity.Log;
 import com.jornah.model.qo.ArticleQo;
 import com.jornah.model.vo.ArticleMetaInfo;
@@ -41,9 +41,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import static com.jornah.utils.MyStringUtil.LineNoFormat;
-import static com.jornah.utils.MyStringUtil.generateLineNumberForText;
 
 @Service
 @EnableAspectJAutoProxy(exposeProxy = true)
@@ -158,6 +155,18 @@ public class ArticleServiceImpl implements ArticleService {
         PageInfo<Article> pageInfo = PageHelper.startPage(pageNum, pageSize)
                 .doSelectPageInfo(() -> articleDao.findArticlesByTag(tagId));
         return PageUtil.toVo(pageInfo, ArticleConverter.INSTANCE::toVo);
+    }
+
+    @Override
+    public List<ArticleVo> getRecommendArticle(int size) {
+        List<Article> articles = articleDao.findByRecommend(size);
+        return articles.stream()
+                .map(ArticleConverter.INSTANCE::toVo)
+                .peek(article->{
+                    String sub = article.getContent().substring(0, 100);
+                    article.setContent(sub);
+                })
+                .collect(Collectors.toList());
     }
 
 

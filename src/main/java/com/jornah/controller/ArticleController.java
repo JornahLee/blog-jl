@@ -22,16 +22,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
+import java.util.List;
+import java.util.Objects;
 
 @RestController()
 @RequestMapping("/blog/article")
@@ -39,7 +39,7 @@ import javax.validation.constraints.Min;
 @Validated
 @Slf4j
 @Api("文章")
-public class ArticleController extends BaseController{
+public class ArticleController extends BaseController {
 
     @Autowired
     private ArticleService articleService;
@@ -77,8 +77,16 @@ public class ArticleController extends BaseController{
         Long tagId = qo.getQueryKeyColumns().get("byTag");
         PageInfo<ArticleVo> orderBy = articleService.getArticleByTag(tagId, qo.getPageNum(), qo.getPageSize());
         Gson gson = new Gson();
-        cacheService.setValue("ariticle:list",gson.toJson(orderBy.getList()));
+        cacheService.setValue("ariticle:list", gson.toJson(orderBy.getList()));
         return APIResponse.success(orderBy);
+    }
+
+    @ApiOperation("推荐文章列表")
+    @GetMapping(value = "/list/recommended")
+    public APIResponse<List<ArticleVo>> listRecommendArticle(@RequestParam Integer size) {
+
+        List<ArticleVo> list = articleService.getRecommendArticle(Objects.isNull(size) ? 10 : size);
+        return APIResponse.success(list);
     }
 
     @ApiOperation("按分类 分页查询文档")
@@ -87,7 +95,7 @@ public class ArticleController extends BaseController{
         Long cateId = qo.getQueryKeyColumns().get("byCate");
         PageInfo<ArticleVo> orderBy = articleService.getArticleByCate(cateId, qo.getPageNum(), qo.getPageSize());
         Gson gson = new Gson();
-        cacheService.setValue("ariticle:list",gson.toJson(orderBy.getList()));
+        cacheService.setValue("ariticle:list", gson.toJson(orderBy.getList()));
         return APIResponse.success(orderBy);
     }
 
@@ -109,7 +117,7 @@ public class ArticleController extends BaseController{
 
     @ApiOperation("获取文章信息，分类，标签，评论等")
     @GetMapping("/meta/{articleId}")
-    public APIResponse<ArticleMetaInfo> getMetaInfo(@PathVariable("articleId") Long articleId){
+    public APIResponse<ArticleMetaInfo> getMetaInfo(@PathVariable("articleId") Long articleId) {
         return APIResponse.success(articleService.getArticleMetaInfo(articleId));
     }
 }

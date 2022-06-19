@@ -70,5 +70,10 @@ public class Article extends  BaseEntity implements Serializable {
      */
     private Boolean allowFeed;
 
+    /**
+     * 推荐级别
+     */
+    private Integer recommendLevel;
+
 
 }

@@ -31,6 +31,9 @@ public interface ArticleDao extends BaseMapper<Article> {
     @Select("select * from article where status='PUBLISH' order by updated desc")
     List<Article> findArticles();
 
+    @Select("select * from article where status='PUBLISH' and recommend_level > 0  order by recommend_level desc , updated desc limit #{size}")
+    List<Article> findByRecommend(@Param("size") int size);
+
     @Select("select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping, a.allow_feed, a.order_weight " +
             "from article a join article_category ac on a.id=ac.article_id " +
             "where ac.category_id=#{cateId} and a.status='PUBLISH' order by a.created desc")
