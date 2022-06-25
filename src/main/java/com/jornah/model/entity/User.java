@@ -1,5 +1,6 @@
 package com.jornah.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
  * 用户表
  */
 @Data
+@TableName("users")
 public class User extends BaseEntity implements Serializable {
 
     /** 用户名 */
@@ -20,4 +22,9 @@ public class User extends BaseEntity implements Serializable {
     private String homeUrl;
     /**  用户显示的名称 */
     private String screenName;
+
+    private String projIntroduction;
+    private String introduction;
+    private String avatarUrl;
+    private String signature;
 }

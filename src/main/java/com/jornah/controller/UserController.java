@@ -28,7 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/blog/user")
 @CrossOrigin
-public class AuthController extends BaseController {
+public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
@@ -44,6 +44,15 @@ public class AuthController extends BaseController {
                 ImmutableMap.of("userId", userInfo.getId()),
                 Instant.now().plus(30, ChronoUnit.DAYS));
         userVo.setAccessToken(accessToken);
+        return APIResponse.success(userVo);
+    }
+
+    @ApiOperation("站长的信息")
+    @GetMapping(value = "/info")
+    public APIResponse<UserVo> info() {
+        // 调用Service登录方法
+        User userInfo = userService.getById(1L);
+        UserVo userVo = UserConverter.INSTANCE.toVo(userInfo);
         return APIResponse.success(userVo);
     }
 

@@ -3,15 +3,18 @@ package com.jornah.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.jornah.anno.AccessControl;
 import com.jornah.cache.CacheService;
 import com.jornah.model.DraftStatus;
 import com.jornah.model.dto.ArticleSaveBo;
 import com.jornah.model.entity.Article;
+import com.jornah.model.entity.Config;
 import com.jornah.model.qo.ArticleQo;
 import com.jornah.model.vo.ArticleMetaInfo;
 import com.jornah.model.vo.ArticleVo;
+import com.jornah.service.ConfigService;
 import com.jornah.service.DraftService;
 import com.jornah.service.article.ArticleService;
 import com.jornah.utils.APIResponse;
@@ -41,12 +44,15 @@ import java.util.Objects;
 @Api("文章")
 public class ArticleController extends BaseController {
 
+    public static final String INDEX_STATS = "index_stats";
     @Autowired
     private ArticleService articleService;
     @Autowired
     private DraftService draftService;
     @Autowired
     private CacheService cacheService;
+    @Autowired
+    private ConfigService configService;
 
     @ApiOperation("保存或更新")
     @PostMapping(value = "/saveOrUpdate")
@@ -87,6 +93,13 @@ public class ArticleController extends BaseController {
 
         List<ArticleVo> list = articleService.getRecommendArticle(Objects.isNull(size) ? 10 : size);
         return APIResponse.success(list);
+    }
+
+    @ApiOperation("推荐文章列表")
+    @GetMapping(value = "/stats/info")
+    public List<String> statsInfo() {
+        Config config = configService.getConfigByKey(INDEX_STATS);
+        return Lists.newArrayList(config.getValue1(), config.getValue2(), config.getValue3(), config.getValue4());
     }
 
     @ApiOperation("按分类 分页查询文档")

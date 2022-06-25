@@ -25,11 +25,12 @@ public class UserVo {
      */
     private String screenName;
     /**
-     * 头像
-     */
-    private String avatar;
-    /**
      * accessToken
      */
     private String accessToken;
+
+    private String projIntroduction;
+    private String introduction;
+    private String avatarUrl;
+    private String signature;
 }

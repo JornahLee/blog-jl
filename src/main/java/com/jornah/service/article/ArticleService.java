@@ -7,6 +7,7 @@ package com.jornah.service.article;
 
 import com.github.pagehelper.PageInfo;
 import com.jornah.model.dto.ArticleSaveBo;
+import com.jornah.model.entity.Article;
 import com.jornah.model.qo.ArticleQo;
 import com.jornah.model.vo.ArticleMetaInfo;
 import com.jornah.model.vo.ArticleVo;
@@ -44,4 +45,8 @@ public interface ArticleService  {
     void logVisit(Integer cid, String detail, HttpServletRequest request);
 
     ArticleMetaInfo getArticleMetaInfo(Long articleId);
+
+    int articleCount();
+
+    Article firstArticle();
 }

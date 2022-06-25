@@ -5,6 +5,8 @@
  **/
 package com.jornah.service.article.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jornah.cache.CacheService;
@@ -218,5 +220,18 @@ public class ArticleServiceImpl implements ArticleService {
 //        cacheService.getValue()
         return ArticleMetaInfo.builder().tags(tagDao.findTagBy(articleId))
                 .category(categoryDao.findCategoryBy(articleId)).build();
+    }
+
+    @Override
+    public int articleCount(){
+        QueryWrapper<Article> query = new QueryWrapper<>();
+        return articleDao.selectCount(query);
+    }
+
+    @Override
+    public Article firstArticle(){
+        LambdaQueryWrapper<Article> query = new LambdaQueryWrapper<>();
+        query.orderByDesc(Article::getCreated);
+        return articleDao.selectOne(query);
     }
 }
