@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -95,11 +96,13 @@ public class ArticleController extends BaseController {
         return APIResponse.success(list);
     }
 
-    @ApiOperation("推荐文章列表")
+    @ApiOperation("首页文章统计信息")
     @GetMapping(value = "/stats/info")
-    public List<String> statsInfo() {
+    public APIResponse<List<String>> statsInfo() {
         Config config = configService.getConfigByKey(INDEX_STATS);
-        return Lists.newArrayList(config.getValue1(), config.getValue2(), config.getValue3(), config.getValue4());
+        List<String> dataList = Lists.newArrayList(config.getValue1(), config.getValue2(),
+                config.getValue3(), config.getValue4());
+        return APIResponse.success(dataList);
     }
 
     @ApiOperation("按分类 分页查询文档")
