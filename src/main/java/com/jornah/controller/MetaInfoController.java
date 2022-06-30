@@ -9,12 +9,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -43,14 +45,24 @@ public class MetaInfoController extends BaseController {
 
     @ApiOperation("新增标签")
     @PutMapping(value = "/tag")
-    public APIResponse<?> newTag() {
-        return APIResponse.success("");
+    public APIResponse<Tag> newTag(@RequestParam String name) {
+        return APIResponse.success(metaInfoService.addTag(name));
+    }
+    @ApiOperation("删除标签")
+    @DeleteMapping(value = "/tag/{id}")
+    public APIResponse<?> deleteTag(@PathVariable Long id) {
+        return APIResponse.success(metaInfoService.deleteTag(id));
     }
 
     @ApiOperation("新增分类")
-    @PutMapping(value = "/category/{name}")
-    public APIResponse<Category> newCate(@PathVariable String name) {
+    @PutMapping(value = "/category")
+    public APIResponse<Category> newCate(@RequestParam String name) {
         return APIResponse.success(metaInfoService.addCategory(name));
+    }
+    @ApiOperation("删除分类")
+    @DeleteMapping(value = "/cate/{id}")
+    public APIResponse<?> deleteCate(@PathVariable Long id) {
+        return APIResponse.success(metaInfoService.deleteCate(id));
     }
 
     @ApiOperation("保存文章 元数据信息")

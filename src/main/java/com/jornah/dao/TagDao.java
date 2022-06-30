@@ -19,7 +19,7 @@ import java.util.List;
 @Mapper
 public interface TagDao extends BaseMapper<Tag> {
 
-    @Select("select * from article_tag a join tag t on a.tag_id=t.id where a.article_id=#{arId}")
+    @Select("select t.* from article_tag a join tag t on a.tag_id=t.id where a.article_id=#{arId}")
     List<Tag> findTagBy(@Param("arId") Long arId);
 
     @Insert(" insert article_tag(article_id,tag_id) values(#{arId},#{tagId})")
@@ -30,6 +30,9 @@ public interface TagDao extends BaseMapper<Tag> {
 
     @Delete("delete from article_tag where article_id=#{arId} and tag_id=#{tagId}")
     void deleteMap(@Param("arId") Long arId, @Param("tagId") Long tagId);
+
+    @Delete("delete from article_tag where article_id=#{arId}")
+    void deleteAllMapBy(@Param("arId") Long arId);
 
     @Delete("delete from article_tag where article_id=#{arId}")
     void deleteMapBy(@Param("arId") Long arId);

@@ -38,6 +38,11 @@ public class MetaInfoServiceImpl implements MetaInfoService {
     }
 
     @Override
+    public int deleteCate(Long id) {
+        return categoryDao.deleteById(id);
+    }
+
+    @Override
     public Tag addTag(String name) {
         Tag tag = new Tag();
         tag.setName(name);
@@ -46,9 +51,19 @@ public class MetaInfoServiceImpl implements MetaInfoService {
     }
 
     @Override
-    public void saveMeta(MetaInfoQo qo){
+    public int deleteTag(Long id) {
+        return tagDao.deleteById(id);
+    }
+
+    @Override
+    public void saveMeta(MetaInfoQo qo) {
         categoryDao.deleteAllMapBy(qo.getArticleId());
-        categoryDao.insertMap(qo.getArticleId(),qo.getCateId());
-        // TODO  tag还未实现
+        categoryDao.insertMap(qo.getArticleId(), qo.getCateId());
+
+        tagDao.deleteAllMapBy(qo.getArticleId());
+        qo.getTagIds().forEach(tagId -> {
+            tagDao.insertMap(qo.getArticleId(), tagId);
+        });
+
     }
 }

@@ -13,7 +13,11 @@ public interface MetaInfoService {
 
     Category addCategory(String cateName);
 
+    int deleteCate(Long id);
+
     Tag addTag(String name);
+
+    int deleteTag(Long id);
 
     void saveMeta(MetaInfoQo qo);
 }
