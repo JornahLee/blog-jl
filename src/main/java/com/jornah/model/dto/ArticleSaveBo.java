@@ -46,5 +46,9 @@ public class ArticleSaveBo {
      * 允许出现打赏
      */
     private Boolean allowFeed;
+    /**
+     * 推荐级别
+     */
+    private Integer recommendLevel;
 
 }

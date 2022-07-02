@@ -57,4 +57,9 @@ public class ArticleVo {
      */
     private Boolean allowFeed;
 
+    /**
+     * 推荐级别
+     */
+    private Integer recommendLevel;
+
 }

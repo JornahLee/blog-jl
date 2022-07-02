@@ -49,4 +49,6 @@ public interface ArticleService  {
     int articleCount();
 
     Article firstArticle();
+
+    long getNextOrLastArticle(Long articleId, boolean next, String byType);
 }

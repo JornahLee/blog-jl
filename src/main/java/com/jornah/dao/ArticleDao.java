@@ -48,4 +48,7 @@ public interface ArticleDao extends BaseMapper<Article> {
 
     @Select("select * from article")
     List<Article> findAll();
+
+    @Select("select a.id from article a where a.status='PUBLISH' order by a.created asc")
+    List<Long> findAllIdBy();
 }

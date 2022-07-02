@@ -136,4 +136,11 @@ public class ArticleController extends BaseController {
     public APIResponse<ArticleMetaInfo> getMetaInfo(@PathVariable("articleId") Long articleId) {
         return APIResponse.success(articleService.getArticleMetaInfo(articleId));
     }
+
+    @ApiOperation("获取上一篇或下一篇文章 id")
+    @GetMapping("/nextOrLast")
+    public APIResponse<?> getNextOrLastArticle(@RequestParam Long articleId, @RequestParam boolean next,
+                                               @RequestParam String byType) {
+        return APIResponse.success(articleService.getNextOrLastArticle(articleId, next, byType));
+    }
 }

@@ -56,17 +56,20 @@ public class UserController extends BaseController {
         return APIResponse.success(userVo);
     }
 
+    @ApiOperation("注销登录")
     @RequestMapping(value = "/logout")
     public void logout() {
         // jwt 无状态 无法使token过期
         // 暂时前端直接删掉token即可
     }
 
+    @ApiOperation("记录 最近阅读")
     @PutMapping("/recently-read")
     public void saveRecentRead(@RequestBody ReadRecord readRecord) {
         userService.saveReadRecord(readRecord);
     }
 
+    @ApiOperation("获取最近阅读信息")
     @GetMapping("/recently-read")
     public APIResponse<List<ReadRecord>> getRecentRead() {
         return APIResponse.success( userService.getRecentRead());

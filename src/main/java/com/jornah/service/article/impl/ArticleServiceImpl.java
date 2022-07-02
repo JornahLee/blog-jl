@@ -49,6 +49,7 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl implements ArticleService {
 
     private static final MapCache cache = MapCache.single();
+    public static final int DEFAULT_ARTICLE_ID = 44;
     @Autowired
     private ArticleDao articleDao;
     @Autowired
@@ -113,7 +114,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public PageInfo<ArticleVo> getArticlesOrderBy(@Validated  ArticleQo articleQo) {
+    public PageInfo<ArticleVo> getArticlesOrderBy(@Validated ArticleQo articleQo) {
         PageInfo<Article> pageInfo = PageHelper.startPage(articleQo.getPageNum(), articleQo.getPageSize())
                 .doSelectPageInfo(() -> articleDao.findArticles());
         return PageUtil.toVo(pageInfo, ArticleConverter.INSTANCE::toVo);
@@ -164,7 +165,7 @@ public class ArticleServiceImpl implements ArticleService {
         List<Article> articles = articleDao.findByRecommend(size);
         return articles.stream()
                 .map(ArticleConverter.INSTANCE::toVo)
-                .peek(article->{
+                .peek(article -> {
                     String sub = article.getContent().substring(0, 100);
                     article.setContent(sub);
                 })
@@ -223,15 +224,26 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public int articleCount(){
+    public int articleCount() {
         QueryWrapper<Article> query = new QueryWrapper<>();
         return articleDao.selectCount(query);
     }
 
     @Override
-    public Article firstArticle(){
+    public Article firstArticle() {
         LambdaQueryWrapper<Article> query = new LambdaQueryWrapper<>();
         query.orderByDesc(Article::getCreated);
         return articleDao.selectOne(query);
+    }
+
+    @Override
+    public long getNextOrLastArticle(Long articleId, boolean next, String byType) {
+        List<Long> allId = articleDao.findAllIdBy();
+        for (int index = 1; index < allId.size() - 1; index++) {
+            if (Objects.equals(allId.get(index), articleId)) {
+                return next ? allId.get(index + 1) : allId.get(index - 1);
+            }
+        }
+        return DEFAULT_ARTICLE_ID;
     }
 }
