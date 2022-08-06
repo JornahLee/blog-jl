@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -126,6 +125,7 @@ public class ArticleController extends BaseController {
 
     @ApiOperation("删除文章")
     @DeleteMapping("/{id}")
+    @AccessControl
     public APIResponse<?> deleteArticle(@PathVariable("id") Long id) {
         articleService.deleteBy(id);
         return APIResponse.success();

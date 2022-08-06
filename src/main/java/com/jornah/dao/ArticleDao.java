@@ -28,23 +28,14 @@ public interface ArticleDao extends BaseMapper<Article> {
     @Update("update article set hits=#{hits} where cid =#{id}")
     void updateHitsById(int id, long hits);
 
-    @Select("select * from article where status='PUBLISH' order by updated desc")
-    List<Article> findArticles();
-
     @Select("select * from article where status='PUBLISH' and recommend_level > 0  order by recommend_level desc , updated desc limit #{size}")
     List<Article> findByRecommend(@Param("size") int size);
 
-    @Select("select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping, a.allow_feed, a.order_weight " +
-            "from article a join article_category ac on a.id=ac.article_id " +
-            "where ac.category_id=#{cateId} and a.status='PUBLISH' order by a.created desc")
-    List<Article> findArticlesByCategory(@Param("cateId") Long cateId);
+    List<Article> findArticlesByCategory(@Param("cateId") Long cateId, @Param("statusList") List<String> statusList);
 
-    //todo 如果的确有需求 可以做一个  通过多个tag过滤出文章的功能
-    @Select("select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping, a.allow_feed, a.order_weight " +
-            "from article a join article_tag art on a.id=art.article_id " +
-            "where art.tag_Id=#{tagId} and a.status='PUBLISH' order by a.created desc")
-    List<Article> findArticlesByTag(@Param("tagId") Long tagId);
+    List<Article> findArticlesByTag(@Param("tagId") Long tagId, @Param("statusList") List<String> statusList);
 
+    List<Article> findArticlesByStatus( @Param("statusList") List<String> statusList);
 
     @Select("select * from article")
     List<Article> findAll();

@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.jornah.cache.CacheService;
 import com.jornah.constant.ArticleStatus;
 import com.jornah.constant.WebConst;
@@ -17,6 +18,7 @@ import com.jornah.dao.CategoryDao;
 import com.jornah.dao.LogDao;
 import com.jornah.dao.TagDao;
 import com.jornah.model.DraftStatus;
+import com.jornah.model.UserInfo;
 import com.jornah.model.converter.ArticleConverter;
 import com.jornah.model.dto.ArticleSaveBo;
 import com.jornah.model.entity.Article;
@@ -30,6 +32,7 @@ import com.jornah.service.es.EsContentService;
 import com.jornah.utils.IPKit;
 import com.jornah.utils.MapCache;
 import com.jornah.utils.PageUtil;
+import com.jornah.utils.WebRequestHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.Async;
@@ -43,6 +46,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import static com.jornah.model.enums.ArticleStatus.DELETED;
+import static com.jornah.model.enums.ArticleStatus.DRAFT;
+import static com.jornah.model.enums.ArticleStatus.PUBLISHED;
 
 @Service
 @EnableAspectJAutoProxy(exposeProxy = true)
@@ -116,8 +123,15 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public PageInfo<ArticleVo> getArticlesOrderBy(@Validated ArticleQo articleQo) {
         PageInfo<Article> pageInfo = PageHelper.startPage(articleQo.getPageNum(), articleQo.getPageSize())
-                .doSelectPageInfo(() -> articleDao.findArticles());
+                .doSelectPageInfo(() -> articleDao.findArticlesByStatus(getAdminAccessStatus()));
         return PageUtil.toVo(pageInfo, ArticleConverter.INSTANCE::toVo);
+    }
+
+    private List<String> getAdminAccessStatus() {
+        UserInfo currentUserInfo = WebRequestHelper.getCurrentUserInfo();
+        return !currentUserInfo.isTourist() ?
+                Lists.newArrayList(PUBLISHED.getValue(), DELETED.getValue(), DRAFT.getValue()) :
+                Lists.newArrayList(PUBLISHED.getValue());
     }
 
     @Transactional
@@ -149,14 +163,14 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public PageInfo<ArticleVo> getArticleByCate(Long cateId, int pageNum, int pageSize) {
         PageInfo<Article> pageInfo = PageHelper.startPage(pageNum, pageSize)
-                .doSelectPageInfo(() -> articleDao.findArticlesByCategory(cateId));
+                .doSelectPageInfo(() -> articleDao.findArticlesByCategory(cateId, getAdminAccessStatus()));
         return PageUtil.toVo(pageInfo, ArticleConverter.INSTANCE::toVo);
     }
 
     @Override
     public PageInfo<ArticleVo> getArticleByTag(Long tagId, int pageNum, int pageSize) {
         PageInfo<Article> pageInfo = PageHelper.startPage(pageNum, pageSize)
-                .doSelectPageInfo(() -> articleDao.findArticlesByTag(tagId));
+                .doSelectPageInfo(() -> articleDao.findArticlesByTag(tagId, getAdminAccessStatus()));
         return PageUtil.toVo(pageInfo, ArticleConverter.INSTANCE::toVo);
     }
 

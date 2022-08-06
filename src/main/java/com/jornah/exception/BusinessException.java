@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 public class BusinessException extends RuntimeException {
 
-    protected String errorCode;
+    protected int errorCode;
     protected ExceptionType exceptionType;
     protected String[] errorMessageArguments;
 
@@ -24,20 +24,21 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException(String message) {
         super(message);
-        this.errorCode = "fail";
         this.errorMessageArguments = new String[0];
     }
 
     public BusinessException(String message, Throwable cause) {
         super(message, cause);
-        this.errorCode = "fail";
         this.errorMessageArguments = new String[0];
     }
 
-    public static BusinessException of(String errorCode) {
+    public static BusinessException of(int errorCode) {
         BusinessException businessException = new BusinessException();
         businessException.errorCode = errorCode;
         return businessException;
+    }
+    public static BusinessException of(String msg) {
+        return new BusinessException(msg);
     }
 
     public static BusinessException of(ExceptionType exceptionType, String message) {

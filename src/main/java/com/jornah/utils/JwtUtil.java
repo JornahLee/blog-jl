@@ -1,7 +1,9 @@
 package com.jornah.utils;
 
+import com.jornah.constant.ExceptionType;
 import com.jornah.exception.BusinessException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -56,10 +58,11 @@ public final class JwtUtil implements InitializingBean {
                     .build()
                     .parseClaimsJws(jwt);
             return claimsJws.getBody();
+        } catch (ExpiredJwtException e) {
+            throw BusinessException.of(ExceptionType.TOKEN_EXPIRED, "token 已过期");
         } catch (Throwable e) {
-            throw BusinessException.of("token解析失败");
+            throw BusinessException.of(ExceptionType.NOT_LOGIN, "请登录");
         }
-
     }
 
     @Override

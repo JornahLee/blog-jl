@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jornah.dao.ArticleDao">
+    <!--表名-->
+    <!--    <insert id=""></insert>-->
+    <select id="findArticlesByCategory" resultType="com.jornah.model.entity.Article">
+        select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping,
+        a.allow_feed, a.order_weight
+        from article a join article_category ac on a.id=ac.article_id
+        where ac.category_id=#{cateId}
+        and a.status in
+        <foreach collection="statusList" item="status" index="index" open="(" close=")" separator=",">
+            #{status}
+        </foreach>
+        order by a.created desc
+    </select>
+    <select id="findArticlesByTag" resultType="com.jornah.model.entity.Article">
+        select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping,
+        a.allow_feed, a.order_weight
+        from article a join article_category ac on a.id=ac.article_id
+        where art.tag_Id=#{tagId}
+        and a.status in
+        <foreach collection="statusList" item="status" index="index" open="(" close=")" separator=",">
+            #{status}
+        </foreach>
+        order by a.created desc
+
+    </select>
+    <select id="findArticlesByStatus" resultType="com.jornah.model.entity.Article">
+        select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping,
+        a.allow_feed, a.order_weight
+        from article a
+        where a.status in
+        <foreach collection="statusList" item="status" index="index" open="(" close=")" separator=",">
+            #{status}
+        </foreach>
+        order by a.created desc
+    </select>
+
+</mapper>

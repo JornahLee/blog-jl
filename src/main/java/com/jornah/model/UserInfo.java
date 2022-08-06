@@ -22,4 +22,8 @@ public class UserInfo {
         userInfo.roles.add(Role.TOURIST);
         return userInfo;
     }
+
+    public boolean isTourist() {
+        return userId == TOURIST_USER_ID;
+    }
 }

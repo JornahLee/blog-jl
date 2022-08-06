@@ -7,16 +7,21 @@ package com.jornah.constant;
 public enum ExceptionType {
     // 用户登录相关异常
     // 登录权限相关
-    // 用户输入相关
+    // 用户输入相关E
 
-    NOT_LOGIN("100");
-    private final String code;
+    NOT_LOGIN(100),
+    TOKEN_EXPIRED(101),
+    INVALID_PASSWORD(102),
+    TOO_MANY_REQUESTS(103);
 
-    ExceptionType(String code) {
+
+    private final int code;
+
+    ExceptionType(int code) {
         this.code = code;
     }
 
-    public String value() {
+    public int value() {
         return this.code;
     }
 }

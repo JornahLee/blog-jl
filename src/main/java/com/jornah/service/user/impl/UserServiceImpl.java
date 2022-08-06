@@ -6,7 +6,6 @@
 package com.jornah.service.user.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.google.common.collect.Sets;
 import com.jornah.cache.CacheService;
 import com.jornah.dao.ArticleDao;
 import com.jornah.dao.ReadRecordDao;
@@ -19,18 +18,15 @@ import com.jornah.service.user.BaseService;
 import com.jornah.service.user.UserService;
 import com.jornah.utils.WebRequestHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+
+import static com.jornah.constant.ExceptionType.INVALID_PASSWORD;
+import static com.jornah.constant.ExceptionType.TOO_MANY_REQUESTS;
 
 /**
  * 用户相关Service接口实现
@@ -62,9 +58,9 @@ public class UserServiceImpl extends BaseService implements UserService {
         if (Objects.isNull(user)) {
             cacheService.setValueIfAbsent(LOGIN_FAIL_COUNT, String.valueOf(1), Duration.ofSeconds(60));
             if (cacheService.increment(LOGIN_FAIL_COUNT) > 3) {
-                throw BusinessException.of("密码错误此处过多");
+                throw BusinessException.of(TOO_MANY_REQUESTS, "密码错误此处过多");
             }
-            throw BusinessException.of("密码错");
+            throw BusinessException.of(INVALID_PASSWORD, "密码错");
         }
     }
 
