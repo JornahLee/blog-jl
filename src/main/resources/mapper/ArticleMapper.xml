@@ -12,7 +12,7 @@
         <foreach collection="statusList" item="status" index="index" open="(" close=")" separator=",">
             #{status}
         </foreach>
-        order by a.created desc
+        order by a.updated desc
     </select>
     <select id="findArticlesByTag" resultType="com.jornah.model.entity.Article">
         select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping,
@@ -23,7 +23,7 @@
         <foreach collection="statusList" item="status" index="index" open="(" close=")" separator=",">
             #{status}
         </foreach>
-        order by a.created desc
+        order by a.updated desc
 
     </select>
     <select id="findArticlesByStatus" resultType="com.jornah.model.entity.Article">
@@ -34,7 +34,7 @@
         <foreach collection="statusList" item="status" index="index" open="(" close=")" separator=",">
             #{status}
         </foreach>
-        order by a.created desc
+        order by a.updated desc
     </select>
 
 </mapper>
