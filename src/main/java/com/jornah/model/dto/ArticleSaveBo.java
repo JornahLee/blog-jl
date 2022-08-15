@@ -51,4 +51,9 @@ public class ArticleSaveBo {
      */
     private Integer recommendLevel;
 
+    /**
+     * 版本号
+     */
+    private Integer version;
+
 }

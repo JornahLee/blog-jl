@@ -17,6 +17,7 @@ import com.jornah.dao.ArticleDao;
 import com.jornah.dao.CategoryDao;
 import com.jornah.dao.LogDao;
 import com.jornah.dao.TagDao;
+import com.jornah.exception.BusinessException;
 import com.jornah.model.DraftStatus;
 import com.jornah.model.UserInfo;
 import com.jornah.model.converter.ArticleConverter;
@@ -47,6 +48,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.jornah.constant.ExceptionType.BAD_VERSION;
 import static com.jornah.model.enums.ArticleStatus.DELETED;
 import static com.jornah.model.enums.ArticleStatus.DRAFT;
 import static com.jornah.model.enums.ArticleStatus.PUBLISHED;
@@ -85,12 +87,25 @@ public class ArticleServiceImpl implements ArticleService {
             articleDao.insert(article);
             esContentService.add(article);
         } else {
+            checkContentVersion(articleSaveBo);
             article.setUpdated(Instant.now());
             articleDao.updateById(article);
             esContentService.update(article);
         }
 
         return article.getId();
+    }
+
+    private void checkContentVersion(ArticleSaveBo articleSaveBo) {
+        // 兼容前端未开发完成不检查版本
+        if (Objects.isNull(articleSaveBo.getVersion())) {
+            return;
+        }
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<Article>().eq(Article::getId, articleSaveBo.getId());
+        Article fromDb = articleDao.selectOne(queryWrapper);
+        if (articleSaveBo.getVersion() - fromDb.getVersion() != 1) {
+            throw BusinessException.of(BAD_VERSION, "保存失败，不是基于最新版本修改");
+        }
     }
 
     @Override

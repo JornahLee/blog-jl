@@ -50,6 +50,6 @@ public class Advice {
                 response.setStatus(HttpStatus.FORBIDDEN.value());
         }
         log.error("业务错异常,{}", e.getErrorCode());
-        return APIResponse.fail("系统错误," + e.getMessage());
+        return APIResponse.fail(e.getMessage());
     }
 }
