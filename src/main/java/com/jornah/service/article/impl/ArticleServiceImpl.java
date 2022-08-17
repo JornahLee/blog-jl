@@ -12,6 +12,8 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.jornah.cache.CacheService;
 import com.jornah.constant.ArticleStatus;
+import com.jornah.constant.ArticleType;
+import com.jornah.constant.ExceptionType;
 import com.jornah.constant.WebConst;
 import com.jornah.dao.ArticleDao;
 import com.jornah.dao.CategoryDao;
@@ -30,15 +32,18 @@ import com.jornah.model.vo.ArticleVo;
 import com.jornah.service.DraftService;
 import com.jornah.service.article.ArticleService;
 import com.jornah.service.es.EsContentService;
+import com.jornah.utils.EncryptUtil;
 import com.jornah.utils.IPKit;
 import com.jornah.utils.MapCache;
 import com.jornah.utils.PageUtil;
 import com.jornah.utils.WebRequestHelper;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 
 import javax.servlet.http.HttpServletRequest;
@@ -80,6 +85,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional
     @Override
     public long saveOrUpdate(ArticleSaveBo articleSaveBo) {
+        encryptDiary(articleSaveBo);
         Article article = ArticleConverter.INSTANCE.toEntity(articleSaveBo);
         if (Objects.isNull(article.getId())) {
             article.setCreated(Instant.now());
@@ -96,6 +102,17 @@ public class ArticleServiceImpl implements ArticleService {
         return article.getId();
     }
 
+    @SneakyThrows
+    private void encryptDiary(ArticleSaveBo articleSaveBo) {
+        if (!ArticleType.DIARY.equals(articleSaveBo.getType())) {
+            return;
+        }
+        Assert.notNull(articleSaveBo.getPassphrase(), "需提供passphrase");
+        String encryptText = EncryptUtil.encrypt(articleSaveBo.getContent(), articleSaveBo.getPassphrase());
+        articleSaveBo.setContent(encryptText);
+
+    }
+
     private void checkContentVersion(ArticleSaveBo articleSaveBo) {
         // 兼容前端未开发完成不检查版本
         if (Objects.isNull(articleSaveBo.getVersion())) {
@@ -109,13 +126,23 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleVo getArticleBy(Long arId) {
+    public ArticleVo getArticleBy(Long arId, String passphrase) {
         Article article = articleDao.selectById(arId);
+        decryptDiaryContent(passphrase, article);
         return ArticleConverter.INSTANCE.toVo(article);
     }
 
-    public List<ArticleVo> getArticlesBy(List<Long> arIds) {
-        return arIds.stream().map(this::getArticleBy).collect(Collectors.toList());
+    private void decryptDiaryContent(String passphrase, Article article) {
+        if (!ArticleType.DIARY.equalTo(article.getType())) {
+            return ;
+        }
+        try {
+            String plainText = EncryptUtil.decrypt(article.getContent(), passphrase);
+            article.setContent(plainText);
+        } catch (Exception e) {
+            throw BusinessException.of(ExceptionType.BAD_PASSPHRASE,"bad passphrase，解析失败");
+        }
+
     }
 
     @Transactional

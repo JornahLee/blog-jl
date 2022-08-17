@@ -64,8 +64,8 @@ public class ArticleController extends BaseController {
 
     @ApiOperation("查询单个文档")
     @GetMapping(value = "/{id}")
-    public APIResponse<ArticleVo> getArticle(@PathVariable Long id) {
-        ArticleVo articleVo = articleService.getArticleBy(id);
+    public APIResponse<ArticleVo> getArticle(@PathVariable Long id, @RequestParam String passphrase) {
+        ArticleVo articleVo = articleService.getArticleBy(id, passphrase);
         return APIResponse.success(articleVo);
     }
 

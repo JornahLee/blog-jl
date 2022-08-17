@@ -24,7 +24,7 @@ public interface ArticleService  {
 
     long saveOrUpdate(ArticleSaveBo articleSaveBo);
 
-    ArticleVo getArticleBy(Long arId);
+    ArticleVo getArticleBy(Long arId, String passphrase);
 
     PageInfo<ArticleVo> getArticlesOrderBy(ArticleQo articleQo);
 

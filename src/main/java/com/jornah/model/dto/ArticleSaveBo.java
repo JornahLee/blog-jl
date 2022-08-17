@@ -1,5 +1,6 @@
 package com.jornah.model.dto;
 
+import com.jornah.constant.ArticleType;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
@@ -55,5 +56,15 @@ public class ArticleSaveBo {
      * 版本号
      */
     private Integer version;
+
+    /**
+     * 文章类型
+     */
+    private ArticleType type;
+
+    /**
+     * 加密秘钥
+     */
+    private String passphrase;
 
 }

@@ -13,7 +13,8 @@ public enum ExceptionType {
     TOKEN_EXPIRED(101),
     INVALID_PASSWORD(102),
     TOO_MANY_REQUESTS(103),
-    BAD_VERSION(104);
+    BAD_VERSION(104),
+    BAD_PASSPHRASE(105);
 
 
     private final int code;

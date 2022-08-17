@@ -49,7 +49,7 @@ public class Advice {
             default:
                 response.setStatus(HttpStatus.FORBIDDEN.value());
         }
-        log.error("业务错异常,{}", e.getErrorCode());
+        log.error("业务错异常,{}", e.getErrorCode(),e);
         return APIResponse.fail(e.getMessage());
     }
 }
