@@ -62,4 +62,9 @@ public class ArticleVo {
      */
     private Integer recommendLevel;
 
+    /**
+     * 版本号
+     */
+    private Integer version;
+
 }
