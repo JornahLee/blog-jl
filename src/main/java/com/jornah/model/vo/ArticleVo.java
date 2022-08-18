@@ -1,5 +1,6 @@
 package com.jornah.model.vo;
 
+import com.jornah.constant.ArticleType;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -66,5 +67,10 @@ public class ArticleVo {
      * 版本号
      */
     private Integer version;
+
+    /**
+     * 文章类型
+     */
+    private ArticleType type;
 
 }

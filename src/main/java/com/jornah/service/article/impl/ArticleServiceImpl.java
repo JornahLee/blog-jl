@@ -38,6 +38,7 @@ import com.jornah.utils.MapCache;
 import com.jornah.utils.PageUtil;
 import com.jornah.utils.WebRequestHelper;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.Async;
@@ -104,7 +105,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @SneakyThrows
     private void encryptDiary(ArticleSaveBo articleSaveBo) {
-        if (!ArticleType.DIARY.equals(articleSaveBo.getType())) {
+        if (!ArticleType.DIARY.equals(articleSaveBo.getType()) || Objects.isNull(articleSaveBo.getContent())) {
             return;
         }
         Assert.notNull(articleSaveBo.getPassphrase(), "需提供passphrase");
@@ -133,14 +134,14 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     private void decryptDiaryContent(String passphrase, Article article) {
-        if (!ArticleType.DIARY.equalTo(article.getType())) {
-            return ;
+        if (!ArticleType.DIARY.equalTo(article.getType()) || StringUtils.isEmpty(article.getContent())) {
+            return;
         }
         try {
             String plainText = EncryptUtil.decrypt(article.getContent(), passphrase);
             article.setContent(plainText);
         } catch (Exception e) {
-            throw BusinessException.of(ExceptionType.BAD_PASSPHRASE,"bad passphrase，解析失败");
+            throw BusinessException.of(ExceptionType.BAD_PASSPHRASE, "bad passphrase，解析失败");
         }
 
     }
