@@ -86,7 +86,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional
     @Override
     public long saveOrUpdate(ArticleSaveBo articleSaveBo) {
-        encryptDiary(articleSaveBo);
+        encryptContent(articleSaveBo);
         Article article = ArticleConverter.INSTANCE.toEntity(articleSaveBo);
         if (Objects.isNull(article.getId())) {
             article.setCreated(Instant.now());
@@ -104,8 +104,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @SneakyThrows
-    private void encryptDiary(ArticleSaveBo articleSaveBo) {
-        if (!ArticleType.DIARY.equals(articleSaveBo.getType()) || Objects.isNull(articleSaveBo.getContent())) {
+    private void encryptContent(ArticleSaveBo articleSaveBo) {
+        if (!articleSaveBo.isEncryptEnable() || Objects.isNull(articleSaveBo.getContent())) {
             return;
         }
         Assert.notNull(articleSaveBo.getPassphrase(), "需提供passphrase");
@@ -129,19 +129,19 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleVo getArticleBy(Long arId, String passphrase) {
         Article article = articleDao.selectById(arId);
-        decryptDiaryContent(passphrase, article);
+        decryptContent(passphrase, article);
         return ArticleConverter.INSTANCE.toVo(article);
     }
 
-    private void decryptDiaryContent(String passphrase, Article article) {
-        if (!ArticleType.DIARY.equalTo(article.getType()) || StringUtils.isEmpty(article.getContent())) {
+    private void decryptContent(String passphrase, Article article) {
+        if (!article.isEncryptEnable() || StringUtils.isEmpty(article.getContent())) {
             return;
         }
         try {
             String plainText = EncryptUtil.decrypt(article.getContent(), passphrase);
             article.setContent(plainText);
         } catch (Exception e) {
-            throw BusinessException.of(ExceptionType.BAD_PASSPHRASE, "bad passphrase，解析失败");
+            article.setContent("bad passphrase，解析失败");
         }
 
     }

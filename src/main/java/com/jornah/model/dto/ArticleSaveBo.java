@@ -60,11 +60,15 @@ public class ArticleSaveBo {
     /**
      * 文章类型
      */
-    private ArticleType type;
+    private String type;
 
     /**
      * 加密秘钥
      */
     private String passphrase;
+    /**
+     * 是否加密content
+     */
+    private boolean encryptEnable;
 
 }

@@ -80,5 +80,10 @@ public class Article extends  BaseEntity implements Serializable {
      */
     private Integer version;
 
+    /**
+     * 是否加密content
+     */
+    private boolean encryptEnable;
+
 
 }

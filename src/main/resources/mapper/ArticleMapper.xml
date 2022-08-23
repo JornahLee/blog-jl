@@ -4,36 +4,36 @@
     <!--表名-->
     <!--    <insert id=""></insert>-->
     <select id="findArticlesByCategory" resultType="com.jornah.model.entity.Article">
-        select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping,
-        a.allow_feed, a.order_weight, a.status
+        select a.*
         from article a join article_category ac on a.id=ac.article_id
         where ac.category_id=#{cateId}
         and a.status in
         <foreach collection="statusList" item="status" index="index" open="(" close=")" separator=",">
             #{status}
         </foreach>
+        and a.encrypt_enable=false
         order by a.updated desc
     </select>
     <select id="findArticlesByTag" resultType="com.jornah.model.entity.Article">
-        select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping,
-        a.allow_feed, a.order_weight, a.status
+        select a.*
         from article a join article_category ac on a.id=ac.article_id
         where art.tag_Id=#{tagId}
         and a.status in
         <foreach collection="statusList" item="status" index="index" open="(" close=")" separator=",">
             #{status}
         </foreach>
+        and a.encrypt_enable=false
         order by a.updated desc
 
     </select>
     <select id="findArticlesByStatus" resultType="com.jornah.model.entity.Article">
-        select a.id, a.title, a.created, a.updated, a.author_id, a.hits, a.comments_num, a.allow_comment, a.allow_ping,
-        a.allow_feed, a.order_weight, a.status
+        select a.*
         from article a
         where a.status in
         <foreach collection="statusList" item="status" index="index" open="(" close=")" separator=",">
             #{status}
         </foreach>
+        and a.encrypt_enable=false
         order by a.updated desc
     </select>
 

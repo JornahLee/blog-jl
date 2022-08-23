@@ -4,6 +4,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.time.Duration;
 
+//todo use jetcache
 public interface CacheService {
     void setValueIfAbsent(String key, String value, Duration timeout);
 

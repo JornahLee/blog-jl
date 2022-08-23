@@ -4,21 +4,17 @@ package com.jornah.constant;
  * @author licong
  * @date 2022/8/16 10:22
  */
-public enum ArticleType {
+public interface ArticleType {
     /**
      * 随笔
      */
-    ESSAY,
+    String ESSAY = "ESSAY";
     /**
      * 日记
      */
-    DIARY,
+    String DIARY = "REPRINTED";
     /**
      * 转载
      */
-    REPRINTED;
-
-    public boolean equalTo(String type) {
-        return this.name().equalsIgnoreCase(type);
-    }
+    String REPRINTED = "REPRINTED";
 }

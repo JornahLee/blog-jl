@@ -82,8 +82,6 @@ public class ArticleController extends BaseController {
     public APIResponse<PageInfo<ArticleVo>> getArticleListByTag(@RequestBody @Validated ArticleQo qo) {
         Long tagId = qo.getQueryKeyColumns().get("byTag");
         PageInfo<ArticleVo> orderBy = articleService.getArticleByTag(tagId, qo.getPageNum(), qo.getPageSize());
-        Gson gson = new Gson();
-        cacheService.setValue("ariticle:list", gson.toJson(orderBy.getList()));
         return APIResponse.success(orderBy);
     }
 
@@ -109,8 +107,6 @@ public class ArticleController extends BaseController {
     public APIResponse<PageInfo<ArticleVo>> getArticleListByCate(@RequestBody @Validated ArticleQo qo) {
         Long cateId = qo.getQueryKeyColumns().get("byCate");
         PageInfo<ArticleVo> orderBy = articleService.getArticleByCate(cateId, qo.getPageNum(), qo.getPageSize());
-        Gson gson = new Gson();
-        cacheService.setValue("ariticle:list", gson.toJson(orderBy.getList()));
         return APIResponse.success(orderBy);
     }
 
@@ -119,7 +115,6 @@ public class ArticleController extends BaseController {
     @AccessControl
     public APIResponse<?> saveDraft(Article article) {
         draftService.createDraft(article.getId(), article.getContent(), DraftStatus.getByString(article.getStatus()));
-
         return APIResponse.success();
     }
 
