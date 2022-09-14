@@ -38,6 +38,7 @@ import com.jornah.utils.MapCache;
 import com.jornah.utils.PageUtil;
 import com.jornah.utils.WebRequestHelper;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -61,6 +62,7 @@ import static com.jornah.model.enums.ArticleStatus.PUBLISHED;
 
 @Service
 @EnableAspectJAutoProxy(exposeProxy = true)
+@Slf4j
 public class ArticleServiceImpl implements ArticleService {
 
     private static final MapCache cache = MapCache.single();
@@ -129,19 +131,22 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleVo getArticleBy(Long arId, String passphrase) {
         Article article = articleDao.selectById(arId);
-        decryptContent(passphrase, article);
-        return ArticleConverter.INSTANCE.toVo(article);
+        ArticleVo articleVo = ArticleConverter.INSTANCE.toVo(article);
+        decryptContent(passphrase, articleVo);
+        return articleVo;
     }
 
-    private void decryptContent(String passphrase, Article article) {
-        if (!article.isEncryptEnable() || StringUtils.isEmpty(article.getContent())) {
+    private void decryptContent(String passphrase, ArticleVo articleVo) {
+        if (!articleVo.isEncryptEnable() || StringUtils.isEmpty(articleVo.getContent())) {
             return;
         }
         try {
-            String plainText = EncryptUtil.decrypt(article.getContent(), passphrase);
-            article.setContent(plainText);
+            String plainText = EncryptUtil.decrypt(articleVo.getContent(), passphrase);
+            articleVo.setContent(plainText);
+            articleVo.setDecryptSuccess(true);
         } catch (Exception e) {
-            article.setContent("bad passphrase，解析失败");
+            articleVo.setContent("bad passphrase，解析失败");
+            articleVo.setDecryptSuccess(false);
         }
 
     }

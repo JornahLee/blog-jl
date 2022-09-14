@@ -76,4 +76,9 @@ public class ArticleVo {
      */
     private boolean encryptEnable;
 
+    /**
+     * 解密是否成功
+     */
+    private boolean decryptSuccess;
+
 }
