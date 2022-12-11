@@ -17,6 +17,7 @@ import com.jornah.service.ConfigService;
 import com.jornah.service.DraftService;
 import com.jornah.service.article.ArticleService;
 import com.jornah.utils.APIResponse;
+import io.opentracing.Tracer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +53,9 @@ public class ArticleController extends BaseController {
     private CacheService cacheService;
     @Autowired
     private ConfigService configService;
+
+    @Autowired
+    Tracer tracer;
 
     @ApiOperation("保存或更新")
     @PostMapping(value = "/saveOrUpdate")
