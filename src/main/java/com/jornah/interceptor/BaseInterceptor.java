@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 
 /**
  * 自定义拦截器
@@ -40,6 +41,9 @@ public class BaseInterceptor implements HandlerInterceptor {
     }
 
     private void setTraceIdInHeader(HttpServletResponse response) {
+        if (Objects.isNull(tracer.activeSpan())) {
+            return;
+        }
         String traceId = tracer.activeSpan().context().toTraceId();
         response.setHeader("trace-id", traceId);
     }
