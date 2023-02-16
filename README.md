@@ -20,7 +20,9 @@
 
 jwt
 
-持续集成/发布： Jenkins Docker Nginx
+持续集成/发布： Jenkins Docker
+
+反向代理/静态资源服务: Nginx
 
 
 
