@@ -6,6 +6,7 @@ import com.jornah.dao.TagDao;
 import com.jornah.model.entity.Category;
 import com.jornah.model.entity.Tag;
 import com.jornah.model.qo.MetaInfoQo;
+import com.jornah.service.cache.impl.CacheHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +19,20 @@ public class MetaInfoServiceImpl implements MetaInfoService {
     private TagDao tagDao;
     @Autowired
     private CategoryDao categoryDao;
+    @Autowired
+    private CacheHolder cacheHolder;
+
 
     @Override
     public List<Tag> getAllTag() {
-        return tagDao.selectList(new QueryWrapper<>());
+        return cacheHolder.getTagCache()
+                .getOrSaveCache(() -> tagDao.selectList(new QueryWrapper<>()));
     }
 
     @Override
     public List<Category> getAllCategory() {
-        return categoryDao.selectList(new QueryWrapper<>());
+        return cacheHolder.getCategoryCache()
+                .getOrSaveCache(() -> categoryDao.selectList(new QueryWrapper<>()));
     }
 
     @Override

@@ -10,10 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
-import com.jornah.cache.CacheService;
 import com.jornah.constant.ArticleStatus;
-import com.jornah.constant.ArticleType;
-import com.jornah.constant.ExceptionType;
 import com.jornah.constant.WebConst;
 import com.jornah.dao.ArticleDao;
 import com.jornah.dao.CategoryDao;
@@ -31,6 +28,7 @@ import com.jornah.model.vo.ArticleMetaInfo;
 import com.jornah.model.vo.ArticleVo;
 import com.jornah.service.DraftService;
 import com.jornah.service.article.ArticleService;
+import com.jornah.service.cache.impl.ArticleMetaInfoCache;
 import com.jornah.service.es.EsContentService;
 import com.jornah.utils.EncryptUtil;
 import com.jornah.utils.IPKit;
@@ -70,7 +68,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleDao articleDao;
     @Autowired
-    private CacheService cacheService;
+    private ArticleMetaInfoCache articleMetaInfoCache;
     @Autowired
     private TagDao tagDao;
     @Autowired
@@ -280,9 +278,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleMetaInfo getArticleMetaInfo(Long articleId) {
-//        cacheService.getValue()
-        return ArticleMetaInfo.builder().tags(tagDao.findTagBy(articleId))
-                .category(categoryDao.findCategoryBy(articleId)).build();
+        return this.articleMetaInfoCache.getOrSaveCache(articleId,
+                id -> ArticleMetaInfo.builder()
+                        .articleId(id)
+                        .tags(tagDao.findTagBy(id))
+                        .category(categoryDao.findCategoryBy(id))
+                        .build());
     }
 
     @Override

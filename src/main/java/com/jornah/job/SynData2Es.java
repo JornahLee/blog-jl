@@ -17,10 +17,9 @@ public class SynData2Es {
     @Autowired
     private EsContentService esContentService;
 
-//    @Scheduled(cron = "00 00 00 ? * *")
-    @Scheduled(cron = "0 0 0 0/1 * *")
-    public void syn(){
+    @Scheduled(initialDelay = 5, fixedDelay = 12 * 60 * 60 * 1000)
+    public void syn() {
         log.info("runing");
-//        esContentService.exportDataToEs();
+        esContentService.exportDataToEs();
     }
 }

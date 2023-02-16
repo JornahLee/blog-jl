@@ -1,13 +1,15 @@
 package com.jornah.model.vo;
 
+import com.jornah.service.cache.Cacheable;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Data
 @SuperBuilder
-public class ArticleVo {
+public class ArticleVo implements Serializable, Cacheable {
     private Long id;
     private Instant created;
     private Instant updated;
@@ -81,4 +83,8 @@ public class ArticleVo {
      */
     private boolean decryptSuccess;
 
+    @Override
+    public Object getCacheId() {
+        return id;
+    }
 }
