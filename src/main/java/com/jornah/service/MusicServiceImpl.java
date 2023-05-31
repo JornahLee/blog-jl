@@ -8,7 +8,7 @@ import com.jornah.model.converter.MusicConverter;
 import com.jornah.model.entity.Music;
 import com.jornah.model.qo.MusicUploadQo;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.IOUtils;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

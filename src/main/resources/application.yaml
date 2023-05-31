@@ -1,0 +1,85 @@
+server:
+  port: 8089
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
+  datasource:
+    #    use
+    name: mysql_data_source
+    #    type: com.alibaba.druid.pool.DruidDataSource
+    #    type: com.zaxxer.hikari.HikariDataSource
+
+    #    hikari:
+    #      username: root
+    #      password: mimaMysql614.
+    #      jdbc-url: jdbc:mysql://132.232.81.70:3306/blog_jl?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=true
+    #      driver-class-name: com.zaxxer.hikari.HikariDataSource
+    url: ${DB_URL}
+    username: ${DB_USER_NAME}
+    password: ${DB_PASSWORD}
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    driver-class-name: io.opentracing.contrib.jdbc.TracingDriver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 5
+      # 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      # 连接池最大连接数，默认是10
+      maximum-pool-size: 10
+      # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      auto-commit: true
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      # 数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+  aop:
+    auto: true
+    proxy-target-class: true
+
+  #  servlet:
+  #    multipart:
+  #      max-file-size: 10Mb
+  #      max-request-size: 100Mb
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
+    timeout : 5000
+  elasticsearch:
+    rest:
+      uris: ${ES_URL}
+      # username: {ES_ACCOUNT}
+      # password: {ES_PWD}
+
+
+#mybatis:
+#  mapper-locations: classpath:mapper/*.xml
+#  type-aliases-package: com.wip.model
+#  configuration:
+#    map-underscore-to-camel-case: true
+mybatis-plus:
+  type-aliases-package: com.jornah.model
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config.id-type: auto
+
+swagger:
+  show: true
+
+music:
+  disk:
+    path: /usr/jornah/static/music/
+  url:
+    prefix: http://music.ilearn.space/
+
+opentracing:
+  jaeger:
+    http-sender:
+      url: 'http://jaeger-collector.ilearn.space:7100/api/traces'
+
