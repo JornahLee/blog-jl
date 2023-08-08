@@ -10,6 +10,7 @@ import com.jornah.model.DraftStatus;
 import com.jornah.model.dto.ArticleSaveBo;
 import com.jornah.model.entity.Article;
 import com.jornah.model.entity.Config;
+import com.jornah.model.qo.ArticleBatchQo;
 import com.jornah.model.qo.ArticleQo;
 import com.jornah.model.vo.ArticleMetaInfo;
 import com.jornah.model.vo.ArticleVo;
@@ -44,15 +45,13 @@ import java.util.Objects;
 @Api("文章")
 public class ArticleController extends BaseController {
 
-    public static final String INDEX_STATS = "index_stats";
     @Autowired
     private ArticleService articleService;
     @Autowired
     private DraftService draftService;
     @Autowired
     private CacheService cacheService;
-    @Autowired
-    private ConfigService configService;
+
 
     @Autowired
     Tracer tracer;
@@ -75,18 +74,19 @@ public class ArticleController extends BaseController {
     @ApiOperation("分页查询文档")
     @PostMapping(value = "/list")
     public APIResponse<PageInfo<ArticleVo>> getArticleList(@RequestBody @Validated ArticleQo qo) {
-        PageInfo<ArticleVo> orderBy = articleService.getArticlesOrderBy(qo);
-//        log.error(bindingResult.toString());
+        Long tagId = qo.getQueryKeyColumns().get("byTag");
+        Long cateId = qo.getQueryKeyColumns().get("byCate");
+        PageInfo<ArticleVo> orderBy;
+        if (Objects.nonNull(tagId)) {
+            orderBy = articleService.getArticleByTag(tagId, qo.getPageNum(), qo.getPageSize());
+        } else if (Objects.nonNull(cateId)) {
+            orderBy = articleService.getArticleByCate(cateId, qo.getPageNum(), qo.getPageSize());
+        } else {
+            orderBy = articleService.getArticlesOrderBy(qo);
+        }
         return APIResponse.success(orderBy);
     }
 
-    @ApiOperation("按标签 分页查询文档")
-    @PostMapping(value = "/list/byTag")
-    public APIResponse<PageInfo<ArticleVo>> getArticleListByTag(@RequestBody @Validated ArticleQo qo) {
-        Long tagId = qo.getQueryKeyColumns().get("byTag");
-        PageInfo<ArticleVo> orderBy = articleService.getArticleByTag(tagId, qo.getPageNum(), qo.getPageSize());
-        return APIResponse.success(orderBy);
-    }
 
     @ApiOperation("推荐文章列表")
     @GetMapping(value = "/list/recommended")
@@ -96,22 +96,6 @@ public class ArticleController extends BaseController {
         return APIResponse.success(list);
     }
 
-    @ApiOperation("首页文章统计信息")
-    @GetMapping(value = "/stats/info")
-    public APIResponse<List<String>> statsInfo() {
-        Config config = configService.getConfigByKey(INDEX_STATS);
-        List<String> dataList = Lists.newArrayList(config.getValue1(), config.getValue2(),
-                config.getValue3(), config.getValue4());
-        return APIResponse.success(dataList);
-    }
-
-    @ApiOperation("按分类 分页查询文档")
-    @PostMapping(value = "/list/byCate")
-    public APIResponse<PageInfo<ArticleVo>> getArticleListByCate(@RequestBody @Validated ArticleQo qo) {
-        Long cateId = qo.getQueryKeyColumns().get("byCate");
-        PageInfo<ArticleVo> orderBy = articleService.getArticleByCate(cateId, qo.getPageNum(), qo.getPageSize());
-        return APIResponse.success(orderBy);
-    }
 
     @ApiOperation("保存草稿")
     @PostMapping(value = "/draft/save")
@@ -133,6 +117,12 @@ public class ArticleController extends BaseController {
     @GetMapping("/meta/{articleId}")
     public APIResponse<ArticleMetaInfo> getMetaInfo(@PathVariable("articleId") Long articleId) {
         return APIResponse.success(articleService.getArticleMetaInfo(articleId));
+    }
+
+    @ApiOperation("batch 获取文章信息，分类，标签，评论等")
+    @PostMapping("/meta/batch")
+    public APIResponse<List<ArticleMetaInfo>> getMetaInfo(@RequestBody ArticleBatchQo batchQo) {
+        return APIResponse.success(articleService.batchGetArticleMetaInfo(batchQo.getArticleIdList()));
     }
 
     @ApiOperation("获取上一篇或下一篇文章 id")

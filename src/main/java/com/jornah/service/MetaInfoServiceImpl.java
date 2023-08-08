@@ -25,6 +25,8 @@ public class MetaInfoServiceImpl implements MetaInfoService {
 
     @Override
     public List<Tag> getAllTag() {
+//        List<Tag> tags = tagDao.selectList(new QueryWrapper<>());
+//        return tags;
         return cacheHolder.getTagCache()
                 .getOrSaveCache(() -> tagDao.selectList(new QueryWrapper<>()));
     }

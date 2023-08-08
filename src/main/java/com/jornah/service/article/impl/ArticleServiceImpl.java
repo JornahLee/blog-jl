@@ -285,6 +285,10 @@ public class ArticleServiceImpl implements ArticleService {
                         .category(categoryDao.findCategoryBy(id))
                         .build());
     }
+    @Override
+    public List<ArticleMetaInfo> batchGetArticleMetaInfo(List<Long> articleIdList) {
+        return articleIdList.stream().map(this::getArticleMetaInfo).collect(Collectors.toList());
+    }
 
     @Override
     public int articleCount() {
@@ -309,4 +313,6 @@ public class ArticleServiceImpl implements ArticleService {
         }
         return DEFAULT_ARTICLE_ID;
     }
+
+
 }

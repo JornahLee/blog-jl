@@ -51,4 +51,6 @@ public interface ArticleService  {
     Article firstArticle();
 
     long getNextOrLastArticle(Long articleId, boolean next, String byType);
+
+    List<ArticleMetaInfo> batchGetArticleMetaInfo(List<Long> articleIdList);
 }

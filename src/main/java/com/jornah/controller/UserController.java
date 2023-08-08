@@ -1,11 +1,16 @@
 package com.jornah.controller;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.jornah.model.converter.UserConverter;
+import com.jornah.model.entity.Config;
 import com.jornah.model.entity.User;
 import com.jornah.model.qo.LoginQo;
 import com.jornah.model.qo.ReadRecord;
+import com.jornah.model.vo.SiteInfo;
 import com.jornah.model.vo.UserVo;
+import com.jornah.service.ConfigService;
+import com.jornah.service.MetaInfoService;
 import com.jornah.service.user.UserService;
 import com.jornah.utils.APIResponse;
 import com.jornah.utils.JwtUtil;
@@ -30,8 +35,13 @@ import java.util.List;
 @CrossOrigin
 public class UserController extends BaseController {
 
+    public static final String INDEX_STATS = "index_stats";
     @Autowired
     private UserService userService;
+    @Autowired
+    private MetaInfoService metaInfoService;
+    @Autowired
+    private ConfigService configService;
 
 
     @ApiOperation("登录")
@@ -47,13 +57,23 @@ public class UserController extends BaseController {
         return APIResponse.success(userVo);
     }
 
-    @ApiOperation("站长的信息")
+    @ApiOperation("博客信息")
     @GetMapping(value = "/info")
-    public APIResponse<UserVo> info() {
+    public APIResponse<SiteInfo> info() {
         // 调用Service登录方法
-        User userInfo = userService.getById(1L);
-        UserVo userVo = UserConverter.INSTANCE.toVo(userInfo);
-        return APIResponse.success(userVo);
+        User ownerInfo = userService.getById(1L);
+        UserVo userVo = UserConverter.INSTANCE.toVo(ownerInfo);
+
+        Config config = configService.getConfigByKey(INDEX_STATS);
+        List<String> statsInfoList = Lists.newArrayList(config.getValue1(), config.getValue2(),
+                config.getValue3(), config.getValue4());
+
+        SiteInfo siteInfo = SiteInfo.from(
+                userVo,
+                metaInfoService.getAllCategory(),
+                metaInfoService.getAllTag(),
+                statsInfoList);
+        return APIResponse.success(siteInfo);
     }
 
     @ApiOperation("注销登录")
@@ -72,7 +92,7 @@ public class UserController extends BaseController {
     @ApiOperation("获取最近阅读信息")
     @GetMapping("/recently-read")
     public APIResponse<List<ReadRecord>> getRecentRead() {
-        return APIResponse.success( userService.getRecentRead());
+        return APIResponse.success(userService.getRecentRead());
     }
 
 
