@@ -5,5 +5,5 @@ package com.jornah.service.cache;
  * @date 2023/2/15 15:27
  */
 public interface Cacheable<ID> {
-    ID getCacheId();
+    ID cacheId();
 }

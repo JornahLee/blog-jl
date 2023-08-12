@@ -21,7 +21,7 @@ public class BaseEntity implements Cacheable<Long> {
     private Instant updated;
 
     @Override
-    public Long getCacheId() {
+    public Long cacheId() {
         return id;
     }
 }

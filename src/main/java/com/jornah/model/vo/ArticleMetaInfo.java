@@ -25,7 +25,7 @@ public class ArticleMetaInfo implements Cacheable<Long>, Serializable {
     Category category;
 
     @Override
-    public Long getCacheId() {
+    public Long cacheId() {
         return this.articleId;
     }
 }

@@ -17,13 +17,13 @@ public class ArticleMetaInfoCache extends AbstractCacheService<Long, ArticleMeta
     private static final String ARTICLE_META_INFO = "ARTICLE_META_INFO";
 
     @Override
-    protected RBucket<ArticleMetaInfo> getBucket(Long id) {
+    protected RBucket<ArticleMetaInfo> getBucketByKey(Long id) {
         String key = String.format("%s:%s", ARTICLE_META_INFO, id);
         return this.redissonClient.getBucket(key);
     }
 
     @Override
-    protected RList<ArticleMetaInfo> getList() {
+    protected RList<ArticleMetaInfo> getListByKey() {
         throw new UnsupportedOperationException();
     }
 

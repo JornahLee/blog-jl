@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor(staticName="from")
+@NoArgsConstructor
 public class SiteInfo {
     private UserVo ownerInfo;
     private List<Category> cateList;

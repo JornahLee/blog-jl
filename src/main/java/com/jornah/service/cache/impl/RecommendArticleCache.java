@@ -18,13 +18,13 @@ public class RecommendArticleCache extends AbstractCacheService<Long, Tag> {
     private static final String ALL_TAG = "ALL_TAG";
 
     @Override
-    protected RBucket<Tag> getBucket(Long id) {
+    protected RBucket<Tag> getBucketByKey(Long id) {
         String key = String.format("%s:%s", TAG, id);
         return this.redissonClient.getBucket(key);
     }
 
     @Override
-    protected RList<Tag> getList() {
+    protected RList<Tag> getListByKey() {
         return this.redissonClient.getList(ALL_TAG);
     }
 

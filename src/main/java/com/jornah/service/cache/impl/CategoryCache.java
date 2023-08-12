@@ -18,13 +18,13 @@ public class CategoryCache extends AbstractCacheService<Long, Category> {
     private static final String ALL_CATEGORY = "ALL_CATEGORY";
 
     @Override
-    protected RBucket<Category> getBucket(Long id) {
+    protected RBucket<Category> getBucketByKey(Long id) {
         String key = String.format("%s:%s", CATEGORY, id);
         return this.redissonClient.getBucket(key);
     }
 
     @Override
-    protected RList<Category> getList() {
+    protected RList<Category> getListByKey() {
         return this.redissonClient.getList(ALL_CATEGORY);
     }
 

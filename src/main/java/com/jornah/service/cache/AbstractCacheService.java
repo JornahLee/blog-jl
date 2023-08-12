@@ -19,28 +19,31 @@ public abstract class AbstractCacheService<ID, T extends Cacheable<ID>> implemen
     @Autowired
     protected RedissonClient redissonClient;
 
-    protected abstract RBucket<T> getBucket(ID id);
+    protected abstract RBucket<T> getBucketByKey(ID id);
 
-    protected abstract RList<T> getList();
+    protected abstract RList<T> getListByKey();
 
     protected abstract void hitLog(ID id);
 
 
+    @Override
     public T get(ID id) {
-        return getBucket(id).get();
+        return getBucketByKey(id).get();
     }
 
+    @Override
     public boolean remove(ID id) {
-        return getBucket(id).delete();
+        return getBucketByKey(id).delete();
     }
 
+    @Override
     public void save(T t) {
-        RBucket<T> bucket = getBucket(t.getCacheId());
+        RBucket<T> bucket = getBucketByKey(t.cacheId());
         bucket.set(t);
     }
 
     public void save(T t, long timeToLive, TimeUnit timeUnit) {
-        RBucket<T> bucket = getBucket(t.getCacheId());
+        RBucket<T> bucket = getBucketByKey(t.cacheId());
         bucket.set(t, timeToLive, timeUnit);
     }
 
@@ -65,37 +68,46 @@ public abstract class AbstractCacheService<ID, T extends Cacheable<ID>> implemen
     }
 
 
-    public RList<T> getOrSaveCache(Supplier<List<T>> supplier, long timeToLive, TimeUnit timeUnit) {
-        RList<T> fromCache = this.getList();
+    public List<T> getOrSaveCache(Supplier<List<T>> supplier, long timeToLive, TimeUnit timeUnit) {
+        RList<T> fromCache = this.getListByKey();
         if (fromCache.isExists()) {
-            return fromCache;
+            return fromCache.readAll();
         }
 
         List<T> fromDB = supplier.get();
-        return Objects.isNull(timeUnit) ?
-                this.saveList(fromDB) :
-                this.saveList(fromDB, timeToLive, timeUnit);
+        if (Objects.isNull(timeUnit)) {
+            this.saveList(fromDB);
+        } else {
+            this.saveList(fromDB, timeToLive, timeUnit);
+        }
+        return fromDB;
     }
 
-    public RList<T> getOrSaveCache(Supplier<List<T>> supplier) {
+    public List<T> getOrSaveCache(Supplier<List<T>> supplier) {
         return this.getOrSaveCache(supplier, 0, null);
     }
 
-    public RList<T> saveList(List<T> list) {
-        RList<T> rList = this.getList();
+    @Override
+    public void saveList(List<T> list) {
+        RList<T> rList = this.getListByKey();
         rList.addAll(list);
-        return rList;
     }
 
-    public RList<T> saveList(List<T> list, long timeToLive, TimeUnit timeUnit) {
-        RList<T> rList = this.getList();
+    @Override
+    public void saveList(List<T> list, long timeToLive, TimeUnit timeUnit) {
+        RList<T> rList = this.getListByKey();
         rList.addAll(list);
         rList.expire(timeToLive, timeUnit);
-        return rList;
     }
 
+    @Override
+    public List<T> getList() {
+        return this.getListByKey().readAll();
+    }
+
+    @Override
     public void clearList() {
-        this.getList().delete();
+        this.getListByKey().delete();
     }
 
 }
