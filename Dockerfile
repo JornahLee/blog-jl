@@ -8,8 +8,8 @@ ADD ./src src/
 RUN mvn clean package
 
 FROM openjdk:8-jdk-alpine
-COPY ${JAR_FILE} app.jar
 COPY --from=builder target/*.jar app.jar
+EXPOSE 8089
 
 RUN echo "java -jar /app.jar" > /run.sh && chmod 777 /run.sh
 ENTRYPOINT ["/bin/sh","/run.sh"]
