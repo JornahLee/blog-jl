@@ -1,6 +1,6 @@
 package com.jornah.interceptor;
 
-import io.opentracing.Tracer;
+//import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private Tracer tracer;
+//    @Autowired
+//    private Tracer tracer;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -24,6 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Bean
     public BaseInterceptor baseInterceptor(){
-        return new BaseInterceptor(tracer);
+//        return new BaseInterceptor(tracer);
+        return new BaseInterceptor();
     }
 }

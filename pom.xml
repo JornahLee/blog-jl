@@ -232,11 +232,11 @@
             <artifactId>guava</artifactId>
             <version>31.0.1-jre</version>
         </dependency>
-        <dependency>
-            <groupId>io.opentracing.contrib</groupId>
-            <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
-            <version>3.3.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.opentracing.contrib</groupId>-->
+<!--            <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>-->
+<!--            <version>3.3.1</version>-->
+<!--        </dependency>-->
 
 
     </dependencies>
