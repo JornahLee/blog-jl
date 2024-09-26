@@ -52,34 +52,36 @@ public abstract class AbstractCacheService<ID, T extends Cacheable<ID>> implemen
     }
 
     public T getOrSaveCache(ID id, Function<ID, T> function, long timeToLive, TimeUnit timeUnit) {
-        T fromCache = this.get(id);
-        if (Objects.nonNull(fromCache)) {
-            hitLog(id);
-            return fromCache;
-        }
+        //todo disable cache due to serialization issue
+//        T fromCache = this.get(id);
+//        if (Objects.nonNull(fromCache)) {
+//            hitLog(id);
+//            return fromCache;
+//        }
 
         T fromDB = function.apply(id);
-        if (Objects.isNull(timeUnit)) {
-            this.save(fromDB);
-        } else {
-            this.save(fromDB, timeToLive, timeUnit);
-        }
+//        if (Objects.isNull(timeUnit)) {
+//            this.save(fromDB);
+//        } else {
+//            this.save(fromDB, timeToLive, timeUnit);
+//        }
         return fromDB;
     }
 
 
     public List<T> getOrSaveCache(Supplier<List<T>> supplier, long timeToLive, TimeUnit timeUnit) {
-        RList<T> fromCache = this.getListByKey();
-        if (fromCache.isExists()) {
-            return fromCache.readAll();
-        }
+        //todo disable cache due to serialization issue
+//        RList<T> fromCache = this.getListByKey();
+//        if (fromCache.isExists()) {
+//            return fromCache.readAll();
+//        }
 
         List<T> fromDB = supplier.get();
-        if (Objects.isNull(timeUnit)) {
-            this.saveList(fromDB);
-        } else {
-            this.saveList(fromDB, timeToLive, timeUnit);
-        }
+//        if (Objects.isNull(timeUnit)) {
+//            this.saveList(fromDB);
+//        } else {
+//            this.saveList(fromDB, timeToLive, timeUnit);
+//        }
         return fromDB;
     }
 
