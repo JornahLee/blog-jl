@@ -1,0 +1,38 @@
+name: My Scheduled Task # 工作流的名称
+
+on:
+  schedule:
+    # 使用标准的 cron 语法 (分钟 小时 日 月 星期)
+    # 注意：GitHub Actions 使用 UTC 时间！
+    - cron: '0/5 * * * * ? *' # 示例：每天 UTC 时间 8:00 (即北京时间 16:00) 运行一次
+    # - cron: '*/15 * * * *' # 示例：每 15 分钟运行一次
+    # - cron: '0 0 * * 1' # 示例：每周一 UTC 时间 00:00 运行
+
+jobs: # 定义要执行的任务
+  run-task: # 任务的 ID (自定义)
+    runs-on: ubuntu-latest # 指定运行环境 (常用 ubuntu-latest, windows-latest, macos-latest)
+    steps: # 定义任务执行的步骤
+      - name: Checkout repository # 步骤1：检出代码（通常需要）
+        uses: actions/checkout@v4 # 使用官方的检出 Action
+
+      - name: Run my script # 步骤2：执行你的任务
+        # 你可以选择以下任意一种方式：
+        # 方式1：直接运行 Shell 命令
+        run: |
+          curl https://api.day.app/Q44dpDyHeXk4Tv3vkTYUjE/测试推送
+          #echo "Starting the scheduled task..."
+          # python my_script.py # 例如，运行一个 Python 脚本
+          # 可以写多条命令
+
+        # 方式2：使用特定语言的 Action (例如 setup-python)
+        # - name: Set up Python
+        #   uses: actions/setup-python@v5
+        #   with:
+        #     python-version: '3.10'
+        # - name: Run Python script
+        #   run: python my_script.py
+
+        # 方式3：运行其他类型的脚本或程序
+        # run: node my_script.js
+        # run: bash ./my_shell_script.sh
+        # run: ./my_compiled_binary
