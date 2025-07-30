@@ -1,7 +1,7 @@
 name: Call API Every 10 Minutes (9 AM - 11 PM UTC+8)
 on:
   schedule:
-    - cron: '*/10 * * * *'  # 每10分钟执行一次（UTC时间）
+    - cron: '*/5 * * * *'  # 每10分钟执行一次（UTC时间）
   workflow_dispatch:  # 允许手动触发
 
 jobs:
