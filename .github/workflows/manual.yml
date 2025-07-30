@@ -1,19 +1,24 @@
-name: Call API Every 5 Seconds
+name: Call API Every 10 Minutes (9 AM - 11 PM UTC+8)
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '* * * * *'  # 每分钟触发一次
+    - cron: '*/10 * * * *'  # 每10分钟执行一次（UTC时间）
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
   call-api:
     runs-on: ubuntu-latest
     steps:
-      - name: Call API in loop
+      - name: Check if within 9 AM - 11 PM UTC+8
+        id: check_time
         run: |
-          for i in {1..12}; do
-            # 调用你的API（替换成你的curl命令）
-            curl -X GET "https://api.day.app/Q44dpDyHeXk4Tv3vkTYUjE/测试测试"
-            
-            # 等待5秒（如果是Windows runner使用 timeout /t 5）
-            sleep 5
-          done
+          CURRENT_HOUR=$(TZ='Asia/Shanghai' date +%H)
+          if [ "$CURRENT_HOUR" -ge 9 ] && [ "$CURRENT_HOUR" -lt 23 ]; then
+            echo "RUN_JOB=true" >> $GITHUB_OUTPUT
+          else
+            echo "RUN_JOB=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Call API
+        if: steps.check_time.outputs.RUN_JOB == 'true'
+        run: |
+          curl -X GET "https://api.day.app/Q44dpDyHeXk4Tv3vkTYUjE/喝口水,走两步"
